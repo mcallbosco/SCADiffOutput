@@ -1,14 +1,20 @@
 #ifndef SCA_
 #define SCA_
 #include "SCAInterface.h"
+
+#include "Node.h"
+#include <iostream>
+#include <stack>
+#include <fstream>
+#include <vector>
 #include "ANTLR_Server.h"
 #include "AST_Parser.h"
 #include "Tree.h"
-#include <iostream>
 
 using namespace std;
 
 class SCA : public SCAInterface {
+
 private:
 	string cppFilePath;
 	string templateTableFile;
@@ -31,4 +37,3 @@ public:
 #include "SCA.cpp"
 
 #endif // !SCA_
-

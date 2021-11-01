@@ -23,7 +23,11 @@ bool SCA::existsFile(string filePath) const {
 
 // Undefined Function
 bool SCA::loadTemplateTable(string templateTableFile) {
-	return true;
+	TemplateTable* tempTableLoader = new TemplateTable();
+	if (tempTableLoader->loadTemplateTable(templateTableFile))
+		return true;
+	else
+		return false;
 }
 
 
@@ -351,7 +355,16 @@ bool SCA::readANTLROutputErrors(string& errorTxtFilePath) {
 
 // Undefined Function
 string SCA::matchTemplateWithTree() const {
-	return "";
+	Template_Matcher templateMatcher;
+
+	TemplateTable* tempTableLoader = new TemplateTable();
+	tempTableLoader->loadTemplateTable(templateTableFile);
+
+	templateMatcher.setTemplateTable(tempTableLoader->getTemplateTable());
+	templateMatcher.setRulesArraySize();
+	templateMatcher.checkTreeForErrors(ast->getRoot());
+
+	return templateMatcher.outputSuggestions();
 }
 
 // Undefined Function

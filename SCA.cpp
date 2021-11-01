@@ -38,7 +38,7 @@ string loadSourceCode(string sourceCodeFileLocation)
 	if (!SCA::existsFile(sourceCodeFileLocation))
 	{
 		cout << "File not found or failed to open." << endl;
-		return "";
+		return "failed";
 	}
 
 	ifstream sourceCodeFile;

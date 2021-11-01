@@ -12,9 +12,18 @@ SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable) {
 
 }
 
-// Undefined Function
 bool SCA::existsFile(string filePath) const {
-	return true;
+	ifstream testFile(filepath);
+	if (testFile.is_open())
+	{
+		testFile.close();
+		return true;
+	}
+	else
+	{
+		testFile.close();
+		return false;
+	}
 }
 
 // Undefined Function
@@ -25,22 +34,23 @@ bool SCA::loadTemplateTable(string templateTableFile) {
 string loadSourceCode(string sourceCodeFileLocation)
 {
 	cout << "Loading source code..." << endl;
-	ifstream sourceCodeFile;
-	sourceCodeFile.open(sourceCodeFileLocation);
 
-	//File checking
-	if (sourceCodeFile.is_open() == false)
+	if (!SCA::existsFile(sourceCodeFileLocation))
 	{
 		cout << "File not found or failed to open." << endl;
 		return "";
 	}
+
+	ifstream sourceCodeFile;
+	sourceCodeFile.open(sourceCodeFileLocation);
+
 	cout << "File found." << endl;
 
-	ifstream problemFile;
-	problemFile.open("Source.cpp");								//Try to open "Source.cpp," which will be a file to append the function(s) to
-	if (problemFile.is_open())									//If Source.cpp isn't found, assume we're just making a main() function
+	if (SCA::existsFile("Source.cpp"))									//Try to open "Source.cpp," which will be a file to append the function(s) to
 	{
 		cout << "Source.cpp found. Attaching functions..." << endl;
+		ifstream problemFile;
+		problemFile.open("Source.cpp");								
 
 		vector<string> functions;
 		vector<string> functionHeaders;

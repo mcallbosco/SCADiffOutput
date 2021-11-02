@@ -1,15 +1,19 @@
 #include "SCA.h"
 
 // Constructor
-SCA::SCA() {};
+SCA::SCA(): ast(nullptr), templateTableFile(""), cppFilePath("") {};
 
 // Constructor with parameter for cppFilePath
 SCA::SCA(const string& pathToCppFile) {
-	
+	cppFilePath = pathToCppFile;
+	ast = nullptr;
+	templateTableFile = "";
 }
 
 SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable) {
-
+	cppFilePath = pathToCppFile;
+	ast = nullptr;
+	templateTableFile = pathToTemplateTable;
 }
 
 bool SCA::existsFile(string filePath) const {
@@ -28,8 +32,13 @@ bool SCA::existsFile(string filePath) const {
 
 // Undefined Function
 bool SCA::loadTemplateTable(string templateTableFile) {
-	return true;
+	TemplateTable* tempTableLoader = new TemplateTable();
+	if (tempTableLoader->loadTemplateTable(templateTableFile))
+		return true;
+	else
+		return false;
 }
+
 
 string loadSourceCode(string sourceCodeFileLocation)
 {
@@ -324,13 +333,29 @@ string loadSourceCode(string sourceCodeFileLocation)
 	}
 }
 
+
 bool SCA::serveCodeToANTLR(string& treeTxtFilePath, string& errorTxtFilePath) {
-	return true;
+	ANTLR_Server* toAntlr = new ANTLR_Server(cppFilePath);
+
+	if (toAntlr->serveCode(treeTxtFilePath, errorTxtFilePath))
+		return true;
+	else
+		return false;
 }
 
-// Undefined Function
+
 Node* SCA::readANTLROutputTree(string& treeTxtFilePath) {
-	return nullptr;
+	AST_Parser* ast_parser = new AST_Parser(treeTxtFilePath, cppFilePath);
+	Node* rootPtr = nullptr;
+	if (ast_parser->testFileExists(treeTxtFilePath)) {
+		ast_parser->parseTree();
+		rootPtr = ast_parser->getTreeRoot();
+		ast_parser->condenseTree(rootPtr);
+		ast_parser->getNodeLineNums();
+
+		ast = ast_parser->getTree();
+	}
+	return rootPtr;
 }
 
 // Undefined Function
@@ -340,7 +365,16 @@ bool SCA::readANTLROutputErrors(string& errorTxtFilePath) {
 
 // Undefined Function
 string SCA::matchTemplateWithTree() const {
-	return "";
+	Template_Matcher templateMatcher;
+
+	TemplateTable* tempTableLoader = new TemplateTable();
+	tempTableLoader->loadTemplateTable(templateTableFile);
+
+	templateMatcher.setTemplateTable(tempTableLoader->getTemplateTable());
+	templateMatcher.setRulesArraySize();
+	templateMatcher.checkTreeForErrors(ast->getRoot());
+
+	return templateMatcher.outputSuggestions();
 }
 
 // Undefined Function

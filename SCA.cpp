@@ -17,7 +17,7 @@ SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable) {
 }
 
 bool SCA::existsFile(string filePath) const {
-	ifstream testFile(filepath);
+	ifstream testFile(filePath);
 	if (testFile.is_open())
 	{
 		testFile.close();
@@ -40,11 +40,11 @@ bool SCA::loadTemplateTable(string templateTableFile) {
 }
 
 
-string loadSourceCode(string sourceCodeFileLocation)
+string SCA::loadSourceCode(string sourceCodeFileLocation)
 {
 	cout << "Loading source code..." << endl;
 
-	if (!SCA::existsFile(sourceCodeFileLocation))
+	if (!existsFile(sourceCodeFileLocation))
 	{
 		cout << "File not found or failed to open." << endl;
 		return "failed";
@@ -55,7 +55,7 @@ string loadSourceCode(string sourceCodeFileLocation)
 
 	cout << "File found." << endl;
 
-	if (SCA::existsFile("Source.cpp"))									//Try to open "Source.cpp," which will be a file to append the function(s) to
+	if (existsFile("Source.cpp"))									//Try to open "Source.cpp," which will be a file to append the function(s) to
 	{
 		cout << "Source.cpp found. Attaching functions..." << endl;
 		ifstream problemFile;
@@ -106,7 +106,13 @@ string loadSourceCode(string sourceCodeFileLocation)
 		if (numOfFunctions > 0)
 		{
 			ofstream newFile;
-			newFile.open("new" + sourceCodeFileLocation);		//New file to print to
+			// find .cpp in filepath and insert "new" before it to create new file name
+			int found = sourceCodeFileLocation.find(".cpp");
+			// Create new file name for file
+			if (found != -1) {
+				sourceCodeFileLocation = sourceCodeFileLocation.substr(0, found) + "new" + sourceCodeFileLocation.substr(found, sourceCodeFileLocation.length() - found);
+			}
+			newFile.open(sourceCodeFileLocation);		//New file to print to
 
 			bool* hasAPrototype = new bool[numOfFunctions];		//Array of bools signifying if the function already has a prototype in Source.cpp
 			for (int i = 0; i < numOfFunctions; i++)			//Initialize it
@@ -151,7 +157,7 @@ string loadSourceCode(string sourceCodeFileLocation)
 				newFile << functions[i] << endl;
 			}
 
-			return "new" + sourceCodeFileLocation;
+			return sourceCodeFileLocation;
 
 		}
 		else
@@ -161,7 +167,7 @@ string loadSourceCode(string sourceCodeFileLocation)
 		}
 	}
 
-	cout << "Checking for main() funciton..." << endl;
+	cout << "Checking for main() function..." << endl;
 
 	//Scans code for "int main()" to see if it's already declared
 	string line;
@@ -173,7 +179,7 @@ string loadSourceCode(string sourceCodeFileLocation)
 			cout << "main() found." << endl;
 			//check for command line parameters??
 			sourceCodeFile.close();
-			return "existing";									//Return code for the case that main exists
+			return sourceCodeFileLocation;									//Return code for the case that main exists
 		}
 	}
 
@@ -302,7 +308,11 @@ string loadSourceCode(string sourceCodeFileLocation)
 		}
 
 		//Make a new file containing the original functions and a new main function that calls all of them
-		ofstream newCodeFile("new" + sourceCodeFileLocation);
+		int found = sourceCodeFileLocation.find(".cpp");
+		if (found != -1) {
+			sourceCodeFileLocation = sourceCodeFileLocation.substr(0, found) + "new" + sourceCodeFileLocation.substr(found, sourceCodeFileLocation.length() - found);
+		}
+		ofstream newCodeFile(sourceCodeFileLocation);
 		sourceCodeFile.clear();
 		sourceCodeFile.seekg(0);				//Back to the top once more
 		while (!sourceCodeFile.eof())
@@ -322,7 +332,7 @@ string loadSourceCode(string sourceCodeFileLocation)
 
 		newCodeFile.close();
 
-		return ("new" + sourceCodeFileLocation);
+		return (sourceCodeFileLocation);
 
 	}
 	else													//Case that no functions are found, potentially an empty file
@@ -354,6 +364,10 @@ Node* SCA::readANTLROutputTree(string& treeTxtFilePath) {
 		ast_parser->getNodeLineNums();
 
 		ast = ast_parser->getTree();
+		ast_parser->inOrderPrintAllLeafData(rootPtr);
+	}
+	else {
+		cout << "File " << treeTxtFilePath << " does not exist..." << endl;
 	}
 	return rootPtr;
 }
@@ -365,16 +379,16 @@ bool SCA::readANTLROutputErrors(string& errorTxtFilePath) {
 
 // Undefined Function
 string SCA::matchTemplateWithTree() const {
-	Template_Matcher templateMatcher;
+	Template_Matcher* templateMatcher = new Template_Matcher();
 
 	TemplateTable* tempTableLoader = new TemplateTable();
 	tempTableLoader->loadTemplateTable(templateTableFile);
 
-	templateMatcher.setTemplateTable(tempTableLoader->getTemplateTable());
-	templateMatcher.setRulesArraySize();
-	templateMatcher.checkTreeForErrors(ast->getRoot());
+	templateMatcher->setTemplateTable(tempTableLoader->getTemplateTable());
+	templateMatcher->setRulesArraySize();
+	templateMatcher->checkTreeForErrors(ast->getRoot());
 
-	return templateMatcher.outputSuggestions();
+	return templateMatcher->outputSuggestions();
 }
 
 // Undefined Function

@@ -22,6 +22,9 @@ bool AST_Parser::parseTree() {
 				if (astTxt.peek() == leftPar) { isReady = true; }
 			}
 		}
+		else {
+			isReady = true;
+		}
 
 		if (isReady) {
 			while (getline(astTxt, word, space)) {
@@ -49,7 +52,7 @@ bool AST_Parser::parseTree() {
 		else {
 			// if unsuccessful close file and return false
 			astTxt.close();
-			cout << "Check txt file... unfamiliar format detected.";
+			cout << "Check txt file... unfamiliar format detected." << endl;
 			return false;
 		}
 		// if successful close file and return true

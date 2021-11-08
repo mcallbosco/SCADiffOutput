@@ -4,11 +4,14 @@
 
 #include "Node.h"
 #include <iostream>
+#include <algorithm>
 #include <stack>
 #include <fstream>
 #include <vector>
 #include "ANTLR_Server.h"
 #include "AST_Parser.h"
+#include "TemplateTable.h"
+#include "Template_Matcher.h"
 #include "Tree.h"
 
 using namespace std;

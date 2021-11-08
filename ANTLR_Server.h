@@ -3,21 +3,25 @@
 
 #include <iostream>
 #include <string>
-#include <windows.h>
 #include <fstream>
+#include <unistd.h>
+#include <dirent.h>
+#include <pwd.h>
+#include <sys/stat.h>
 
 using namespace std;
 
 class ANTLR_Server {
 private:
 	string cppFile;
-	string antlrWorkingDir = "C:\\Users\\Public\\ANTLR\\cpp_grammar";
-	string commandBeg = "grun CPP14 translationUnit -tree ";
-	string commandEnd = " > \"C:\\Users\\Public\\ANTLR\\antlr_output\\tree.txt\" 2> \"C:\\Users\\Public\\ANTLR\\antlr_output\\error.txt\"";
+	char* homeDir;
+	string antlrWorkingDir = "/SCA/core/ANTLR";
+	string commandBeg = "java org.antlr.v4.gui.TestRig CPP14 translationUnit -tree ";
+	string commandEnd = " 2> ../out/error.txt 1> ../out/tree.txt ";
 
 public:
 	ANTLR_Server() {};
-	ANTLR_Server(string& cppfilepath) : cppFile(cppfilepath) {};
+	ANTLR_Server(string& cppfilepath);
 	bool serveCode(string& treeTxtFile, string& errorTxtFile);
 	void printErrors();
 };

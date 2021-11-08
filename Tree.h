@@ -2,7 +2,6 @@
 #define TREE_
 #include <iostream>
 #include <string>
-#include <map>
 #include <vector>
 #include <queue>
 #include "Node.h"
@@ -40,6 +39,8 @@ public:
 	string getNextNtokens(Node* rt, int n);
 	void _getNextNtokens(Node* rt, int n);
 
+	// trim leading and trailing white spaces from string
+	string trim(const string& line);
 	
 	// level-order traversal => writes tree to string for html output
 	string LevelOrderTraversaltoString();

@@ -106,9 +106,9 @@ namespace SCAUnitTests
 		std:string errorFilePath;
 			test.serveCodeToANTLR(treeFilePath, errorFilePath);
 
-			Assert::AreEqual(test.existsFile("C:\\Users\\Public\\ANTLR\\antlr_output\\tree.txt"), true);
-			Assert::AreEqual(test.existsFile("C:\\Users\\Public\\ANTLR\\antlr_output\\error.txt"), true);
-			//Note: file paths are taken directly from function. Should these be hard coded to this file path?
+			Assert::AreEqual(test.existsFile(treeFilePath), true);
+			Assert::AreEqual(test.existsFile(errorFilePath), true);
+			
 		}
 	};
 }

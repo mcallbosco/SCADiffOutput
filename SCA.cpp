@@ -393,5 +393,14 @@ string SCA::matchTemplateWithTree() const {
 
 // Undefined Function
 string SCA::createHTMLFile() {
-	return "";
+	createHTML create_html;
+	create_html.setCPPfile(cppFilePath);
+	create_html.setSuggestions(matchTemplateWithTree());
+
+	int pos = cppFilePath.find_last_of("//");
+	string htmlLocation = cppFilePath.substr(0, pos);
+	create_html.setHTMLlocation(htmlLocation);
+	create_html.makeCSSfile();
+	create_html.makeHTMLfile();
+	return htmlLocation;
 }

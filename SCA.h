@@ -12,6 +12,7 @@
 #include "AST_Parser.h"
 #include "TemplateTable.h"
 #include "Template_Matcher.h"
+#include "createHTMLFile.h"
 #include "Tree.h"
 #include "TemplateTable.h"
 #include "Template_Matcher.h"

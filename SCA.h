@@ -10,6 +10,8 @@
 #include "ANTLR_Server.h"
 #include "AST_Parser.h"
 #include "Tree.h"
+#include "TemplateTable.h"
+#include "Template_Matcher.h"
 
 using namespace std;
 

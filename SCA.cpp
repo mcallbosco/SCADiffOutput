@@ -17,7 +17,7 @@ SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable) {
 }
 
 bool SCA::existsFile(string filePath) const {
-	ifstream testFile(filepath);
+	ifstream testFile(filePath);
 	if (testFile.is_open())
 	{
 		testFile.close();
@@ -40,7 +40,7 @@ bool SCA::loadTemplateTable(string templateTableFile) {
 }
 
 
-string loadSourceCode(string sourceCodeFileLocation)
+string SCA::loadSourceCode(string sourceCodeFileLocation)
 {
 	cout << "Loading source code..." << endl;
 

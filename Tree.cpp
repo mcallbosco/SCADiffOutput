@@ -144,7 +144,7 @@ void Tree::_getNextNtokens(Node* rt, int n) {
 
 	if (rt->getChildCount() == 0) {
 		string temp = rt->getParent()->getData();
-		temp.erase(remove_if(temp.begin(), temp.end(), isspace), temp.end());
+		temp = trim(temp);
 		if (temp == "unqualifiedId" || temp == "literal") {
 			nextNtokens += rt->getParent()->getData();
 		}
@@ -162,6 +162,12 @@ void Tree::_getNextNtokens(Node* rt, int n) {
 	}
 }
 
+string Tree::trim(const string& line) {
+	const char* WhiteSpace = " \t\v\r\n";
+	size_t start = line.find_first_not_of(WhiteSpace);
+	size_t end = line.find_last_not_of(WhiteSpace);
+	return start == end ? string() : line.substr(start, end - start + 1);
+}
 
 void Tree::filltokenNodeVector(const string& token, Node* rt) {
 	Node* nodeIter = rt;

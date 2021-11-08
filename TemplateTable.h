@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class TemplateTable : SCA {
+class TemplateTable {
 private:
 	//The template table
 	unordered_map <int, Rule> template_table;

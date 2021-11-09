@@ -17,8 +17,8 @@ bool ANTLR_Server::serveCode(string& treeTxtFile, string& errorTxtFile) {
 		//run command
 		int errStatus = system(cmdString.c_str());
 		if (errStatus == 0) {
-			treeTxtFile = string(homeDir) + "/SCA/core/out/tree.txt";
-			errorTxtFile = string(homeDir) + "/SCA/core/out/error.txt";
+			treeTxtFile = string(homeDir) + "/SCA/SCA/core/out/tree.txt";
+			errorTxtFile = string(homeDir) + "/SCA/SCA/core/out/error.txt";
 		}
 		else {
 			printErrors();
@@ -36,7 +36,7 @@ bool ANTLR_Server::serveCode(string& treeTxtFile, string& errorTxtFile) {
 
 void ANTLR_Server::printErrors() {
 	string line;
-	string errorFilePath = string(homeDir) + "/SCA/core/out/error.txt";
+	string errorFilePath = string(homeDir) + "/SCA/SCA/core/out/error.txt";
 	ifstream errorFile(errorFilePath);
 	cout << "Error(s): " << endl;
 

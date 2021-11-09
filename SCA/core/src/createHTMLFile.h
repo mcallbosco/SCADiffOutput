@@ -8,8 +8,8 @@
 
 class createHTML {
 private:
-	string htmlLocation;
-	string htmlName = "results.html";
+	// changes to directory to match SCA dir structure
+	string htmlFilePath;
 	string cppFileLocation;
 	string Suggestions;
 public:
@@ -38,7 +38,7 @@ createHTML::createHTML() {
 }
 
 createHTML::createHTML(string HTMLlocation, string cppLocation, string suggestions) {
-	htmlLocation = HTMLlocation;
+	htmlFilePath = HTMLlocation;
 	cppFileLocation = cppLocation;
 	Suggestions = suggestions;
 }
@@ -52,13 +52,13 @@ void createHTML::setCPPfile(string CPPfile) {
 }
 
 void createHTML::setHTMLlocation(string HTMLlocation) {
-	htmlLocation = HTMLlocation;
+	htmlFilePath = HTMLlocation;
 }
 
 void createHTML::makeHTMLfile()
 {
 	//create html file
-	ofstream htmlFile(htmlLocation + "\\" + htmlName);
+	ofstream htmlFile(htmlFilePath);
 
 	//start of file
 	htmlFile << "<!DOCTYPE html>\n" << "<html>\n" << "\t<head>\n";
@@ -90,7 +90,10 @@ void createHTML::makeHTMLfile()
 
 void createHTML::makeCSSfile() 
 {
-	ofstream  cssFile(htmlLocation + "//htmlStyle.css");
+	// changes to file name and directory to match SCA dir structure
+	int pos = htmlFilePath.find_last_of("/");
+	string cssFilePath = htmlFilePath.substr(0, pos) + "/htmlStyle.css"; 
+	ofstream  cssFile(cssFilePath);
 
 	cssFile << ".columnContainer{\n" << "\tdisplay: flex;\n" << "}\n";
 	cssFile << "p{\n" << "\tflex: 1;\n" << "}\n";

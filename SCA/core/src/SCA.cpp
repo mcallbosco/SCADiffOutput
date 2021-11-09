@@ -1,19 +1,28 @@
 #include "SCA.h"
 
 // Constructor
-SCA::SCA(): ast(nullptr), templateTableFile(""), cppFilePath("") {};
+SCA::SCA(): ast(nullptr), templateTableFile(""), cppFilePath(""), htmlDir("") {};
 
 // Constructor with parameter for cppFilePath
 SCA::SCA(const string& pathToCppFile) {
 	cppFilePath = pathToCppFile;
 	ast = nullptr;
 	templateTableFile = "";
+	htmlDir = "";
 }
 
 SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable) {
 	cppFilePath = pathToCppFile;
 	ast = nullptr;
 	templateTableFile = pathToTemplateTable;
+	htmlDir = "";
+}
+
+SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable, const string& pathToHtmlDir) {
+	cppFilePath = pathToCppFile;
+	ast = nullptr;
+	templateTableFile = pathToTemplateTable;
+	htmlDir = pathToHtmlDir;
 }
 
 bool SCA::existsFile(string filePath) const {
@@ -393,14 +402,18 @@ string SCA::matchTemplateWithTree() const {
 
 // Undefined Function
 string SCA::createHTMLFile() {
-	createHTML create_html;
-	create_html.setCPPfile(cppFilePath);
-	create_html.setSuggestions(matchTemplateWithTree());
+	createHTML* create_html = new createHTML();
+	create_html->setCPPfile(cppFilePath);
+	create_html->setSuggestions(matchTemplateWithTree());
 
-	int pos = cppFilePath.find_last_of("//");
-	string htmlLocation = cppFilePath.substr(0, pos);
-	create_html.setHTMLlocation(htmlLocation);
-	create_html.makeCSSfile();
-	create_html.makeHTMLfile();
+	// changes to filename and file path to match directory structure
+	int pos = cppFilePath.find_last_of("/");
+	string filename = cppFilePath.substr(pos + 1, cppFilePath.length() - (pos + 1));
+	pos = filename.find(".");
+	filename = filename.substr(0, pos);
+	string htmlLocation = htmlDir + "/" + filename + ".html";
+	create_html->setHTMLlocation(htmlLocation);
+	create_html->makeCSSfile();
+	create_html->makeHTMLfile();
 	return htmlLocation;
 }

@@ -24,12 +24,14 @@ class SCA : public SCAInterface {
 private:
 	string cppFilePath;
 	string templateTableFile;
+	string htmlDir;
 	Tree* ast;
 
 public:
 	SCA();
 	SCA(const string& pathToCppFile);
 	SCA(const string& pathToCppFile, const string& pathToTemplateTable);
+	SCA(const string& pathToCppFile, const string& pathToTemplateTable, const string& pathToHtmlDir);
 	bool existsFile(string filePath) const;
 	bool loadTemplateTable(string templateTableFile);
 	string loadSourceCode(string filePath);

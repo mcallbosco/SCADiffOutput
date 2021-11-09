@@ -12,8 +12,9 @@ string matchedSuggestions;
 string htmlFilePath;
 string treeTxtFilePath;
 string errorTxtFilePath;
-string templateTableFile = "/SCA/core/dat/rules.txt";
-string sourceFileDir = "/SCA/user/source-code";
+string templateTableFile = "/SCA/SCA/core/dat/rules.txt";
+string sourceFileDir = "/SCA/SCA/user/source-code";
+string htmlFileDir = "/SCA/SCA/user/output";
 char *homeDir;
 
 void explore(char *dir_name);
@@ -26,6 +27,7 @@ int main() {
 	// update absolute paths for templateTableFile and sourceFileDir
 	sourceFileDir = string(homeDir) + sourceFileDir;
 	templateTableFile = string(homeDir) + templateTableFile;
+	htmlFileDir = string(homeDir) + htmlFileDir;
 	
 	explore((char*)sourceFileDir.c_str());
 
@@ -48,7 +50,7 @@ void explore(char *dir_name) {
 			string cppFilePath = sourceFileDir + "/" + string(entry->d_name);
 			
 			if (cppFilePath.substr(cppFilePath.length() - 3, 3) == "cpp") {
-				SCA* sca = new SCA(cppFilePath, templateTableFile);
+				SCA* sca = new SCA(cppFilePath, templateTableFile, htmlFileDir);
 				Node* rt;
 
 				sca->existsFile(cppFilePath);
@@ -80,6 +82,10 @@ void explore(char *dir_name) {
 
 				htmlFilePath = sca->createHTMLFile();
 				cout << "Created html file\n";
+			}
+			else {
+				cout << "File: " + cppFilePath + " not recognized.\n";
+				cout << "Make sure file is named with proper extenstion (.cpp)\n";
 			}
 		}
 	}

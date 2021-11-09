@@ -15,7 +15,7 @@ class ANTLR_Server {
 private:
 	string cppFile;
 	char* homeDir;
-	string antlrWorkingDir = "/SCA/core/ANTLR";
+	string antlrWorkingDir = "/ANTLR";
 	string commandBeg = "java org.antlr.v4.gui.TestRig CPP14 translationUnit -tree ";
 	string commandEnd = " 2> ../out/error.txt 1> ../out/tree.txt ";
 

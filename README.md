@@ -17,17 +17,17 @@ Prerequisites => Must be running a Debian version of Linux
     - The command to do so is:  chmod +x install_SCA_ubuntu.sh
     - After that you can run the script with:  ./install_SCA_ubuntu.sh
 3. After the script has run successfully it will have downloaded and installed all necessary requirements for
-   SCA to run in a direcorty that can be found at ~/SCA (on your home directory). A picture of the directory
+   SCA to run in a directory that can be found at ~/SCA (on your home directory). A picture of the directory
    structure can be found below.
 4. To execute the SCA tool on your source code files, place the .cpp files you would like to have analyzed
    in the ~/SCA/user/source-code directory (see photo below)
-5. Once you have your desired .cpp files in /source-code run the a.out file located in ~/SCA/core/src. This
+5. Once you have your desired .cpp files in /source-code run the a.out file located in ~/SCA/SCA/core/src. This
    will perform the analysis on the source code files and produce subsequent html output files with a report
    of the errors, warnings, and suggestions to your source code files.
-6. The html output files will be located in ~/SCA/user/output. The name of each .html will correspond with your
+6. The html output files will be located in ~/SCA/SCA/user/output. The name of each .html will correspond with your
    source code file's name.
 
+![Directory_Tree](https://user-images.githubusercontent.com/64028736/140849179-40abb7ef-75b9-4ca8-b878-4b4665f5fedd.JPG)
 
-![Directory_Tree](https://user-images.githubusercontent.com/64028736/140796600-9c5f4edf-85d4-459a-89ff-31bfe8552801.JPG)
 
 

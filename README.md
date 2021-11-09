@@ -20,7 +20,7 @@ Prerequisites => Must be running a Debian version of Linux
    SCA to run in a directory that can be found at ~/SCA (on your home directory). A picture of the directory
    structure can be found below.
 4. To execute the SCA tool on your source code files, place the .cpp files you would like to have analyzed
-   in the ~/SCA/user/source-code directory (see photo below)
+   in the ~/SCA/SCA/user/source-code directory (see photo below)
 5. Once you have your desired .cpp files in /source-code run the a.out file located in ~/SCA/SCA/core/src. This
    will perform the analysis on the source code files and produce subsequent html output files with a report
    of the errors, warnings, and suggestions to your source code files.

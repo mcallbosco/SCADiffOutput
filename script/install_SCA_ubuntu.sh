@@ -2,11 +2,11 @@
 # cd Documents/ANTLR_Install
 
 # install Java Runtime Enviornment and JDK
+sudo apt-get update
 sudo apt install default-jdk
 sudo apt install default-jre
 
 # install gcc if not already
-sudo apt-get update
 sudo apt-get install build-essential
 
 # install git
@@ -23,6 +23,10 @@ git clone https://github.com/alihaider1264/SCA.git ~/SCA
 # remove script directory from git clone
 cd ~/SCA
 rmdir -r script
+
+# make directory out if it doesn't alread exist
+cd ~/SCA/SCA/core
+mkdir -p out
 
 # Return to ANTLR dir and install required ANTLR files
 cd ~/ANTLR

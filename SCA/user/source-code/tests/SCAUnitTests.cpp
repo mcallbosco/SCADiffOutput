@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "../Senior Project/SCA.h"	//FILE PATH WILL CHANGE?
+#include "~/SCA/SCA/core/src/SCA.h"	//FILE PATH WILL CHANGE?
 #include <stdio.h>
 #include <fstream>
 

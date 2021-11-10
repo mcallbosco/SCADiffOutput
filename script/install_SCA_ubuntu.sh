@@ -21,12 +21,14 @@ mkdir ANTLR
 git clone https://github.com/alihaider1264/SCA.git ~/SCA
 
 # remove script directory from git clone
-cd ~/SCA
-rmdir -r script
+# pipe yes to remove command if it asks about removing files
+yes | rm -r ~/SCA/script
 
-# make directory out if it doesn't alread exist
+# make directory /out and /output if they don't already exist
 cd ~/SCA/SCA/core
 mkdir -p out
+cd ~/SCA/SCA/user
+mkdir -p output
 
 # Return to ANTLR dir and install required ANTLR files
 cd ~/ANTLR
@@ -58,3 +60,14 @@ javac CPP14*.java
 # return to src directory and compile SCA files
 cd ~/SCA/SCA/core/src
 g++ Driver.cpp
+
+# Display message to user after completion of installation
+echo ""  # skip a couple lines and print directions to screen
+echo ""
+echo "----------------------------------------------"
+echo "System install successful!"
+echo "----------------------------------------------"
+echo "HOW TO RUN THE SYSTEM:"
+echo "1. Load user source files to the folder: ~/SCA/SCA/user/source-code"
+echo "2. Navigate to ~/SCA/SCA/core/src and run a.out using command ./a.out"
+echo "3. To view the HTML files navigate to ~/SCA/SCA/user/output and double click to see results."

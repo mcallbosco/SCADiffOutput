@@ -45,6 +45,8 @@ export CLASSPATH=".:$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH"
 
 # add alias for grun
 echo "alias grun='java -Xmx500M -cp \"$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH\" org.antlr.v4.gui.TestRig'" >> ~/.bashrc
+# add alias for a.out created to run Driver.cpp
+echo "alias sca='~/SCA/SCA/core/src/a.out'" >> ~/.bashrc
 
 # Download CPP14 Lexer and Parser from GitHub
 wget https://raw.githubusercontent.com/antlr/grammars-v4/master/cpp/CPP14Lexer.g4
@@ -69,5 +71,5 @@ echo "System install successful!"
 echo "----------------------------------------------"
 echo "HOW TO RUN THE SYSTEM:"
 echo "1. Load user source files to the folder: ~/SCA/SCA/user/source-code"
-echo "2. Navigate to ~/SCA/SCA/core/src and run a.out using command ./a.out"
-echo "3. To view the HTML files navigate to ~/SCA/SCA/user/output and double click to see results."
+echo "2. Open a terminal and run the command: sca"
+echo "3. File explorer should open with your results as .html files"

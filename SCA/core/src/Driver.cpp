@@ -30,6 +30,9 @@ int main() {
 	htmlFileDir = string(homeDir) + htmlFileDir;
 	
 	explore((char*)sourceFileDir.c_str());
+	
+	// open /output in file explorer when SCA is complete
+	system("xdg-open ~/SCA/SCA/user/output")
 
 	return 0;
 }

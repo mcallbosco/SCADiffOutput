@@ -27,7 +27,7 @@ Prerequisites => Must be running a Debian version of Linux
    This command will run SCA on the files placed in /source-code. After sca is complete a new file explorer
    should open at the location of the resulting .html files. If it does not, you can view your results in 
    the directory ~/SCA/SCA/user/output
-6. To do analyze additional .cpp files, all you need to do is replace the files located in ~/SCA/SCA/user/source-code
+6. To analyze additional .cpp files, all you need to do is replace the files located in ~/SCA/SCA/user/source-code
    and run the sca command again.
 
 ![Directory_Tree](https://user-images.githubusercontent.com/64028736/140849179-40abb7ef-75b9-4ca8-b878-4b4665f5fedd.JPG)

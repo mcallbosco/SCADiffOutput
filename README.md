@@ -23,8 +23,9 @@ Prerequisites => Must be running a Debian version of Linux
 4. To execute the SCA tool on your source code files, place the .cpp files you would like to have analyzed
    in the ~/SCA/SCA/user/source-code directory (see photo below)
 5. Once you have your desired .cpp files in /source-code open a new terminal and type the command: sca
+
    This command will run SCA on the files placed in /source-code. After sca is complete a new file explorer
-   should open at the location of the resulting .html files. If it does not you can view your results in 
+   should open at the location of the resulting .html files. If it does not, you can view your results in 
    the directory ~/SCA/SCA/user/output
 6. To do analyze additional .cpp files, all you need to do is replace the files located in ~/SCA/SCA/user/source-code
    and run the sca command again.

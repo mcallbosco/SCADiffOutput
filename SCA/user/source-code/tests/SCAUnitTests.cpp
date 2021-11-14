@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "~/SCA/SCA/core/src/SCA.h"	//FILE PATH WILL CHANGE?
+#include "~/SCA/SCA/core/src/SCA.h"
 #include <stdio.h>
 #include <fstream>
 
@@ -65,7 +65,7 @@ namespace SCAUnitTests
 		//loadTemplateFile
 		TEST_METHOD(LoadTemplateFileExists)
 		{
-		std:string templateTableFile = "placeholder text";	//TODO: get template file that exists to use here for testing purposes
+		std:string templateTableFile = "rules.txt";	
 
 			SCA test("testNoMain.cpp");
 
@@ -84,18 +84,21 @@ namespace SCAUnitTests
 
 		TEST_METHOD(MatchTemplateFile)
 		{
-			SCA test("testNoMain.cpp", "templateTableFile Placeholder"); //TODO: template table file that exists to use here
+			SCA test("for_loop.cpp", "rules.txt"); 
 
-			Assert::AreEqual(test.matchTemplateWithTree(), (string)"some string");
-				//function should have predictable output given a constant template table file, just need one here
+			Assert::AreEqual(test.matchTemplateWithTree(), (string)"missing last statement which executes after the for loop is executed(usually an update statement to variable).\nshould add 'endl' or '\\n' to make a new line.");
+				
 		}
 
 		//readANTLROutputTree
 
 		TEST_METHOD(ReadANTLROutputTree)
 		{
-			//Not so sure for this one. should have a set text file tree and then parse the
-			//node it gives? I need to talk with Matt for this one.
+			SCA test("testMain.cpp", "rules.txt");
+
+			Node* testNode = test.readANTLROutputTree("testMain.cpp");
+
+			Assert:AreEqual(testNode->getData(), (string)"translationUnit")
 		}
 
 		//serveCodeToANTLR

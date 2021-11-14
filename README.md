@@ -7,6 +7,7 @@ reliable coding practices and "pushing" them in the right direction. We hope you
 to use and also beneficial in your coding endeavors.
 
 Instructions on installing and using SCA tool:
+
 Prerequisites => Must be running a Debian version of Linux 
                  (if you don't have a debian version of Linux you can always spin up a Virtual Machine).
 

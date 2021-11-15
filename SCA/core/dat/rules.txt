@@ -1,51 +1,61 @@
-0,6,if (unqualifiedId = unqualifiedId),one '=' is for assignment while two '==' is for comparison.
-1,6,if (unqualifiedId = literal),one '=' is for assignment while two '==' is for comparison.
-2,6,if (literal = unqualifiedId),one '=' is for assignment while two '==' is for comparison.
+ver: 1.1
+0,6,if (unqualifiedId = unqualifiedId),One '=' is for assignment while two '==' is for comparison.
+1,6,if (unqualifiedId = literal),One '=' is for assignment while two '==' is for comparison.
+2,6,if (literal = unqualifiedId),One '=' is for assignment while two '==' is for comparison.
 3,5,unqaulifiedId = unqualifiedId + 1,This is correct, but there's a cleaner way to write this (variable++)
 4,4,unquaulifiedId += 1,This is correct, but there's a cleaner way to write this (variable++)
-5,2,[],Empty brackets, trying to access a specific part of the array? Use integers. Or if in a loop use a variable to go through array. //check around this
+5,2,[],Empty brackets, Trying to access a specific part of the array? Use integers, or if in a loop use a variable to go through array.
 6,2,><,Use '>' for greater than, '<' for less than, '>>' for cout statements, and '<<' for cin statements.
 7,3,===,Syntax error. one '=' is for assignment while two '==' is for comparison.
-8,2,int a,Have //more descriptive variable names.
-9,2,int b,Have meaningful variable names. //check if one letter id
-10,2,int c,Have meaningful variable names.
-11,2,int d,Have meaningful variable names.
-12,2,int x,Have meaningful variable names.
-13,2,int y,Have meaningful variable names.
-14,2,int z,Have meaningful variable names.
-15,12,for (int unqualifiedId = literal; unqualifiedId > literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-16,12,for (int unqualifiedId = literal; unqualifiedId > unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-17,12,for (int unqualifiedId = unqualifiedId; unqualifiedId > literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-18,12,for (int unqualifiedId = unqualifiedId; unqualifiedId > unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-19,12,for (int unqualifiedId = literal; unqualifiedId < literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-20,12,for (int unqualifiedId = literal; unqualifiedId < unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-21,12,for (int unqualifiedId = unqualifiedId; unqualifiedId < literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-22,12,for (int unqualifiedId = unqualifiedId; unqualifiedId < unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-23,12,for (int unqualifiedId = literal; unqualifiedId == literal;), missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-24,12,for (int unqualifiedId = literal; unqualifiedId == unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-25,12,for (int unqualifiedId = unqualifiedId; unqualifiedId == literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-26,12,for (int unqualifiedId = unqualifiedId; unqualifiedId == unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-27,12,for (int unqualifiedId = literal; unqualifiedId <= literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-28,12,for (int unqualifiedId = literal; unqualifiedId <= unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-29,12,for (int unqualifiedId = unqualifiedId; unqualifiedId <= literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-30,12,for (int unqualifiedId = unqualifiedId; unqualifiedId <= unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-31,12,for (int unqualifiedId = literal; unqualifiedId >= literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-32,12,for (int unqualifiedId = literal; unqualifiedId >= unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-33,12,for (int unqualifiedId = unqualifiedId; unqualifiedId >= literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-34,12,for (int unqualifiedId = unqualifiedId; unqualifiedId >= unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-35,12,for (int unqualifiedId = literal; unqualifiedId != literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-36,12,for (int unqualifiedId = literal; unqualifiedId != unqualifiedId;),//will work with update statement in the body missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-37,12,for (int unqualifiedId = unqualifiedId; unqualifiedId != literal;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-38,12,for (int unqualifiedId = unqualifiedId; unqualifiedId != unqualifiedId;),missing last statement, executes after the for loop is executed(usually an update statemetn to variable).
-39,11,for (int unqualifiedId = literal; unqualifiedId++;),missing second statement, the conditional statement for the loop.
-40,4,unqualifiedId << literal,should add 'endl' or '\n' to make a new line.
-41,4,unqualifiedId << unqualifiedId,should add 'endl' or '\n' to make a new line.
-42,7,unqualifiedId << literal << literal,should add 'endl' or '\n' to make a new line.
-43,7,unqualifiedId << literal << unqualifiedId,should add 'endl' or '\n' to make a new line.
-44,7,unqualifiedId << unqualifiedId << unqualifiedId,should add 'endl' or '\n' to make a new line.
-45,7,unqualifiedId << unqualifiedId << literal,should add 'endl' or '\n' to make a new line.
-46,6,if (literal == literal),You're comparing two constants, this is either constantly true or false so this statement is not uselful.
-47,6,if (literal = literal),one '=' is for assignment while two '==' is for comparison, and comparing two constants.
-48,3,unqualifiedId < literal, one '<' is for comparison while two '<<' is usually used with cout statements.
-49,3,unqualifiedId < unqualifiedId, one '<' is for comparison while two '<<' is usually used with cout statements.
-48,3,cin > unqualifiedId, one '>' is for comparison while two '>>' is usually used with cin statements.
+8,2,int a,Have more descriptive variable names.
+9,2,int b,Have more descriptive variable names.
+10,2,int c,Have more descriptive variable names.
+11,2,int d,Have more descriptive variable names.
+12,2,int x,Have more descriptive variable names.
+13,2,int y,Have more descriptive variable names.
+14,2,int z,Have more descriptive variable names.
+15,12,for (int unqualifiedId = literal; unqualified > literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+16,12,for (int unqualifiedId = literal; unqualified > unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+17,12,for (int unqualifiedId = unqualifiedId; unqualified > literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+18,12,for (int unqualifiedId = unqualifiedId; unqualified > unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+19,12,for (int unqualifiedId = literal; unqualified < literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+20,12,for (int unqualifiedId = literal; unqualified < unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+21,12,for (int unqualifiedId = unqualifiedId; unqualified < literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+22,12,for (int unqualifiedId = unqualifiedId; unqualified < unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+23,12,for (int unqualifiedId = literal; unqualified == literal;), Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+24,12,for (int unqualifiedId = literal; unqualified == unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+25,12,for (int unqualifiedId = unqualifiedId; unqualified == literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+26,12,for (int unqualifiedId = unqualifiedId; unqualified == unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+27,12,for (int unqualifiedId = literal; unqualified <= literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+28,12,for (int unqualifiedId = literal; unqualified <= unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+29,12,for (int unqualifiedId = unqualifiedId; unqualified <= literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+30,12,for (int unqualifiedId = unqualifiedId; unqualified <= unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+31,12,for (int unqualifiedId = literal; unqualified >= literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+32,12,for (int unqualifiedId = literal; unqualified >= unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+33,12,for (int unqualifiedId = unqualifiedId; unqualified >= literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+34,12,for (int unqualifiedId = unqualifiedId; unqualified >= unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+35,12,for (int unqualifiedId = literal; unqualified != literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+36,12,for (int unqualifiedId = literal; unqualified != unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+37,12,for (int unqualifiedId = unqualifiedId; unqualified != literal;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+38,12,for (int unqualifiedId = unqualifiedId; unqualified != unqualifiedId;),Will work with update statement in the body. Missing last statement which executes after the for loop is executed(usually an update statement to variable).
+39,11,for (int unqualifiedId = literal; unqualifiedId++;),Missing second statement, the conditional statement for the loop.
+40,4,cout << literal,Should add 'endl' or '\n' to make a new line.
+41,4,cout << unqualifiedId,Should add 'endl' or '\n' to make a new line.
+42,7,cout << literal << literal,Should add 'endl' or '\n' to make a new line.
+43,7,cout << literal << unqualifiedId,Should add 'endl' or '\n' to make a new line.
+44,7,cout << unqualifiedId << unqualifiedId,Should add 'endl' or '\n' to make a new line.
+45,7,cout << unqualifiedId << literal,Should add 'endl' or '\n' to make a new line.
+46,6,if (literal == literal),Comparing two constants. This is either constantly true or false, so this statement inst to uselful.
+47,6,if (literal = literal),One '=' is for assignment while two '==' is for comparison, and comparing two constants.
+48,3,cout < literal, One '<' is for comparison while two '<<' is usually used with cout statements.
+49,3,cout < unqualifiedId, One '<' is for comparison while two '<<' is usually used with cout statements.
+50,3,cin > unqualifiedId, One '>' is for comparison while two '>>' is usually used with cin statements.
+51,11,for (int unqualifiedId = unqualifiedId; unqualifiedId++;),Missing second statement, the conditional statement for the loop.
+52,3,int unqualifiedId;, Make sure you initialize your variables when they are declared.
+53,3,double unqaulifiedId;,Make sure you initialize your variables when they are declared.
+54,3,char unqaulifiedId;,Make sure you initialize your variables when they are declared.
+55,3,string unqaulifiedId;,Make sure you initialize your variables when they are declared.
+56,3,float unqaulifiedId;,Make sure you initialize your variables when they are declared.
+57,3,bool unqaulifiedId;,Make sure you initialize your variables when they are declared.
+58,5,unqaulifiedId = unqualifiedId - 1,This is correct, but there's a cleaner way to write this (variable--)
+59,4,unquaulifiedId -= 1,This is correct, but there's a cleaner way to write this (variable--)

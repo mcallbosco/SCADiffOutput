@@ -138,7 +138,7 @@ string Template_Matcher::outputSuggestions()
 	{
 		if (rulesViolated[i] == -1)
 			break;
-		suggestions += rulesViolated[i] + ": " + template_table[rulesViolated[i]].getSuggestion() + "\n";
+		suggestions += template_table[rulesViolated[i]].getSuggestion() + "\n";
 	}
 
 	return suggestions;

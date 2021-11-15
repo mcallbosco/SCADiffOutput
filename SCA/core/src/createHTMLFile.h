@@ -3,14 +3,13 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <string>
 #include "SCA.h"
 
 class createHTML {
 private:
-	string htmlLocation;
-	string htmlName = "results.html";
+	// changes to directory to match SCA dir structure
+	string htmlFilePath;
 	string cppFileLocation;
 	string Suggestions;
 public:
@@ -69,8 +68,8 @@ void createHTML::makeHTMLfile()
 
 	htmlFile << "\t</head>\n" << "\t<body>\n";
 
-	//left column
-	htmlFile << "\t\t<div id=column1 class=\"columnContainer\"\n>";
+	//format columns
+	htmlFile << "\t\t<div id=container-for-columns class=\"columnContainer\"\n>";
 
 	ifstream cppFile(cppFileLocation);
 	string CPPstring;
@@ -84,53 +83,20 @@ void createHTML::makeHTMLfile()
 	}
 
 	//load soucre code in left column
-	htmlFile << "\t\t\t<p class=\"sourcecode\">" << CPPstring << "<p>\n";
-	htmlFile << "\t\t</div>\n";
-
-	//right column
-	htmlFile << "\t\t<div id=column2 clss=\"columnContainer\">";
-
-	stringstream suggestions(Suggestions);
+	htmlFile << "\t\t\t<p>" << CPPstring << "<p>\n";
 	//load suggestions in right column
-	if (Suggestions != "")
-	{
-		while (getline(suggestions, tempString))
-		{
-			htmlFile << "\t\t\t<p class=\"rule\">" << tempString << "<p>\n";
-		}
-	}
-	else
-		htmlFile << "\t\t\t<p class=\"rule\">" << "No Suggestions!" << "<p>\n";
-
-	htmlFile << "\t\t</div>\n" << "\t</body>\n" << "</html>";
+	htmlFile << "\t\t\t<p>" << Suggestions << "<p>\n";
 }
 
 void createHTML::makeCSSfile() 
 {
-	ofstream  cssFile(htmlLocation + "//htmlStyle.css");
+	// changes to file name and directory to match SCA dir structure
+	int pos = htmlFilePath.find_last_of("/");
+	string cssFilePath = htmlFilePath.substr(0, pos) + "/htmlStyle.css"; 
+	ofstream  cssFile(cssFilePath);
 
-	cssFile << ".columnContainer{\n" << "\tfloat: left;\n" << "\twidth: 50%" << "}\n\n";
-	cssFile << ".sourcecode{\n" 
-		<< "\tposition: relative;"
-		<< "\tborder-radius: 25px;\n"
-		<< "\tborder: 2px solid #227db3;\n"
-		<< "\tpadding: 20px;\n"
-		<< "\twidth: 400px;\n"
-		<< "\theight: 500px;\n"
-		<< "\tmargin: 0;\n"
-		<< "\tfont-family: \"Lucida Console\";\n"
-		<< "}\n\n";
-
-	cssFile << ".rule{\n"
-		<< "\tposition: relative;"
-		<< "\tborder-radius: 25px;\n"
-		<< "\tborder: 2px solid #227db3;\n"
-		<< "\tpadding: 20px;\n"
-		<< "\twidth: 400px;\n"
-		<< "\theight: 50px;\n"
-		<< "\tmargin: 0;\n"
-		<< "\tfont-family: \"Lucida Console\";\n"
-		<< "}\n\n";
+	cssFile << ".columnContainer{\n" << "\tdisplay: flex;\n" << "}\n";
+	cssFile << "p{\n" << "\tflex: 1;\n" << "}\n";
 }
 
 #endif // !CREATE_HTML_FILE

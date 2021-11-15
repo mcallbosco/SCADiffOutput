@@ -59,3 +59,6 @@ ver: 1.1
 57,3,bool unqaulifiedId;,Make sure you initialize your variables when they are declared.
 58,5,unqaulifiedId = unqualifiedId - 1,This is correct, but there's a cleaner way to write this (variable--)
 59,4,unquaulifiedId -= 1,This is correct, but there's a cleaner way to write this (variable--)
+60,10,if (unqualifiedId == literal) {} else,There is no body for the if statement, use if (x != y) instead of just the else statement.
+61,10,if (unqualifiedId == unqualifiedId) {} else,There is no body for the if statement, use if (x != y) instead of just the else statement.
+62,10,if (literal == unqualifiedId) {} else,There is no body for the if statement, use if (x != y) instead of just the else statement.

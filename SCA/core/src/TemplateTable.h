@@ -40,6 +40,8 @@ public:
 
 		while (getline(template_file, line))
 		{
+			// skip the first line (first line contains the version number)
+			getline(template_file, line);
 			//seperating lines from file
 			string key = line.substr(0, line.find(","));
 			line.erase(0, line.find(",") + 1);

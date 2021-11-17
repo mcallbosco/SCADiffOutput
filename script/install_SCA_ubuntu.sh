@@ -1,5 +1,4 @@
 #!/bin/bash
-# cd Documents/ANTLR_Install
 
 # install Java Runtime Enviornment and JDK
 sudo apt-get update
@@ -11,6 +10,10 @@ sudo apt-get install build-essential
 
 # install git
 sudo apt install git
+
+#remove SCA and ANTLR directories if they already exist
+yes | rm -rf ~/SCA || true
+yes | rm -rf ~/ANTLR || true
 
 # create directories for our project and ANTLR files in ~/
 cd ~
@@ -39,14 +42,20 @@ workingDir=`pwd`
 # download ANTLR jar file
 wget https://www.antlr.org/download/antlr-4.9.2-complete.jar
 
-# add ANTLR jar file to classpath
-echo "export CLASSPATH=\".:$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH\"" >> ~/.bashrc
-export CLASSPATH=".:$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH"
+# add CLASSPATH and alias only if they are not already in .bashrc
+if ["$(grep -c "4.9.2-complete.jar" -eq 0)"] 
+then
+    echo "export CLASSPATH=\".:$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH\"" >> ~/.bashrc
+fi
 
-# add alias for grun
-echo "alias grun='java -Xmx500M -cp \"$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH\" org.antlr.v4.gui.TestRig'" >> ~/.bashrc
-# add alias for a.out created to run Driver.cpp
-echo "alias sca='~/SCA/SCA/core/src/a.out'" >> ~/.bashrc
+if ["$(grep -c "alias sca=" -eq 0)"]
+then
+    # add alias for a.out created to run Driver.cpp
+    echo "alias sca='~/SCA/SCA/core/src/a.out'" >> ~/.bashrc
+fi
+  
+# add ANTLR jar file to classpath of currently open terminal
+export CLASSPATH=".:$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH"
 
 # Download CPP14 Lexer and Parser from GitHub
 wget https://raw.githubusercontent.com/antlr/grammars-v4/master/cpp/CPP14Lexer.g4

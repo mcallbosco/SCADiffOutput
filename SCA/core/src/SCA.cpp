@@ -373,7 +373,6 @@ Node* SCA::readANTLROutputTree(string& treeTxtFilePath) {
 		ast_parser->getNodeLineNums();
 
 		ast = ast_parser->getTree();
-		ast_parser->inOrderPrintAllLeafData(rootPtr);
 	}
 	else {
 		cout << "File " << treeTxtFilePath << " does not exist..." << endl;

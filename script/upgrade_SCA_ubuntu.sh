@@ -1,7 +1,7 @@
 # remove SCA directory
 # git clone must be cloned to an empty directory
 # pipe yes to remove command if it asks about removing files
-yes | rm -r ~/SCA
+yes | rm -rf ~/SCA || true
 
 # create empty SCA directory
 mkdir ~/SCA

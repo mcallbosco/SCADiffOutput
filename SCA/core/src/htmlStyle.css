@@ -1,0 +1,35 @@
+.columnContainer{
+    float: left;
+    width: 50%;
+}
+
+.sourcecode{
+  position: relative;
+  border-radius: 25px;
+  border: 2px solid #227db3;
+  padding: 20px;
+  width: 90%;
+  height: 500px;
+  margin: 0;
+  font-family: "Lucida Console";
+}
+
+.rule
+{
+  position: relative;
+  border-radius: 25px;
+  border: 2px solid #227db3;
+  padding: 20px;
+  width: 90%;
+  height: 50px;
+  margin: 0;
+  font-family: "Lucida Console";
+}
+
+#rcorners {
+    border-radius: 25px;
+    border: 2px solid #227db3;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+  }

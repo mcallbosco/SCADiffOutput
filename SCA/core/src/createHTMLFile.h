@@ -30,9 +30,6 @@ public:
 
 	//creates html file from cpp file and suggestions.
 	void makeHTMLfile();
-
-	//creates css file for html in same directory html file was made in.
-	void makeCSSfile();
 };
 
 createHTML::createHTML() {
@@ -103,34 +100,6 @@ void createHTML::makeHTMLfile()
 		htmlFile << "\t\t\t<p class=\"rule\">" << "No Suggestions!" << "<p>\n";
 
 	htmlFile << "\t\t</div>\n" << "\t</body>\n" << "</html>";
-}
-
-void createHTML::makeCSSfile() 
-{
-	ofstream  cssFile(htmlLocation + "//htmlStyle.css");
-
-	cssFile << ".columnContainer{\n" << "\tfloat: left;\n" << "\twidth: 50%" << "}\n\n";
-	cssFile << ".sourcecode{\n" 
-		<< "\tposition: relative;"
-		<< "\tborder-radius: 25px;\n"
-		<< "\tborder: 2px solid #227db3;\n"
-		<< "\tpadding: 20px;\n"
-		<< "\twidth: 400px;\n"
-		<< "\theight: 500px;\n"
-		<< "\tmargin: 0;\n"
-		<< "\tfont-family: \"Lucida Console\";\n"
-		<< "}\n\n";
-
-	cssFile << ".rule{\n"
-		<< "\tposition: relative;"
-		<< "\tborder-radius: 25px;\n"
-		<< "\tborder: 2px solid #227db3;\n"
-		<< "\tpadding: 20px;\n"
-		<< "\twidth: 400px;\n"
-		<< "\theight: 50px;\n"
-		<< "\tmargin: 0;\n"
-		<< "\tfont-family: \"Lucida Console\";\n"
-		<< "}\n\n";
 }
 
 #endif // !CREATE_HTML_FILE

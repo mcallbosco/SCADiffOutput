@@ -8,13 +8,22 @@ using namespace std;
 class Component 
 {
 private:
+	Node* treeRootNode;
+	Node* componentRootNode;
+
 	int statementTypeint;
 	string statementType;
 	Node* startOfStatement;
 	string componentType;
 	vector<Node*> statementInstances;
-public:
 
+public:
+	// Default Constructor
+	Component();
+	// Contructor with component root node
+	Component(Node* compRtPtr);
+	// Constructor with component root node and tree root node
+	Component(Node* compRtPtr, Node* treeRtPtr);
 	//Pass in 0 for 'iterationStatement' and 1 for 'selectionStatement'.
 	void setStatementType(int type);
 
@@ -30,6 +39,21 @@ public:
 	//returns vector of pointers to all nodes in the statement.
 	vector<Node*> getStatementInstances();
 };
+
+Component::Component() {
+	componentRootNode = nullptr;
+	treeRootNode = nullptr;
+}
+
+Component::Component(Node* compRtPtr) {
+	componentRootNode = compRtPtr;
+	treeRootNode = nullptr;
+}
+
+Component::Component(Node* compRtPtr, Node* treeRtPtr) {
+	componentRootNode = compRtPtr;
+	treeRootNode = treeRtPtr;
+}
 
 void Component::setStatementType(int type){
 	statementTypeint = type;

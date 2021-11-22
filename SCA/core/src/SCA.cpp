@@ -396,6 +396,9 @@ string SCA::matchTemplateWithTree() const {
 	templateMatcher->setRulesArraySize();
 	templateMatcher->checkTreeForErrors(ast->getRoot());
 
+	// Use tree to gather Components
+	templateMatcher->retreiveComponents(ast);
+
 	return templateMatcher->outputSuggestions();
 }
 

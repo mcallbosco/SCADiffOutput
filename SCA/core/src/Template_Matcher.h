@@ -15,6 +15,7 @@ private:
 	int rulesToCheckEntries;
 	int* rulesToCheck;
 	int* rulesViolated;
+	int* rulesViolatedLines;
 	string suggestions;
 	vector<Node*> iterationNodes;
 	vector<Node*> selectionNodes;
@@ -118,9 +119,22 @@ bool Template_Matcher::checkFullViolation(Node* rt, Rule currRule)
 
 	if (treeRule == templateRule)
 	{
-		rulesViolated[rulesViolatedEntries] = currRule.getRuleNum();
-		rulesViolatedEntries++;
-		return true;
+		bool alreadyThere = false;
+		for (int i = 0; i < template_table.size(); i++)
+		{
+			if ((rulesViolated[i] == currRule.getRuleNum()) && (rulesViolatedLines[i] == rt->getLineNum()))
+				alreadyThere = true;
+
+			if (alreadyThere)
+				break;
+		}
+		if (!alreadyThere)
+		{
+			rulesViolated[rulesViolatedEntries] = currRule.getRuleNum();
+			rulesViolatedLines[rulesViolatedEntries] = rt->getLineNum();
+			rulesViolatedEntries++;
+			return true;
+		}
 	}
 	return false;
 }
@@ -132,6 +146,7 @@ void Template_Matcher::setTemplateTable(unordered_map <int, Rule> templatetable)
 void Template_Matcher::setRulesArraySize() {
 	rulesViolated = new int [template_table.size()];
 	rulesToCheck = new int [template_table.size()];
+	rulesViolatedLines = new int[template_table.size()];
 	rulesToCheckEntries = 0;
 	rulesViolatedEntries = 0;
 }
@@ -153,7 +168,8 @@ string Template_Matcher::outputSuggestions()
 	{
 		if (rulesViolated[i] == -1)
 			break;
-		suggestions += rulesViolated[i] + ": " + template_table[rulesViolated[i]].getSuggestion() + "\n";
+		suggestions += "Line " + rulesViolatedLines[i];
+		suggestions += ": " + template_table[rulesViolated[i]].getSuggestion() + "\n";
 	}
 
 	return suggestions;

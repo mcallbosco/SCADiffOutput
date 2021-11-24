@@ -2,6 +2,7 @@
 #define COMPONENT
 
 #include "SCA.h"
+#include "Tree.h"
 
 using namespace std;
 
@@ -61,7 +62,11 @@ public:
 	int getStartLineCount();
 
 	//searches from start node to find data, returns first node with the same data in it.
-	Node* find(string data, Node* start);
+	Node* findNode(string data, Node* start);
+
+	// accessor Methods
+	Node* getTreeRootNode();
+	Node* getComponentRootNode();
 };
 
 Component::Component() {
@@ -77,6 +82,14 @@ Component::Component(Node* compRtPtr) {
 Component::Component(Node* compRtPtr, Node* treeRtPtr) {
 	componentRootNode = compRtPtr;
 	treeRootNode = treeRtPtr;
+}
+
+Node* Component::getTreeRootNode() {
+	return treeRootNode;
+}
+
+Node* Component::getComponentRootNode() {
+	return componentRootNode;
 }
 
 void Component::setStatementType(int type){
@@ -143,7 +156,7 @@ int Component::getStartLineCount() {
 	return startLineCount;
 }
 
-Node* Component::find(string data, Node* start)
+Node* Component::findNode(string data, Node* start)
 {
 	Node* nodeIter = start;
 
@@ -158,7 +171,7 @@ Node* Component::find(string data, Node* start)
 	int totalChildren = nodeIter->getChildCount();
 
 	for (int i = 0; i < totalChildren; i++) {
-		find(data, nodeIter->getChild(i));
+		findNode(data, nodeIter->getChild(i));
 	}
 }
 

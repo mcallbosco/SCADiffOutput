@@ -2,6 +2,7 @@
 #define TEMPLATE_MATCHER
 
 #include "SCA.h"
+#include "While_Loop.h"
 #include <string>
 
 using namespace std;
@@ -178,12 +179,14 @@ string Template_Matcher::outputSuggestions()
 void Template_Matcher::_fillIterationNodeVector(Tree* tree) {
 	tree->filltokenNodeVector(iterationStmt, tree->getRoot());
 	iterationNodes = tree->getTokenNodes();
+	tree->clearTokenNodes();
 }
 
 	
 void Template_Matcher::_fillSelectionNodeVector(Tree* tree) {
 	tree->filltokenNodeVector(selectionStmt, tree->getRoot());
 	selectionNodes = tree->getTokenNodes();
+	tree->clearTokenNodes();
 }
 
 void Template_Matcher::retreiveComponents(Tree* tree) {
@@ -191,6 +194,7 @@ void Template_Matcher::retreiveComponents(Tree* tree) {
 	_fillIterationNodeVector(tree);
 	_fillSelectionNodeVector(tree);
 	Node* temp;
+	string testToken = "";
 
 	// iterate though each node that contains an iterationStatement
 	for (int i = 0; i < iterationNodes.size(); i++) {
@@ -198,46 +202,49 @@ void Template_Matcher::retreiveComponents(Tree* tree) {
 		while (temp->getChildCount() != 0) {
 			temp = temp->getChild(0);
 		}
-		switch(temp->getData()) {
-			case "for":
-				// hand control to for_component, pass in rootNode of Tree and iterationNode[i]
-				break;
-			case "while":
-				While_Loop* aWhileLoop = new While_Loop(iterationNodes[i], tree->getRoot(), "while");
-				aWhileLoop->extractAllInfo();
-				whileLoopComponents.push_back(aWhileLoop);
-				break;
-			case "do":
-				While_Loop* aDoWhileLoop = new While_Loop(iterationNodes[i], tree->getRoot(), "do");
-				aDoWhileLoop->extractAllInfo();
-				whileLoopComponents.push_back(aDoWhileLoop);
-				break;
-			default:
-				break;
+		testToken = temp->getData();
+		
+		if (testToken == "for") {
+			// hand control to for_component, pass in rootNode of Tree and iterationNode[i]
+			break;
+		}
+		else if (testToken == "while") {
+			While_Loop* aWhileLoop = new While_Loop(iterationNodes[i], tree->getRoot(), "while");
+			aWhileLoop->extractAllInfo();
+			whileLoopComponents.push_back(aWhileLoop);
+			break;
+		}
+		else if (testToken == "do") {
+			While_Loop* aDoWhileLoop = new While_Loop(iterationNodes[i], tree->getRoot(), "do");
+			aDoWhileLoop->extractAllInfo();
+			whileLoopComponents.push_back(aDoWhileLoop);
+			break;
 		}
 	}
 
 	// iterate through each node that contains a selectionStatement
 	for (int i = 0; i < selectionNodes.size(); i++) {
-		temp = iterationNodes(i);
+		temp = iterationNodes[i];
 		while (temp->getChildCount() != 0) {
 			temp = temp->getChild(0);
 		}
-		switch(temp->getData()) {
-			case "if":
-				// hand control to if_component, pass in rootNode of Tree and iterationNode[i]
-				break;
-			case "switch":
-				// hand control to switch_component, pass in rootNode of Tree and iterationNode[i]
-				break;
-			default:
-				break;
+
+		testToken = temp->getData();
+		if (testToken == "if") {
+			// hand control to if_component, pass in rootNode of Tree and iterationNode[i]
+			break;
+		}
+		else if (testToken == "switch") {
+			// hand control to switch_component, pass in rootNode of Tree and iterationNode[i]
+			break;
 		}
 	}
+	cout << "Looped through selection statements\n";
 
 	for (int i = 0; i < whileLoopComponents.size(); i++) {
 		whileLoopComponents[i]->printLoopInfo();
 	}
+	cout << "End of retreive components function\n";
 }
 
 

@@ -9,6 +9,7 @@
 #include <fstream>
 #include <vector>
 #include "ANTLR_Server.h"
+#include "Component.h"
 #include "AST_Parser.h"
 #include "TemplateTable.h"
 #include "Template_Matcher.h"
@@ -39,7 +40,7 @@ public:
 	Node* readANTLROutputTree(string& treeTxtFilePath);
 	bool readANTLROutputErrors(string& errorTxtFilePath);
 	string matchTemplateWithTree() const;
-	string createHTMLFile();
+	string createHTMLFile(string& matchedSuggestions);
 };
 
 #include "SCA.cpp"

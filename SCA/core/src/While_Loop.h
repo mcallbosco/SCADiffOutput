@@ -2,6 +2,7 @@
 #define WHILE_COMPONENT_
 
 #include "Component.h"
+#include <algorithm>
 
 class While_Loop : public Component 
 {
@@ -19,7 +20,7 @@ private:
     Node* stmtRtNode;
 public:
     While_Loop();
-    While_Loop(string lType);
+    While_Loop(Node* compRtPtr, Node* treeRtPtr, string lType);
 
     // uses member functions to extract all information from the tree
     void extractAllInfo();
@@ -61,14 +62,14 @@ While_Loop::While_Loop(Node* compRtNode, Node* treeRtNode, string lType) : Compo
 }
 
 void While_Loop::extractBegLineNum() {
-    if (componentRootNode->getChildCount() > 0) {
-        begLineNum = componentRootNode->getChild(0)->getLineNum();
+    if (getComponentRootNode()->getChildCount() > 0) {
+        begLineNum = getComponentRootNode()->getChild(0)->getLineNum();
     }
 }
 
 void While_Loop::extractTestExpression() {
-    Node* walker = componentRootNode;
-    for (int i = 0; i < componentRootNode->getChildCount(); i++) {
+    Node* walker = getComponentRootNode();
+    for (int i = 0; i < getComponentRootNode()->getChildCount(); i++) {
         if (loopType == "while" && walker->getChild(i)->getData() == "condition") {
             conditionRtNode = walker->getChild(i);
             break;
@@ -102,8 +103,8 @@ void While_Loop::_extractTestExpression(Node* condRtNode) {
 }
 
 void While_Loop::extractBody() {
-    Node* walker = componentRootNode;
-    for (int i = 0; i < componentRootNode->getChildCount(); i++) {
+    Node* walker = getComponentRootNode();
+    for (int i = 0; i < getComponentRootNode()->getChildCount(); i++) {
         if (walker->getChild(i)->getData() == "statement") {
             stmtRtNode = walker->getChild(i);
             break;
@@ -134,7 +135,7 @@ void While_Loop::_extractBody(Node* stRtNode) {
 
 void While_Loop::extractIncrement() {
     for (int i = 0; i < testExpression.size(); i++) {
-        if (testExpression[i]->getParent() == "unqualifiedId") {
+        if (testExpression[i]->getParent()->getData() == "unqualifiedId") {
             testVariable.push_back(testExpression[i]->getData());
         }
     }
@@ -157,7 +158,7 @@ void While_Loop::extractIncrement() {
 
 void While_Loop::extractSetupVariable() {
     // extract all leaf nodes up the point where the loop begins
-    _extractSetupVariable(treeRootNode);
+    _extractSetupVariable(getTreeRootNode());
     Node* markBegOfStatement = new Node("StatementBegin");
 
     // run through the nodes of source code prior to the beginning of the loop to find the setup variable
@@ -181,7 +182,7 @@ void While_Loop::extractSetupVariable() {
     }
 
     // extract last statment prior to the start of the for loop using the test variable
-    for (int i = setupVariableInstances.size(); i >= 0; i--) {
+    for (int i = setupVariableInstances.size() - 1; i >= 0; i--) {
         if (setupVariableInstances[i]->getData() == "StatementBegin") {
             break;
         }
@@ -245,8 +246,8 @@ void While_Loop::printLoopInfo() {
     }
 
     cout << endl << "Test Variable(s): ";
-    for (int i = 0; i < testVariables.size(); i++) {
-        cout << testVariables[i] << " ";
+    for (int i = 0; i < testVariable.size(); i++) {
+        cout << testVariable[i] << " ";
     }
 
     cout << endl << "Increment Statement(s): ";
@@ -261,7 +262,7 @@ void While_Loop::printLoopInfo() {
         }
     }
 
-    cout << loopType << " (";
+    cout << endl << loopType << " (";
     for (int i = 0; i < testExpression.size(); i++) {
         cout << testExpression[i]->getData() << " ";
     }

@@ -83,7 +83,7 @@ void explore(char *dir_name) {
 				matchedSuggestions = sca->matchTemplateWithTree();
 				cout << "Matched suggestions with tree\n";
 
-				htmlFilePath = sca->createHTMLFile();
+				htmlFilePath = sca->createHTMLFile(matchedSuggestions);
 				cout << "Created html file\n";
 			}
 			else {

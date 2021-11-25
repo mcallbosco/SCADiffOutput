@@ -43,22 +43,22 @@ void ForLoop::setVariables(Tree* rt)
 	Node* walker2;
 
 	//find first line number
-	walker = find("for", statementStart);
+	walker = findNode("for", statementStart);
 	addAnStartLine(walker->getLineNum());
 
 	//set last line number
 	addAnEndLine(statementStart);
 
 	//Find out what the iterator is called
-	walker = find("forInitStatement", statementStart);
-	walker2 = find("unqualifiedId", walker);
+	walker = findNode("forInitStatement", statementStart);
+	walker2 = findNode("unqualifiedId", walker);
 	if (walker2 == nullptr)//unqualifiedId not found
 		iteratorInt = "Not an unqualifiedId";
 	else
 		iteratorInt = walker2->getChild(0)->getData();
 
 	//find the condition
-	walker = find("condition", statementStart);
+	walker = findNode("condition", statementStart);
 	if (walker == nullptr)
 		condition = "No condition was found";
 	else
@@ -120,7 +120,7 @@ void ForLoop::setVariables(Tree* rt)
 	}
 	
 	//find expression
-	walker = find("expression", statementStart);
+	walker = findNode("expression", statementStart);
 	while (walker->getChildCount() == 1)
 		walker = walker->getChild(0);
 

@@ -3,6 +3,7 @@
 
 #include "SCA.h"
 #include "Rule.h"
+#include "Component.h"
 #include <iostream>
 #include <fstream>
 #include <string>

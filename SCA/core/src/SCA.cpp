@@ -396,17 +396,19 @@ string SCA::matchTemplateWithTree() const {
 	templateMatcher->setRulesArraySize();
 	templateMatcher->checkTreeForErrors(ast->getRoot());
 
+	cout << "Inside mathTemplateWithTree() BEFORE retreiveComponents()" << endl;
 	// Use tree to gather Components
 	templateMatcher->retreiveComponents(ast);
+	cout << "Inside mathTemplateWithTree() AFTER retreiveComponents()" << endl;
 
 	return templateMatcher->outputSuggestions();
 }
 
 // Undefined Function
-string SCA::createHTMLFile() {
+string SCA::createHTMLFile(string& matchedSugg) {
 	createHTML* create_html = new createHTML();
 	create_html->setCPPfile(cppFilePath);
-	create_html->setSuggestions(matchTemplateWithTree());
+	create_html->setSuggestions(matchedSugg);
 
 	// changes to filename and file path to match directory structure
 	int pos = cppFilePath.find_last_of("/");
@@ -415,7 +417,6 @@ string SCA::createHTMLFile() {
 	filename = filename.substr(0, pos);
 	string htmlLocation = htmlDir + "/" + filename + ".html";
 	create_html->setHTMLlocation(htmlLocation);
-	create_html->makeCSSfile();
 	create_html->makeHTMLfile();
 	return htmlLocation;
 }

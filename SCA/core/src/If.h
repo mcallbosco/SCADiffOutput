@@ -119,7 +119,7 @@ void If::setVariables(Tree* rt)
 
 
 		statementStart = statementStart->getChild(6);
-		if (statementStart->getChild(0)->getData == "selectionStatement")	//means there's another if
+		if (statementStart->getChild(0)->getData() == "selectionStatement")	//means there's another if
 		{
 			statementStart = statementStart->getChild(0);
 
@@ -200,6 +200,7 @@ void If::setVariables(Tree* rt)
 Node* If::find(string data, Node* start)
 {
 	Node* nodeIter = start;
+	string iteratorInt;
 
 	if (nodeIter->getData() == data)
 	{

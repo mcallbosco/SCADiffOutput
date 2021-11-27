@@ -43,16 +43,18 @@ workingDir=`pwd`
 wget https://www.antlr.org/download/antlr-4.9.2-complete.jar
 
 # add CLASSPATH and alias only if they are not already in .bashrc
-#if ["$(grep -c "4.9.2-complete.jar" -eq 0)"] 
-#then
+isFound1=$(grep -c "4.9.2-complete" ~/.bashrc)
+if [[ "$isFound1" -eq 0 ]] 
+then
     echo "export CLASSPATH=\".:$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH\"" >> ~/.bashrc
-#fi
+fi
 
-#if ["$(grep -c "alias sca=" -eq 0)"]
-#then
+isFound2=$(grep -c "alias sca" ~/.bashrc)
+if [[ "$isFound2" -eq 0 ]]
+then
     # add alias for a.out created to run Driver.cpp
     echo "alias sca='~/SCA/SCA/core/src/a.out'" >> ~/.bashrc
-#fi
+fi
   
 # add ANTLR jar file to classpath of currently open terminal
 export CLASSPATH=".:$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH"

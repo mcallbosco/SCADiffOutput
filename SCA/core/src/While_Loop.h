@@ -44,6 +44,7 @@ public:
     void _extractSetupVariable(Node* trRtNode);
 
     void printLoopInfo();
+    string getComponent();
 
 };
 
@@ -284,6 +285,65 @@ void While_Loop::printLoopInfo() {
     }
     cout << endl << endl;
 
+}
+
+string While_Loop::getComponent() {
+    int currLineNum = 0;
+    int prevLineNum = 0;
+    string htmlString = "";
+
+    htmlString = "<br/>Loop Type: " + loopType + "<br/>";
+
+    htmlString += "Begins on Line " + to_string(begLineNum) + "<br/>";
+
+    htmlString += "Setup Variable ";
+    for (int i = 0; i < setupVariable.size(); i++) {
+        if (i == 0) {
+            htmlString += "on line " + to_string(setupVariable[i]->getLineNum()) + ": ";
+        }
+        htmlString += setupVariable[i]->getData() + " ";
+    }
+
+    htmlString += "<br/>Test Variable(s): ";
+    for (int i = 0; i < testVariable.size(); i++) {
+        htmlString += testVariable[i] + " ";
+    }
+
+    htmlString += "<br/>Increment Statement(s): ";
+    for (int i = 0; i < increment.size(); i++) {
+        prevLineNum = currLineNum;
+        currLineNum = increment[i]->getLineNum();
+        if (prevLineNum != currLineNum) {
+            htmlString += "<br/>" + increment[i]->getData() + " ";
+        }
+        else {
+            htmlString += increment[i]->getData() + " ";
+        }
+    }
+
+    htmlString += "<br/>" + loopType + " (";
+    for (int i = 0; i < testExpression.size(); i++) {
+        htmlString += testExpression[i]->getData() + " ";
+    }
+
+    htmlString += ")";
+
+    // reset current and previous line numbers
+    currLineNum = 0;
+    prevLineNum = 0;
+    for (int i = 0; i < body.size(); i++) {
+        prevLineNum = currLineNum;
+        currLineNum = body[i]->getLineNum();
+        if (prevLineNum != currLineNum) {
+            htmlString += "<br/>" + body[i]->getData() + " ";
+        }
+        else {
+            htmlString += body[i]->getData() + " ";
+        }
+    }
+    htmlString += "<br/><br/>";
+
+    return htmlString;
 }
 
 #endif // !WHILE_COMPONENT_

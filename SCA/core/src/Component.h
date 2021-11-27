@@ -64,6 +64,9 @@ public:
 	//searches from start node to find data, returns first node with the same data in it.
 	Node* findNode(string data, Node* start);
 
+	//getComponent => will be overridden in our component classes, returns a string in html format
+	string getComponent();
+
 	// accessor Methods
 	Node* getTreeRootNode();
 	Node* getComponentRootNode();
@@ -173,6 +176,14 @@ Node* Component::findNode(string data, Node* start)
 	for (int i = 0; i < totalChildren; i++) {
 		findNode(data, nodeIter->getChild(i));
 	}
+}
+
+string Component::getComponent() {
+	// override this function
+	// will return a string formatted for html
+	// use <br /> for line breaks instead of endl or \n
+	// Base function returns an empty string
+	return "";
 }
 
 #endif // !COMPONENT

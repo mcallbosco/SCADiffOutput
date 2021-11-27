@@ -18,6 +18,7 @@ private:
 	int* rulesViolated;
 	int* rulesViolatedLines;
 	string suggestions;
+	string componentString;
 	vector<Node*> iterationNodes;
 	vector<Node*> selectionNodes;
 	vector<While_Loop*> whileLoopComponents;
@@ -66,6 +67,7 @@ Template_Matcher::Template_Matcher()
 	rulesToCheckEntries = 0;
 	rulesViolatedEntries = 0;
 	suggestions = "";
+	componentString = "";
 }
 
 void Template_Matcher::searchFirstToken(string token)
@@ -239,13 +241,15 @@ void Template_Matcher::retreiveComponents(Tree* tree) {
 			break;
 		}
 	}
-	cout << "Looped through selection statements\n";
 
 	for (int i = 0; i < whileLoopComponents.size(); i++) {
-		whileLoopComponents[i]->printLoopInfo();
+		componentString += whileLoopComponents[i]->getComponent();
 	}
-	cout << "End of retreive components function\n";
+
+	// add component string to end of suggestions string to be used by createHTML function
+	suggestions = suggestions + componentString;
 }
+
 
 
 #endif // !TEMPLATE_MATCHER

@@ -396,10 +396,8 @@ string SCA::matchTemplateWithTree() const {
 	templateMatcher->setRulesArraySize();
 	templateMatcher->checkTreeForErrors(ast->getRoot());
 
-	cout << "Inside mathTemplateWithTree() BEFORE retreiveComponents()" << endl;
 	// Use tree to gather Components
 	templateMatcher->retreiveComponents(ast);
-	cout << "Inside mathTemplateWithTree() AFTER retreiveComponents()" << endl;
 
 	return templateMatcher->outputSuggestions();
 }

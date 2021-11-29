@@ -163,19 +163,23 @@ Node* Component::findNode(string data, Node* start)
 {
 	Node* nodeIter = start;
 
-	if (nodeIter->getData() == data)
-	{
+	if (nodeIter->getData() == data){
 		return nodeIter;
 	}
-
+	
 	if (nodeIter->getChildCount() == 0)
+		//no further child nodes
 		return nullptr;
-
-	int totalChildren = nodeIter->getChildCount();
-
-	for (int i = 0; i < totalChildren; i++) {
-		findNode(data, nodeIter->getChild(i));
+	else{
+		//more child nodes
+		int totalChildren = nodeIter->getChildCount();
+	
+		for (int i = 0; i < totalChildren; i++) {
+			findNode(data, nodeIter->getChild(i));
+		}
 	}
+	
+	return nullptr;
 }
 
 string Component::getComponent() {

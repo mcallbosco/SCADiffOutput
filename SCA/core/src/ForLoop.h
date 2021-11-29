@@ -1,6 +1,6 @@
 #ifndef FOR_LOOP
 #define FOR_LOOP
-//my machine
+
 #include "SCA.h"
 #include "Component.h"
 
@@ -10,6 +10,8 @@ class ForLoop : Component
 {
 private:
 	string iteratorInt;
+	string iteratorIntAssignment;
+	bool IntAssignmentUnqualifiedId;
 	string condition;
 	string conditionL;
 	bool conditionLunqualifiedId;
@@ -31,8 +33,9 @@ ForLoop::ForLoop()
 {
 	componentClass.setStatementType(0);
 	condition = "";
-	bool conditionLunqualifiedId = false;
-	bool conditionRunqualifiedId = false;
+	conditionLunqualifiedId = false;
+	conditionRunqualifiedId = false;
+	IntAssignmentUnqualifiedId = false;
 }
 
 void ForLoop::setVariables(Tree* rt)
@@ -52,10 +55,31 @@ void ForLoop::setVariables(Tree* rt)
 	//Find out what the iterator is called
 	walker = findNode("forInitStatement", statementStart);
 	walker2 = findNode("unqualifiedId", walker);
+
 	if (walker2 == nullptr)//unqualifiedId not found
 		iteratorInt = "Not an unqualifiedId";
 	else
+	{
 		iteratorInt = walker2->getChild(0)->getData();
+
+		//find what value is assigned to the iterator
+		walker2 = walker->getChild(1);
+		walker = findNode("literal", walker2);
+
+		if (walker != nullptr)
+			iteratorIntAssignment = walker->getChild(0)->getData();
+		else//check if assignment is unqualified id
+		{
+			walker = findNode("unqualifiedId", walker2);
+			if (walker != nullptr)
+			{
+				iteratorIntAssignment = walker->getChild(0)->getData();
+				IntAssignmentUnqualifiedId = true;
+			}
+			else//no assigment for iterator
+				iteratorIntAssignment = "No assignment made";
+		}
+	}
 
 	//find the condition
 	walker = findNode("condition", statementStart);
@@ -119,7 +143,7 @@ void ForLoop::setVariables(Tree* rt)
 		}
 	}
 	
-	//find expression
+	//find the expression
 	walker = findNode("expression", statementStart);
 	while (walker->getChildCount() == 1)
 		walker = walker->getChild(0);

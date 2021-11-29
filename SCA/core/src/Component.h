@@ -164,11 +164,8 @@ Node* Component::findNode(string data, Node* start)
 	Node* nodeIter = start;
 
 	if (nodeIter->getData() == data)
-	{
 		return nodeIter;
-	}
-
-	if (nodeIter->getChildCount() == 0)
+	else if (nodeIter->getChildCount() == 0)
 		return nullptr;
 
 	int totalChildren = nodeIter->getChildCount();

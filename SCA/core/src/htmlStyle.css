@@ -6,10 +6,39 @@
 .sourcecode{
   position: relative;
   border-radius: 25px;
-  border: 2px solid #227db3;
+  border: 2px solid;
+  background-color: #beddf0;
   padding: 20px;
   width: 90%;
   height: 500px;
+  margin: 0;
+  font-family: "Lucida Console";
+}
+
+.components{
+  font-size: 32px;
+}
+
+.correctComponent{
+  position: relative;
+  border-radius: 25px;
+  display: inline-block;
+  border: 2px solid #66e766;
+  padding: 20px;
+  width: 40%;
+  height: 80px;
+  margin: 0;
+  font-family: "Lucida Console";
+}
+
+.wrongComponent{
+  position: relative;
+  border-radius: 25px;
+  display: inline-block;
+  border: 2px solid #eb4040;
+  padding: 20px;
+  width: 40%;
+  height: 80px;
   margin: 0;
   font-family: "Lucida Console";
 }
@@ -18,7 +47,7 @@
 {
   position: relative;
   border-radius: 25px;
-  border: 2px solid #227db3;
+  border: 2px solid;
   padding: 20px;
   width: 90%;
   height: 50px;
@@ -32,4 +61,13 @@
     padding: 20px;
     width: 200px;
     height: 150px;
+  }
+
+  h1{
+    font-size: 32px;
+  }
+
+  h2{
+    font-style: italic;
+    font-size: 20px;
   }

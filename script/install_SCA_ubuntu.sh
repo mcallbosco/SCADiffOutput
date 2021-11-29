@@ -74,13 +74,57 @@ javac CPP14*.java
 cd ~/SCA/SCA/core/src
 g++ Driver.cpp
 
-# Display message to user after completion of installation
-echo ""  # skip a couple lines and print directions to screen
-echo ""
-echo "----------------------------------------------"
-echo "System install successful!"
-echo "----------------------------------------------"
-echo "HOW TO RUN THE SYSTEM:"
-echo "1. Load user source files to the folder: ~/SCA/SCA/user/source-code"
-echo "2. Open a terminal and run the command: sca"
-echo "3. File explorer should open with your results as .html files"
+pkg1=$(dpkg-query -W -f='${Status}' default-jdk)
+pkg2=$(dpkg-query -W -f='${Status}' default-jre)
+pkg3=$(dpkg-query -W -f='${Status}' git)
+pkg4=$(dpkg-query -W -f='${Status}' g++)
+file1=~/SCA/SCA/core/src/SCA.h
+file2=~/ANTLR/CPP14Parser$AbstractDeclaratorContext.class
+file3=~/SCA/SCA/core/src/a.out
+if [[ "$pkg1" = "install ok installed" ]] 
+then
+    if [[ "$pkg2" = "install ok installed" ]]
+    then
+        if [[ "$pkg3" = "install ok installed" ]]
+        then
+            if [[ "$pkg4" = "install ok installed" ]]
+            then
+                if [[ -f "$file1" ]]
+                then
+                    if [[ -f "$file2" ]]
+                    then
+                        if [[ -f "$file3" ]]
+                        then
+                            # Display message to user after completion of installation
+                            echo ""  # skip a couple lines and print directions to screen
+                            echo ""
+                            echo "---------------------------------------------------------------------"
+                            echo "System install successful!"
+                            echo "---------------------------------------------------------------------"
+                            echo "HOW TO RUN THE SYSTEM:"
+                            echo "1. Load user source files to the folder: ~/SCA/SCA/user/source-code"
+                            echo "2. Open a NEW terminal and run the command: sca"
+                            echo "3. File explorer should open with your results as .html files"
+                            echo "---------------------------------------------------------------------"
+                            echo ""
+                        else
+                            echo "Install failed ... $file3 does NOT exist ... problem compiling SCA"
+                        fi
+                    else
+                        echo "Install failed ... $file2 does NOT exist ... problem with ANTLR"
+                    fi
+                else
+                    echo "Install failed ... $file1 does NOT exist ... problem with git clone"
+                fi
+            else
+                echo "Install failed ... $pkg4 not installed"
+            fi
+        else
+            echo "Install failed ... $pkg3 not installed"
+        fi
+    else
+        echo "Install failed ... $pkg2 not installed"
+    fi  
+else
+    echo "Install failed ... $pkg1 not installed"
+fi

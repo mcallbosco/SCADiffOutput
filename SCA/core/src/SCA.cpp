@@ -9,6 +9,8 @@ SCA::SCA(const string& pathToCppFile) {
 	ast = nullptr;
 	templateTableFile = "";
 	htmlDir = "";
+	iterationNodes.clear();
+	selectionNodes.clear();
 }
 
 SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable) {
@@ -16,6 +18,8 @@ SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable) {
 	ast = nullptr;
 	templateTableFile = pathToTemplateTable;
 	htmlDir = "";
+	iterationNodes.clear();
+	selectionNodes.clear();
 }
 
 SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable, const string& pathToHtmlDir) {
@@ -23,6 +27,8 @@ SCA::SCA(const string& pathToCppFile, const string& pathToTemplateTable, const s
 	ast = nullptr;
 	templateTableFile = pathToTemplateTable;
 	htmlDir = pathToHtmlDir;
+	iterationNodes.clear();
+	selectionNodes.clear();
 }
 
 bool SCA::existsFile(string filePath) const {
@@ -373,6 +379,12 @@ Node* SCA::readANTLROutputTree(string& treeTxtFilePath) {
 		ast_parser->getNodeLineNums();
 
 		ast = ast_parser->getTree();
+		ast->filltokenNodeVector("iterationStatement", ast->getRoot());
+		iterationNodes = ast->getTokenNodes();
+		ast->clearTokenNodes();
+		ast->filltokenNodeVector("selectionStatement", ast->getRoot());
+		selectionNodes = ast->getTokenNodes();
+		ast->clearTokenNodes();
 	}
 	else {
 		cout << "File " << treeTxtFilePath << " does not exist..." << endl;
@@ -397,7 +409,7 @@ string SCA::matchTemplateWithTree() const {
 	templateMatcher->checkTreeForErrors(ast->getRoot());
 
 	// Use tree to gather Components
-	templateMatcher->retreiveComponents(ast);
+	templateMatcher->retreiveComponents(ast, iterationNodes, selectionNodes);
 
 	return templateMatcher->outputSuggestions();
 }

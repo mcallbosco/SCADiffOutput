@@ -24,7 +24,7 @@ int main()
 	double weightedSum = 0.0;
 	int index = 0;
 
-	inData.open("C:\\Users\\itsto\\Google Drive\\College\\J-term '20\\CSIT 121\\grade.txt");
+	inData.open("grade.txt");
 	
 	char letterGrade[20][2];
 	char firstName[20][12];

@@ -27,6 +27,8 @@ private:
 	string templateTableFile;
 	string htmlDir;
 	Tree* ast;
+	vector<Node*> iterationNodes;
+	vector<Node*> selectionNodes;
 
 public:
 	SCA();

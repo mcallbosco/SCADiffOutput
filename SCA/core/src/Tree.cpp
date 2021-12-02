@@ -170,18 +170,17 @@ string Tree::trim(const string& line) {
 }
 
 void Tree::filltokenNodeVector(const string& token, Node* rt) {
-	Node* nodeIter = rt;
-	if (nodeIter->getChildCount() == 0) {
+	if (rt->getChildCount() == 0) {
 		return;
 	}
 
-	int totalChildren = nodeIter->getChildCount();
+	int totalChildren = rt->getChildCount();
 	
 	for (int i = 0; i < totalChildren; i++) {
-		if (nodeIter->getChild(i)->getData() == token) {
-			tokenNodes.push_back(nodeIter->getChild(i));
+		if (rt->getChild(i)->getData() == token) {
+			tokenNodes.push_back(rt->getChild(i));
 		}
-		filltokenNodeVector(token, nodeIter->getChild(i));
+		filltokenNodeVector(token, rt->getChild(i));
 	}
 }
 

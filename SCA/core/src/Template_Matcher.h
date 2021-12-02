@@ -19,8 +19,6 @@ private:
 	int* rulesViolatedLines;
 	string suggestions;
 	string componentString;
-	vector<Node*> iterationNodes;
-	vector<Node*> selectionNodes;
 	vector<While_Loop*> whileLoopComponents;
 
 public:
@@ -51,14 +49,8 @@ public:
 	//returns template table size, the number of rules.
 	int getTemplateTableSize();
 
-	// fills the iteration node vector with all node instances of iteration statements in source code
-	void _fillIterationNodeVector(Tree* tree);
-
-	// fills the selection node vector with all node instances of selection statements in source code
-	void _fillSelectionNodeVector(Tree* tree);
-
 	// Calls the fill node vector functions then iterates through each vector handing node to corresponding component class to build component
-	void retreiveComponents(Tree* tree);
+	void retreiveComponents(Tree* tree, vector<Node*> iterNodes, vector<Node*> selectNodes);
 
 };
 
@@ -178,29 +170,14 @@ string Template_Matcher::outputSuggestions()
 	return suggestions;
 }
 
-void Template_Matcher::_fillIterationNodeVector(Tree* tree) {
-	tree->filltokenNodeVector(iterationStmt, tree->getRoot());
-	iterationNodes = tree->getTokenNodes();
-	tree->clearTokenNodes();
-}
+void Template_Matcher::retreiveComponents(Tree* tree, vector<Node*> iterNodes, vector<Node*> selectNodes) {
 
-	
-void Template_Matcher::_fillSelectionNodeVector(Tree* tree) {
-	tree->filltokenNodeVector(selectionStmt, tree->getRoot());
-	selectionNodes = tree->getTokenNodes();
-	tree->clearTokenNodes();
-}
-
-void Template_Matcher::retreiveComponents(Tree* tree) {
-	// populate vectors with nodes from tree
-	_fillIterationNodeVector(tree);
-	_fillSelectionNodeVector(tree);
 	Node* temp;
 	string testToken = "";
 
 	// iterate though each node that contains an iterationStatement
-	for (int i = 0; i < iterationNodes.size(); i++) {
-		temp = iterationNodes[i];
+	for (int i = 0; i < iterNodes.size(); i++) {
+		temp = iterNodes[i];
 		while (temp->getChildCount() != 0) {
 			temp = temp->getChild(0);
 		}
@@ -211,13 +188,13 @@ void Template_Matcher::retreiveComponents(Tree* tree) {
 			break;
 		}
 		else if (testToken == "while") {
-			While_Loop* aWhileLoop = new While_Loop(iterationNodes[i], tree->getRoot(), "while");
+			While_Loop* aWhileLoop = new While_Loop(iterNodes[i], tree->getRoot(), "while");
 			aWhileLoop->extractAllInfo();
 			whileLoopComponents.push_back(aWhileLoop);
 			break;
 		}
 		else if (testToken == "do") {
-			While_Loop* aDoWhileLoop = new While_Loop(iterationNodes[i], tree->getRoot(), "do");
+			While_Loop* aDoWhileLoop = new While_Loop(iterNodes[i], tree->getRoot(), "do");
 			aDoWhileLoop->extractAllInfo();
 			whileLoopComponents.push_back(aDoWhileLoop);
 			break;
@@ -225,8 +202,8 @@ void Template_Matcher::retreiveComponents(Tree* tree) {
 	}
 
 	// iterate through each node that contains a selectionStatement
-	for (int i = 0; i < selectionNodes.size(); i++) {
-		temp = iterationNodes[i];
+	for (int i = 0; i < selectNodes.size(); i++) {
+		temp = selectNodes[i];
 		while (temp->getChildCount() != 0) {
 			temp = temp->getChild(0);
 		}

@@ -411,14 +411,24 @@ string SCA::matchTemplateWithTree() const {
 	// Use tree to gather Components
 	templateMatcher->retreiveComponents(ast, iterationNodes, selectionNodes);
 
+	whileLoopComponents = templateMatcher->getWhileLoopComponents();
+	forLoopComponents = templateMatcher->getForLoopComponents();
+	ifComponents = templateMatcher->getIfComponents();
+	switchComponents = templateMatcher->getSwitchComponents();
+
 	return templateMatcher->outputSuggestions();
 }
 
-// Undefined Function
 string SCA::createHTMLFile(string& matchedSugg) {
 	createHTML* create_html = new createHTML();
 	create_html->setCPPfile(cppFilePath);
 	create_html->setSuggestions(matchedSugg);
+	
+	//set components
+	void setwhileLoopComponents(whileLoopComponents);
+	void setForLoopComponents(forLoopComponents);
+	void setIfComponents(ifComponents);
+	void setSwitchComponents(switchComponents);
 
 	// changes to filename and file path to match directory structure
 	int pos = cppFilePath.find_last_of("/");

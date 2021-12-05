@@ -21,6 +21,7 @@ private:
 	int startLineCount;
 	vector<int> endLine;
 	int endLineCount;
+	bool correctComponent;
 public:
 	// Default Constructor
 	Component();
@@ -60,6 +61,12 @@ public:
 
 	//returns amount of startLines.
 	int getStartLineCount();
+
+	//sets if the component is correct or not.
+	void setCorrectComponent(bool correct);
+
+	//returns if component is correct or not.
+	bool getCorrectComponent();
 
 	//searches from start node to find data, returns first node with the same data in it.
 	Node* findNode(string data, Node* start);
@@ -157,6 +164,14 @@ vector<int> Component::getStartLine() {
 
 int Component::getStartLineCount() {
 	return startLineCount;
+}
+
+void Component::setCorrectComponent(bool correct) {
+	correctComponent = correct;
+}
+
+bool Component::getCorrectComponent() {
+	return correctComponent;
 }
 
 Node* Component::findNode(string data, Node* start)

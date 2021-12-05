@@ -3,6 +3,9 @@
 
 #include "SCA.h"
 #include "While_Loop.h"
+#include "ForLoop.h"
+#include "Switch.h"
+#include "If.h"
 #include <string>
 
 using namespace std;
@@ -20,6 +23,9 @@ private:
 	string suggestions;
 	string componentString;
 	vector<While_Loop*> whileLoopComponents;
+	vector<ForLoop*> forLoopComponents;
+	vector<If*> ifComponents;
+	vector<Switch*> switchComponents;
 
 public:
 	//constructor sets entries to 0 and suggestions to "".
@@ -49,9 +55,17 @@ public:
 	//returns template table size, the number of rules.
 	int getTemplateTableSize();
 
+	//get components
+	vector<While_Loop*> getWhileLoopComponents();
+	vector<ForLoop*> getForLoopComponents();
+	vector<If*> getIfComponents();
+	vector<Switch*> getSwitchComponents();
+
 	// Calls the fill node vector functions then iterates through each vector handing node to corresponding component class to build component
 	void retreiveComponents(Tree* tree, vector<Node*> iterNodes, vector<Node*> selectNodes);
 
+	//Checks for errors in all components.
+	void checkAllComponents();
 };
 
 Template_Matcher::Template_Matcher() 
@@ -157,6 +171,22 @@ int Template_Matcher::getTemplateTableSize()
 	return template_table.size();
 }
 
+vector<While_Loop*> Template_Matcher::getWhileLoopComponents() {
+	return whileLoopComponents;
+}
+
+vector<ForLoop*> Template_Matcher::getForLoopComponents() {
+	return forLoopComponents;
+}
+
+vector<If*> Template_Matcher::getIfComponents() {
+	return ifComponents;
+}
+
+vector<Switch*> Template_Matcher::getSwitchComponents() {
+	return switchComponents;
+}
+
 string Template_Matcher::outputSuggestions()
 {
 	for (int i = 0; i < rulesViolatedEntries; i++)
@@ -184,7 +214,9 @@ void Template_Matcher::retreiveComponents(Tree* tree, vector<Node*> iterNodes, v
 		testToken = temp->getData();
 		
 		if (testToken == "for") {
-			// hand control to for_component, pass in rootNode of Tree and iterationNode[i]
+			ForLoop* aForLoop = new ForLoop();
+			aForLoop->setVariables(iterNodes[i]);
+			forLoopComponents.push_back(aForLoop);
 			break;
 		}
 		else if (testToken == "while") {
@@ -210,14 +242,20 @@ void Template_Matcher::retreiveComponents(Tree* tree, vector<Node*> iterNodes, v
 
 		testToken = temp->getData();
 		if (testToken == "if") {
-			// hand control to if_component, pass in rootNode of Tree and iterationNode[i]
+			Switch* aSwitch = new Switch();
+			aSwitch->setVariables(selectNodes[i]);
+			switchComponents.push_back(aSwitch);
 			break;
 		}
 		else if (testToken == "switch") {
-			// hand control to switch_component, pass in rootNode of Tree and iterationNode[i]
+			If* aIf = new If();
+			aIf->setVariables(selectNodes[i]);
+			ifComponents.push_back(aIf);
 			break;
 		}
 	}
+
+	checkAllComponents();
 
 	for (int i = 0; i < whileLoopComponents.size(); i++) {
 		componentString += whileLoopComponents[i]->getComponent();
@@ -227,6 +265,43 @@ void Template_Matcher::retreiveComponents(Tree* tree, vector<Node*> iterNodes, v
 	suggestions = suggestions + componentString;
 }
 
+void Template_Matcher::checkAllComponents()
+{
+	for (int i = ; i < whileLoopComponents.size(); i++)
+	{
+		//check for errors
+		//if (errors)
+		//whileLoopComponents[i].setCorrect(false)
+		//else
+		//whileLoopComponents[i].setCorrect(true)
+	}
 
+	for (int i = 0; i < forLoopComponents.size(); i++)
+	{
+		//check for errors
+		//if (errors)
+		//forLoopComponents[i].setCorrect(false)
+		//else
+		//forLoopComponents[i].setCorrect(true)
+	}
+
+	for (int i = 0; i < switchComponents.size(); i++)
+	{
+		//check for errors
+		//if (errors)
+		//switchComponents[i].setCorrect(false)
+		//else
+		//switchComponents[i].setCorrect(true)
+	}
+
+	for (int i = 0; i < ifComponents.size(); i++)
+	{
+		//check for errors
+		//if (errors)
+		//ifComponents[i].setCorrect(false)
+		//else
+		//ifComponents[i].setCorrect(true)
+	}
+}
 
 #endif // !TEMPLATE_MATCHER

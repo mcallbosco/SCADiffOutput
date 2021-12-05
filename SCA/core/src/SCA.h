@@ -29,6 +29,10 @@ private:
 	Tree* ast;
 	vector<Node*> iterationNodes;
 	vector<Node*> selectionNodes;
+	vector<While_Loop*> whileLoopComponents;
+	vector<ForLoop*> forLoopComponents;
+	vector<If*> ifComponents;
+	vector<Switch*> switchComponents;
 
 public:
 	SCA();

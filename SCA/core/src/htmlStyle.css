@@ -17,30 +17,35 @@
 
 .components{
   font-size: 32px;
+  position: relative;
+  width: 95%;
+  align-self: baseline;
 }
 
 .correctComponent{
   position: relative;
   border-radius: 25px;
-  display: inline-block;
+  display: inline-flex;
   border: 2px solid #66e766;
   padding: 20px;
-  width: 40%;
+  width: 25%;
   height: 80px;
-  margin: 0;
+  margin: 5px;
   font-family: "Lucida Console";
+  font-size: 16px;
 }
 
 .wrongComponent{
   position: relative;
   border-radius: 25px;
-  display: inline-block;
+  display: inline-flex;
   border: 2px solid #eb4040;
   padding: 20px;
-  width: 40%;
+  width: 25%;
   height: 80px;
-  margin: 0;
+  margin: 5px;
   font-family: "Lucida Console";
+  font-size: 16px;
 }
 
 .rule
@@ -53,6 +58,17 @@
   height: 50px;
   margin: 0;
   font-family: "Lucida Console";
+}
+
+.ruleContainer
+{
+  position: relative;
+  border-radius: 20px;
+  border: 2px solid;
+  padding: 5px;
+  width: 90%;
+  height: 530px;
+  margin: 0;
 }
 
 #rcorners {

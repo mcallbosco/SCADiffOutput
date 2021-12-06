@@ -25,10 +25,7 @@ public:
 	ForLoop();
 
 	void setVariables(Tree* rt);
-
 	string getComponent();
-
-	
 };
 
 ForLoop::ForLoop()
@@ -159,8 +156,26 @@ void ForLoop::setVariables(Tree* rt)
 	expression = walker->getData();
 }
 
-string ForLoop::getComponent() {
-	return "";
+
+string ForLoop::getComponent()
+{
+	int currLineNum = 0;
+	int prevLineNum = 0;
+	string htmlString = "";
+
+	htmlString = "<br/>Begins on line " + getStartLine()[0] + "<br/>";
+
+	htmlString += "Iterator: " + iteratorInt + "<br/>";
+	htmlString += "Assignment to that iterator: " + iteratorIntAssignment + "<br/>";
+
+	htmlString += "Condition statement: " + conditionL + " " + condition + " "
+		conditionR + "<br/>";
+
+	htmlString += "Update statement: " + expression + plusplusOrminusminus + "<br/>";
+
+	htmlString += "Ends on line " + getEndLine()[0] + "<br/>";
+
+	return htmlString;
 }
 
 #endif // !FOR_LOOP

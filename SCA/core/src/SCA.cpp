@@ -69,6 +69,7 @@ string SCA::loadSourceCode(string sourceCodeFileLocation)
 	sourceCodeFile.open(sourceCodeFileLocation);
 
 	cout << "File found." << endl;
+	cout << sourceCodeFileLocation << endl;
 
 	if (existsFile("Source.cpp"))									//Try to open "Source.cpp," which will be a file to append the function(s) to
 	{
@@ -347,6 +348,8 @@ string SCA::loadSourceCode(string sourceCodeFileLocation)
 
 		newCodeFile.close();
 
+
+		cout << "Succesfully created new file at " << sourceCodeFileLocation << endl;
 		return (sourceCodeFileLocation);
 
 	}

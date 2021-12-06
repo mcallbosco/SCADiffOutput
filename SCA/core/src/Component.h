@@ -36,7 +36,7 @@ public:
 	string getStatementType();
 
 	//Uses filltokenNodeVector() and statementType to set the start of this component. Also sets componentType off first child node.
-	void setStartOfStatement(Tree* rt);
+	void setStartOfStatement(Node* rt);
 
 	//returns the Node which its data contains the statementType, so the start of the component.
 	Node* getStartOfStatement();
@@ -117,7 +117,7 @@ string Component::getStatementType() {
 	return statementType;
 }
 
-void Component::setStartOfStatement(Tree* rt)
+void Component::setStartOfStatement(Node* rt)
 {
 	startOfStatement = rt->getRoot();
 	rt->filltokenNodeVector(statementType, startOfStatement);

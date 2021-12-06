@@ -342,6 +342,8 @@ string SCA::loadSourceCode(string sourceCodeFileLocation)
 
 		newCodeFile.close();
 
+
+		cout << "Succesfully created new file at " << sourceCodeFileLocation << endl;
 		return (sourceCodeFileLocation);
 
 	}

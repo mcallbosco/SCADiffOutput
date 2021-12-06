@@ -162,18 +162,19 @@ string ForLoop::getComponent()
 	int currLineNum = 0;
 	int prevLineNum = 0;
 	string htmlString = "";
+	vector<int> startLineVec = getStartLine();
+	vector<int> endLineVec = getEndLine();
 
-	htmlString = "<br/>Begins on line " + getStartLine()[0] + "<br/>";
+	htmlString = "<br/>Begins on line " + to_string(startLineVec[0]) + "<br/>";
 
 	htmlString += "Iterator: " + iteratorInt + "<br/>";
 	htmlString += "Assignment to that iterator: " + iteratorIntAssignment + "<br/>";
 
-	htmlString += "Condition statement: " + conditionL + " " + condition + " "
-		conditionR + "<br/>";
+	htmlString += "Condition statement: " + conditionL + " " + condition + " " + conditionR + "<br/>";
 
 	htmlString += "Update statement: " + expression + plusplusOrminusminus + "<br/>";
 
-	htmlString += "Ends on line " + getEndLine()[0] + "<br/>";
+	htmlString += "Ends on line " + to_string(endLineVec[0]) + "<br/>";
 
 	return htmlString;
 }

@@ -45,7 +45,7 @@ public:
 	bool serveCodeToANTLR(string& treeTxtFilePath, string& errorTxtFilePath);
 	Node* readANTLROutputTree(string& treeTxtFilePath);
 	bool readANTLROutputErrors(string& errorTxtFilePath);
-	string matchTemplateWithTree() const;
+	string matchTemplateWithTree();
 	string createHTMLFile(string& matchedSuggestions);
 };
 

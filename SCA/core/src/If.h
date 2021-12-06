@@ -21,7 +21,7 @@ private:
 
 public:
 	If();
-	void setVariables(Tree* rt);
+	void setVariables(Node* rt);
 	Node* find(string data, Node* start);
 	string getComponent();
 };
@@ -31,7 +31,7 @@ If::If()
 	componentClass.setStatementType(1);
 }
 
-void If::setVariables(Tree* rt)
+void If::setVariables(Node* rt)
 {
 	componentClass.setStartOfStatement(rt);
 	Node* statementStart = componentClass.getStartOfStatement();

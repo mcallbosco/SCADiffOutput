@@ -401,7 +401,7 @@ bool SCA::readANTLROutputErrors(string& errorTxtFilePath) {
 }
 
 // Undefined Function
-string SCA::matchTemplateWithTree() const {
+string SCA::matchTemplateWithTree() {
 	Template_Matcher* templateMatcher = new Template_Matcher();
 
 	TemplateTable* tempTableLoader = new TemplateTable();
@@ -428,10 +428,10 @@ string SCA::createHTMLFile(string& matchedSugg) {
 	create_html->setSuggestions(matchedSugg);
 	
 	//set components
-	void setwhileLoopComponents(whileLoopComponents);
-	void setForLoopComponents(forLoopComponents);
-	void setIfComponents(ifComponents);
-	void setSwitchComponents(switchComponents);
+	create_html->setwhileLoopComponents(whileLoopComponents);
+	create_html->setForLoopComponents(forLoopComponents);
+	create_html->setIfComponents(ifComponents);
+	create_html->setSwitchComponents(switchComponents);
 
 	// changes to filename and file path to match directory structure
 	int pos = cppFilePath.find_last_of("/");

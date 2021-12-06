@@ -150,9 +150,13 @@ void createHTML::makeHTMLfile()
 	//components
 	htmlFile << "<div class = \"components\">";
 
+	bool componentIsCorrect;
+
 	for (int i = 0; i < whileLoopComponents.size(); i++)
 	{
-		if (whileLoopComponents[i]->getCorrectComponent())
+		componentIsCorrect = whileLoopComponents[i]->getCorrectComponent()
+
+		if (componentIsCorrect)
 		{
 			htmlFile << "<div class=\"correctComponent\">\n";
 			htmlFile << whileLoopComponents[i]->getComponent() << "<br />";
@@ -168,7 +172,9 @@ void createHTML::makeHTMLfile()
 
 	for (int i = 0; i < forLoopComponents.size(); i++)
 	{
-		if (forLoopComponents[i]->getCorrectComponent())
+		componentIsCorrect = forLoopComponents[i]->getCorrectComponent()
+
+		if (componentIsCorrect)
 		{
 			htmlFile << "<div class=\"correctComponent\">";
 			htmlFile <<  forLoopComponents[i]->getComponent() << "<br />";
@@ -184,7 +190,9 @@ void createHTML::makeHTMLfile()
 
 	for (int i = 0; i < ifComponents.size(); i++)
 	{
-		/*if (ifComponents[i]->getCorrectComponent())
+		/*componentIsCorrect = ifComponents[i]->getCorrectComponent()
+
+		if (componentIsCorrect)
 		{
 			htmlFile << "\t\t\t<div class=\"correctComponent\">\n";
 			htmlFile << "\t\t\t\t" << ifComponents[i]->getComponent() << "\n";
@@ -200,7 +208,9 @@ void createHTML::makeHTMLfile()
 
 	for (int i = 0; i < switchComponents.size(); i++)
 	{
-		/*if (switchComponents[i]->getCorrectComponent())
+		/*componentIsCorrect = switchComponents[i]->getCorrectComponent()
+
+		if (componentIsCorrect)
 		{
 			htmlFile << "\t\t\t<div class=\"correctComponent\">\n";
 			htmlFile << "\t\t\t\t" << switchComponents[i]->getComponent() << "\n";

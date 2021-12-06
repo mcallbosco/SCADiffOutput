@@ -278,7 +278,7 @@ void Template_Matcher::retreiveComponents(Tree* tree, vector<Node*> iterNodes, v
 
 void Template_Matcher::checkAllComponents()
 {
-	for (int i = ; i < whileLoopComponents.size(); i++)
+	for (int i = 0; i < whileLoopComponents.size(); i++)
 	{
 		//check for errors
 		//if (errors)

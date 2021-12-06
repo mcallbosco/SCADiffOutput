@@ -23,6 +23,7 @@ public:
 	If();
 	void setVariables(Tree* rt);
 	Node* find(string data, Node* start);
+	string getComponent();
 };
 
 If::If()
@@ -216,6 +217,10 @@ Node* If::find(string data, Node* start)
 	for (int i = 0; i < totalChildren; i++) {
 		find(data, nodeIter->getChild(i));
 	}
+}
+
+string If::getComponent() {
+	return "";
 }
 
 #endif

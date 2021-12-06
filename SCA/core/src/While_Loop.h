@@ -292,36 +292,36 @@ string While_Loop::getComponent() {
     int prevLineNum = 0;
     string htmlString = "";
 
-    htmlString = "<br/>Loop Type: " + loopType + "<br/>";
+    htmlString = "<br/><strong>Loop Type:</strong> " + loopType + "<br/>";
 
-    htmlString += "Begins on Line " + to_string(begLineNum) + "<br/>";
+    htmlString += "<strong>Begins on Line " + to_string(begLineNum) + "</strong><br/>";
 
-    htmlString += "Setup Variable ";
+    htmlString += "<strong>Setup Variable ";
     for (int i = 0; i < setupVariable.size(); i++) {
         if (i == 0) {
-            htmlString += "on line " + to_string(setupVariable[i]->getLineNum()) + ": ";
+            htmlString += "on line " + to_string(setupVariable[i]->getLineNum()) + ":</strong> ";
         }
         htmlString += setupVariable[i]->getData() + " ";
     }
 
-    htmlString += "<br/>Test Variable(s): ";
+    htmlString += "<br/><strong>Test Variable(s):</strong> ";
     for (int i = 0; i < testVariable.size(); i++) {
         htmlString += testVariable[i] + " ";
     }
 
-    htmlString += "<br/>Increment Statement(s): ";
+    htmlString += "<br/><strong>Increment Statement(s):</strong> ";
     for (int i = 0; i < increment.size(); i++) {
         prevLineNum = currLineNum;
         currLineNum = increment[i]->getLineNum();
         if (prevLineNum != currLineNum) {
-            htmlString += "<br/>" + increment[i]->getData() + " ";
+            htmlString += "<br/><strong>Line " + to_string(increment[i]->getLineNum()) + ":</strong> " + increment[i]->getData() + " ";
         }
         else {
             htmlString += increment[i]->getData() + " ";
         }
     }
 
-    htmlString += "<br/>" + loopType + " (";
+    htmlString += "<br/><br/>" + loopType + " (";
     for (int i = 0; i < testExpression.size(); i++) {
         htmlString += testExpression[i]->getData() + " ";
     }
@@ -342,6 +342,7 @@ string While_Loop::getComponent() {
         }
     }
     htmlString += "<br/><br/>";
+    htmlString += "\n";
 
     return htmlString;
 }

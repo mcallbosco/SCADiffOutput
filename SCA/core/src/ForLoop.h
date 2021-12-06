@@ -26,6 +26,8 @@ public:
 
 	void setVariables(Tree* rt);
 
+	string getComponent();
+
 	
 };
 
@@ -155,6 +157,10 @@ void ForLoop::setVariables(Tree* rt)
 		walker = walker->getChild(0);
 
 	expression = walker->getData();
+}
+
+string ForLoop::getComponent() {
+	return "";
 }
 
 #endif // !FOR_LOOP

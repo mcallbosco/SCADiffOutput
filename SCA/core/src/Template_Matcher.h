@@ -3,6 +3,9 @@
 
 #include "SCA.h"
 #include "While_Loop.h"
+#include "ForLoop.h"
+#include "Switch.h"
+#include "If.h"
 #include <string>
 
 using namespace std;
@@ -20,6 +23,9 @@ private:
 	string suggestions;
 	string componentString;
 	vector<While_Loop*> whileLoopComponents;
+	vector<ForLoop*> forLoopComponents;
+	vector<If*> ifComponents;
+	vector<Switch*> switchComponents;
 
 public:
 	//constructor sets entries to 0 and suggestions to "".
@@ -219,8 +225,20 @@ void Template_Matcher::retreiveComponents(Tree* tree, vector<Node*> iterNodes, v
 		}
 	}
 
+	for (int i = 0; i < forLoopComponents.size(); i++) {
+		componentString += forLoopComponents[i]->getComponent();
+	}
+
 	for (int i = 0; i < whileLoopComponents.size(); i++) {
 		componentString += whileLoopComponents[i]->getComponent();
+	}
+
+	for (int i = 0; i < ifComponents.size(); i++) {
+		componentString += ifComponents[i]->getComponent();
+	}
+
+	for (int i = 0; i < switchComponents.size(); i++) {
+		componentString += switchComponents[i]->getComponent();
 	}
 
 	// add component string to end of suggestions string to be used by createHTML function

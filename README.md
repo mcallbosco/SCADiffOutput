@@ -13,7 +13,7 @@ Prerequisites => Must be running a Debian version of Linux
 
 1. Open a new terminal window
 2. Download install script with command: wget https://raw.githubusercontent.com/alihaider1264/SCA/main/script/install_SCA_ubuntu.sh
-3. Give install script permission to run: sudo chmod +x install_SCA_ubuntu.sh
+3. Give install script permission to execute: sudo chmod +x install_SCA_ubuntu.sh
 4. Run the install script: ./install_SCA_ubuntu.sh
 5. Close terminal window
 6. After the script has run successfully it will have downloaded and installed all necessary requirements for

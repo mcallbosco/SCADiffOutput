@@ -18,6 +18,7 @@ private:
 	vector<string> cases;
 	vector<int> caseLines;
 	bool hasDefault;
+	string iteratorInt;
 
 
 public:
@@ -26,6 +27,8 @@ public:
 	void setVariables(Tree* rt);
 
 	Node* find(string data, Node* start);
+
+	string getComponent();
 };
 
 Switch::Switch()
@@ -55,17 +58,17 @@ void Switch::setVariables(Tree* rt)
 		condition = "No condition was found";
 	else
 	{
-		while (walker->getData != "unqualifiedId")
+		while (walker->getData() != "unqualifiedId")
 		{
-			if (walker->getChildCount != 0)
+			if (walker->getChildCount() != 0)
 				walker = walker->getChild(0);
 			else
 				conditionIsUnqualifiedId = false;
 		}
-		if (walker->getData == "unqualifiedId")
+		if (walker->getData() == "unqualifiedId")
 		{
 			conditionIsUnqualifiedId = true;
-			walker = walker->getChild();
+			walker = walker->getChild(0);
 			condition = walker->getData();
 		}
 	}
@@ -78,28 +81,28 @@ void Switch::setVariables(Tree* rt)
 	for (int i = 0; i < walker->getChildCount(); i++)
 	{
 		walker2 = walker->getChild(i);
-		if (walker2->getChild(0)->getData == "labeledStatement")
+		if (walker2->getChild(0)->getData() == "labeledStatement")
 		{
 			walker2 = walker2->getChild(0);
 			walker3 = walker2->getChild(0);
 			numOfCases++;
 			caseLines.push_back(walker3->getLineNum());
-			if (walker3 == "case")
+			if (walker3->getData() == "case")
 			{
 				walker3 = find("constantExpression", walker2);
 				if (walker3 != nullptr)
 				{
-					while (walker3->getData != "literal")
+					while (walker3->getData() != "literal")
 						walker3 = walker3->getChild(0);
 					cases.push_back(walker3->getData());
 				}
 			}
-			else if (walker3 == "default")
+			else if (walker3->getData() == "default")
 			{
 				hasDefault = true;
 			}
 		}
-		else if (walker2->getChild(0)->getData == "jumpStatement")
+		else if (walker2->getChild(0)->getData() == "jumpStatement")
 		{
 			numOfBreaks++;
 		}
@@ -125,6 +128,10 @@ Node* Switch::find(string data, Node* start)
 	for (int i = 0; i < totalChildren; i++) {
 		find(data, nodeIter->getChild(i));
 	}
+}
+
+string Switch::getComponent() {
+	return "";
 }
 
 #endif

@@ -57,38 +57,42 @@ void explore(char *dir_name) {
 				Node* rt;
 
 				sca->existsFile(cppFilePath);
-				cout << "File exists\n";
+				//cout << "File exists\n";
 				
 				sca->loadTemplateTable(templateTableFile);
-				cout << "Loaded template table\n";
+				//cout << "Loaded template table\n";
 				
 				cppFilePath = sca->loadSourceCode(cppFilePath);
-				cout << "Loaded Source Code\n";
-				cout << cppFilePath << endl;
+				//cout << "Loaded Source Code\n";
+				//cout << cppFilePath << endl;
 
 				if (cppFilePath == "failed") {
-					cout << "Loading source code failed... exiting..." << endl;
-					return;
+					goto SkipFile;
 				}
 				sca->serveCodeToANTLR(treeTxtFilePath, errorTxtFilePath);
-				cout << "Served code to ANTLR\n";
+				//cout << "Served code to ANTLR\n";
 
 				// get root
 				rt = sca->readANTLROutputTree(treeTxtFilePath);
-				cout << "Read tree text file into memory\n";
+				//cout << "Read tree text file into memory\n";
 
 				sca->readANTLROutputErrors(errorTxtFilePath);
-				cout << "Read output error file\n";
+				//cout << "Read output error file\n";
 
 				matchedSuggestions = sca->matchTemplateWithTree();
-				cout << "Matched suggestions with tree\n";
+				//cout << "Matched suggestions with tree\n";
 
 				htmlFilePath = sca->createHTMLFile(matchedSuggestions);
-				cout << "Created html file\n";
+				//cout << "Created html file\n";
+				cout << "Successfully analyzed file: " << cppFilePath << endl << endl;
 			}
 			else {
 				cout << "File: " + cppFilePath + " not recognized.\n";
-				cout << "Make sure file is named with proper extenstion (.cpp)\n";
+				cout << "Make sure file is named with proper extenstion (.cpp)\n\n";
+			}
+			if (false) {
+				SkipFile:
+				cout << "Loading source code failed... skipping file: " << cppFilePath << endl << endl;
 			}
 		}
 	}

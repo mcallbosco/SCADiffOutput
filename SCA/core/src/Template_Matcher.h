@@ -255,10 +255,21 @@ void Template_Matcher::retreiveComponents(Tree* tree, vector<Node*> iterNodes, v
 		}
 	}
 
-	checkAllComponents();
+	for (int i = 0; i < forLoopComponents.size(); i++) {
+		componentString += forLoopComponents[i]->getComponent();
+	}
+
 
 	for (int i = 0; i < whileLoopComponents.size(); i++) {
 		componentString += whileLoopComponents[i]->getComponent();
+	}
+
+	for (int i = 0; i < ifComponents.size(); i++) {
+		componentString += ifComponents[i]->getComponent();
+	}
+
+	for (int i = 0; i < switchComponents.size(); i++) {
+		componentString += switchComponents[i]->getComponent();
 	}
 
 	// add component string to end of suggestions string to be used by createHTML function

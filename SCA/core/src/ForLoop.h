@@ -24,7 +24,7 @@ private:
 public:
 	ForLoop();
 
-	void setVariables(Tree* rt);
+	void setVariables(Node* rt);
 	string getComponent();
 };
 
@@ -37,7 +37,7 @@ ForLoop::ForLoop()
 	IntAssignmentUnqualifiedId = false;
 }
 
-void ForLoop::setVariables(Tree* rt)
+void ForLoop::setVariables(Node* rt)
 {
 	componentClass.setStartOfStatement(rt);
 	Node* statementStart = componentClass.getStartOfStatement();

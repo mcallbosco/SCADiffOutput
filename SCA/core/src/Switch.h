@@ -24,7 +24,7 @@ private:
 public:
 	Switch();
 
-	void setVariables(Tree* rt);
+	void setVariables(Node* rt);
 
 	Node* find(string data, Node* start);
 
@@ -40,7 +40,7 @@ Switch::Switch()
 	hasDefault = false;
 }
 
-void Switch::setVariables(Tree* rt)
+void Switch::setVariables(Node* rt)
 {
 	componentClass.setStartOfStatement(rt);
 	Node* statementStart = componentClass.getStartOfStatement();

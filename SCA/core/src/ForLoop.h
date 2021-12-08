@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class ForLoop : Component 
+class ForLoop : public Component 
 {
 private:
 	string iteratorInt;
@@ -28,7 +28,7 @@ public:
 	string getComponent();
 };
 
-ForLoop::ForLoop()
+ForLoop::ForLoop() : Component()
 {
 	componentClass.setStatementType(0);
 	condition = "";

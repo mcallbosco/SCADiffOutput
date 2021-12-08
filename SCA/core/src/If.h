@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class If : Component
+class If : public Component
 {
 private:
 	int elses;
@@ -26,7 +26,7 @@ public:
 	string getComponent();
 };
 
-If::If()
+If::If() : Component()
 {
 	componentClass.setStatementType(1);
 }
@@ -217,6 +217,7 @@ Node* If::find(string data, Node* start)
 	for (int i = 0; i < totalChildren; i++) {
 		find(data, nodeIter->getChild(i));
 	}
+	return nullptr;
 }
 
 string If::getComponent() {

@@ -119,9 +119,7 @@ string Component::getStatementType() {
 
 void Component::setStartOfStatement(Node* rt)
 {
-	startOfStatement = rt->getRoot();
-	rt->filltokenNodeVector(statementType, startOfStatement);
-	statementInstances = rt->getTokenNodes();
+	startOfStatement = rt;
 
 	componentType = startOfStatement->getChild(0)->getData();
 }

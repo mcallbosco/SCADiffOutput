@@ -154,7 +154,7 @@ void createHTML::makeHTMLfile()
 
 	for (int i = 0; i < whileLoopComponents.size(); i++)
 	{
-		componentIsCorrect = whileLoopComponents[i]->getCorrectComponent()
+		componentIsCorrect = whileLoopComponents[i]->getCorrectComponent();
 
 		if (componentIsCorrect)
 		{
@@ -172,7 +172,7 @@ void createHTML::makeHTMLfile()
 
 	for (int i = 0; i < forLoopComponents.size(); i++)
 	{
-		componentIsCorrect = forLoopComponents[i]->getCorrectComponent()
+		componentIsCorrect = forLoopComponents[i]->getCorrectComponent();
 
 		if (componentIsCorrect)
 		{
@@ -190,7 +190,7 @@ void createHTML::makeHTMLfile()
 
 	for (int i = 0; i < ifComponents.size(); i++)
 	{
-		/*componentIsCorrect = ifComponents[i]->getCorrectComponent()
+		/*componentIsCorrect = ifComponents[i]->getCorrectComponent();
 
 		if (componentIsCorrect)
 		{
@@ -208,7 +208,7 @@ void createHTML::makeHTMLfile()
 
 	for (int i = 0; i < switchComponents.size(); i++)
 	{
-		/*componentIsCorrect = switchComponents[i]->getCorrectComponent()
+		/*componentIsCorrect = switchComponents[i]->getCorrectComponent();
 
 		if (componentIsCorrect)
 		{

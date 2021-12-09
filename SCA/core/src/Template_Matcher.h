@@ -80,14 +80,14 @@ void Template_Matcher::searchFirstToken(string token)
 {
 	rulesToCheckEntries = 0;
 
-	int dataLength = token.length();
+	int dataLength = token.length();//get length of give token
 
 	//for each rule in the table
 	for (int i = 0; i < template_table.size(); i++)
 	{
-		//get first token from rule i
+		//get first token from rule i using dataLength
 		string firstToken = template_table[i].getRule().substr(0, dataLength);
-		if (firstToken == token)
+		if (firstToken == token)//if match then add to rulesToCheck[]
 		{
 			rulesToCheck[rulesToCheckEntries] = template_table[i].getRuleNum();
 			rulesToCheckEntries++;
@@ -98,7 +98,7 @@ void Template_Matcher::searchFirstToken(string token)
 void Template_Matcher::checkTreeForErrors(Node* rt)
 {
 	searchFirstToken(rt->getData());
-	for (int i = 0; i < rulesToCheckEntries; i++)//for each rule that needs to be checked, search for full violation on those rules.
+	for (int i = 0; i < rulesToCheckEntries; i++)//for each rule that needs to be checked for this node, search for full violation on those rules.
 		checkFullViolation(rt, template_table[rulesToCheck[i]]);
 
 	int totalChildren = rt->getChildCount();
@@ -110,11 +110,8 @@ void Template_Matcher::checkTreeForErrors(Node* rt)
 
 bool Template_Matcher::checkFullViolation(Node* rt, Rule currRule)
 {
-	int dataLength = rt->getData().length();
+	//get just the rule from the Rule class
 	string templateRule = currRule.getRule();
-
-	//first token from rule
-	string ruleFirstToken = templateRule.substr(0, dataLength);
 
 	//removes white space in rule
 	for (int i = 0; i < templateRule.length(); i++)
@@ -124,20 +121,22 @@ bool Template_Matcher::checkFullViolation(Node* rt, Rule currRule)
 	}
 
 	Tree tempTree;
+	//get full rule from tree based off number of tokens in a currRule
 	string treeRule = tempTree.getNextNtokens(rt, currRule.getTokens());
 
 	if (treeRule == templateRule)
 	{
 		bool alreadyThere = false;
-		for (int i = 0; i < template_table.size(); i++)
+		for (int i = 0; i < rulesViolatedEntries; i++)
 		{
+			//check if rule is already in rulesViolated[], check if ruleNum and lineNum are the same as anything in rulesViolated[]
 			if ((rulesViolated[i] == currRule.getRuleNum()) && (rulesViolatedLines[i] == rt->getLineNum()))
 				alreadyThere = true;
 
 			if (alreadyThere)
 				break;
 		}
-		if (!alreadyThere)
+		if (!alreadyThere)//if not in rulesViolated[], add it
 		{
 			rulesViolated[rulesViolatedEntries] = currRule.getRuleNum();
 			rulesViolatedLines[rulesViolatedEntries] = rt->getLineNum();
@@ -145,7 +144,7 @@ bool Template_Matcher::checkFullViolation(Node* rt, Rule currRule)
 			return true;
 		}
 	}
-	return false;
+	return false;//no violation found
 }
 
 void Template_Matcher::setTemplateTable(unordered_map <int, Rule> templatetable) {
@@ -189,12 +188,13 @@ vector<Switch*> Template_Matcher::getSwitchComponents() {
 
 string Template_Matcher::outputSuggestions()
 {
-	for (int i = 0; i < rulesViolatedEntries; i++)
+	if (rulesViolatedEntries != 0)
 	{
-		if (rulesViolated[i] == -1)
-			break;
-		suggestions += "Line " + rulesViolatedLines[i];
-		suggestions += ": " + template_table[rulesViolated[i]].getSuggestion() + "\n";
+		for (int i = 0; i < rulesViolatedEntries; i++)
+		{
+			suggestions += "Line " + rulesViolatedLines[i];
+			suggestions += ": " + template_table[rulesViolated[i]].getSuggestion() + "\n";
+		}
 	}
 
 	return suggestions;
@@ -255,25 +255,31 @@ void Template_Matcher::retreiveComponents(Tree* tree, vector<Node*> iterNodes, v
 		}
 	}
 
-	for (int i = 0; i < forLoopComponents.size(); i++) {
-		componentString += forLoopComponents[i]->getComponent();
-	}
+	//-------------------------------------------------------------------------------------------------------| 
+	//currently commented out, don't think it's neccessary because of how we print components in createHTML, |
+	// but wanted to make sure with Matt first before I delete this.                                         |
+	// I think this messes up suggestions string as of right now.                                            |
+	// ------------------------------------------------------------------------------------------------------|
+	// 
+	//for (int i = 0; i < forLoopComponents.size(); i++) {
+	//	componentString += forLoopComponents[i]->getComponent();
+	//}
 
 
-	for (int i = 0; i < whileLoopComponents.size(); i++) {
-		componentString += whileLoopComponents[i]->getComponent();
-	}
+	//for (int i = 0; i < whileLoopComponents.size(); i++) {
+	//	componentString += whileLoopComponents[i]->getComponent();
+	//}
 
-	for (int i = 0; i < ifComponents.size(); i++) {
-		componentString += ifComponents[i]->getComponent();
-	}
+	//for (int i = 0; i < ifComponents.size(); i++) {
+	//	componentString += ifComponents[i]->getComponent();
+	//}
 
-	for (int i = 0; i < switchComponents.size(); i++) {
-		componentString += switchComponents[i]->getComponent();
-	}
+	//for (int i = 0; i < switchComponents.size(); i++) {
+	//	componentString += switchComponents[i]->getComponent();
+	//}
 
-	// add component string to end of suggestions string to be used by createHTML function
-	suggestions = suggestions + componentString;
+	//// add component string to end of suggestions string to be used by createHTML function
+	//suggestions = suggestions + componentString;
 }
 
 void Template_Matcher::checkAllComponents()

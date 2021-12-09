@@ -102,7 +102,7 @@ void createHTML::makeHTMLfile()
 	string tempString = "";
 	int lineNum = 1;
 
-	while (getline(cppFile, tempString))
+	while (getline(cppFile, tempString))//load the cpp file into CPP string
 	{
 		if (lineNum < 10) {
 			CPPstring += to_string(lineNum) + "&emsp;" + tempString + "<br/>";
@@ -117,9 +117,8 @@ void createHTML::makeHTMLfile()
 	}
 
 	//load soucre code in left column
-
 	htmlFile << sourceTitle << "<p class=\"sourcecode\">" << CPPstring << "</p>\n";
-	htmlFile << "</div>";
+	htmlFile << "</div>";//close left column
 
 	//right column
 	htmlFile << "<div id=\"column2\" class=\"columnContainer\">";
@@ -144,8 +143,8 @@ void createHTML::makeHTMLfile()
 	else
 		htmlFile << "<p class=\"rule\">" << "No Suggestions!" << "</p>";
 
-	htmlFile << "</div>";
-	htmlFile << "</div>";
+	htmlFile << "</div>";//close ruleContainer
+	htmlFile << "</div>";//close left column
 
 	//components
 	htmlFile << "<div class = \"components\">";
@@ -224,7 +223,7 @@ void createHTML::makeHTMLfile()
 		}*/
 	}
 
-	htmlFile << "</div></div></body></html>";
+	htmlFile << "</div></div></body></html>";//close components then entire page
 
 }
 

@@ -16,7 +16,6 @@ private:
 	string statementType;
 	Node* startOfStatement;
 	string componentType;
-	vector<Node*> statementInstances;
 	vector<int> startLine;
 	int startLineCount;
 	vector<int> endLine;
@@ -44,7 +43,7 @@ public:
 	//returns vector of pointers to all nodes in the statement.
 	vector<Node*> getStatementInstances();
 
-	//goes to the bottom right node start from start node* and sets endLine.
+	//goes to the bottom right node, start from start node* and sets endLine.
 	void addAnEndLine(Node* start);
 
 	//returns endLine.
@@ -126,10 +125,6 @@ void Component::setStartOfStatement(Node* rt)
 
 Node* Component::getStartOfStatement(){
 	return startOfStatement;
-}
-
-vector<Node*> Component::getStatementInstances() {
-	return statementInstances;
 }
 
 void Component::addAnEndLine(Node* start)

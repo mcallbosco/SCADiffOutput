@@ -15,7 +15,7 @@ Prerequisites => Must be running a Debian version of Linux
 2. Download install script with command: wget https://raw.githubusercontent.com/alihaider1264/SCA/main/script/install_SCA_ubuntu.sh
 3. Give install script permission to execute: sudo chmod +x install_SCA_ubuntu.sh
 4. Run the install script: ./install_SCA_ubuntu.sh
-5. Close terminal window. After the script has run successfully it will have downloaded and installed all necessary requirements for
+5. After the install script has successfully run, close the current terminal window. The install script should download and install all necessary requirements for
    SCA to run. Contents of SCA will be stored in a directory that can be found at ~/SCA (on your home directory). A picture of the directory
    structure can be found below.
 6. To execute the SCA tool on your source code files, place the .cpp files you would like to have analyzed

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class Switch : Component
+class Switch : public Component
 {
 private:
 	int numOfCases;
@@ -26,12 +26,12 @@ public:
 
 	void setVariables(Node* rt);
 
-	Node* find(string data, Node* start);
+	Node* findNode(string data, Node* start);
 
 	string getComponent();
 };
 
-Switch::Switch()
+Switch::Switch() : Component()
 {
 	componentClass.setStatementType(1);
 	condition = "";
@@ -49,11 +49,11 @@ void Switch::setVariables(Node* rt)
 	Node* walker3;
 
 	//find first line number
-	walker = find("switch", statementStart);
+	walker = findNode("switch", statementStart);
 	startLine = walker->getLineNum();
 
 	//find condition
-	walker = find("condition", statementStart);
+	walker = findNode("condition", statementStart);
 	if (walker == nullptr)
 		condition = "No condition was found";
 	else
@@ -74,7 +74,7 @@ void Switch::setVariables(Node* rt)
 	}
 
 	//find cases
-	walker = find("statement", statementStart);
+	walker = findNode("statement", statementStart);
 	walker = walker->getChild(0);
 	walker = walker->getChild(0);
 	
@@ -89,7 +89,7 @@ void Switch::setVariables(Node* rt)
 			caseLines.push_back(walker3->getLineNum());
 			if (walker3->getData() == "case")
 			{
-				walker3 = find("constantExpression", walker2);
+				walker3 = findNode("constantExpression", walker2);
 				if (walker3 != nullptr)
 				{
 					while (walker3->getData() != "literal")
@@ -110,7 +110,7 @@ void Switch::setVariables(Node* rt)
 }
 
 
-Node* Switch::find(string data, Node* start)
+Node* Switch::findNode(string data, Node* start)
 {
 	Node* nodeIter = start;
 
@@ -126,8 +126,9 @@ Node* Switch::find(string data, Node* start)
 	int totalChildren = nodeIter->getChildCount();
 
 	for (int i = 0; i < totalChildren; i++) {
-		find(data, nodeIter->getChild(i));
+		findNode(data, nodeIter->getChild(i));
 	}
+	return nullptr;
 }
 
 string Switch::getComponent() {

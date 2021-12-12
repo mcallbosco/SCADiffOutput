@@ -65,7 +65,7 @@ void createHTML::setHTMLlocation(string HTMLlocation) {
 void createHTML::makeHTMLfile()
 {
 	string sourceTitle = "<p class=\"titleText\">Source Code</p><br/>";
-	string suggestionsTitle = "<p class=\"titleText\">Components & Suggestions</p><br/>";
+	string suggestionsTitle = "<p class=\"titleText\">Suggestions</p><br/>";
 	//create html file
 	ofstream htmlFile(htmlLocation);
 
@@ -86,10 +86,10 @@ void createHTML::makeHTMLfile()
 	htmlFile << "</head>\n" << "<body>\n";
 
 	
-  //container for entire page
+  	//container for entire page
 	htmlFile << "<div class=\"entirePage\">\n";
   
-  htmlFile << "\t\t<h1>\n" << "\t\t\tcppNameHere.cpp\n" << "\t\t</h1>";
+  	htmlFile << "\t\t<h1>\n" << "\t\t\t" << fileName << ".cpp\n" << "\t\t</h1>";
 	htmlFile << "\t\t<h2>\n" << "\t\t\t<i>Output from SCA (v1.0) - https://github.com/alihaider1264/SCA.git</i>\n" << "\t\t</h2>";
   
 	//left column
@@ -118,6 +118,7 @@ void createHTML::makeHTMLfile()
 
 	//load soucre code in left column
 	htmlFile << sourceTitle << "<p class=\"sourcecode\">" << CPPstring << "</p>\n";
+
 	htmlFile << "</div>";//close left column
 
 	//right column
@@ -147,15 +148,11 @@ void createHTML::makeHTMLfile()
 	htmlFile << "</div>";//close left column
 
 	//components
-	htmlFile << "<div class = \"components\">";
-
-	bool componentIsCorrect;
+	htmlFile << "<div class=\"components\"><p class=\"titleText\">Components</p><br/>";
 
 	for (int i = 0; i < whileLoopComponents.size(); i++)
 	{
-		componentIsCorrect = whileLoopComponents[i]->getCorrectComponent();
-
-		if (componentIsCorrect)
+		if (whileLoopComponents[i]->getCorrectComponent())
 		{
 			htmlFile << "<div class=\"correctComponent\">\n";
 			htmlFile << whileLoopComponents[i]->getComponent() << "<br />";
@@ -165,15 +162,16 @@ void createHTML::makeHTMLfile()
 		{
 			htmlFile << "<div class=\"wrongComponent\">";
 			htmlFile <<  whileLoopComponents[i]->getComponent() << "<br />";
+			for (string s : whileLoopComponents[i]->getCodeSmells()) {
+				htmlFile << s;
+			}
 			htmlFile << "</div>";
 		}
 	}
 
 	for (int i = 0; i < forLoopComponents.size(); i++)
 	{
-		componentIsCorrect = forLoopComponents[i]->getCorrectComponent();
-
-		if (componentIsCorrect)
+		if (forLoopComponents[i]->getCorrectComponent())
 		{
 			htmlFile << "<div class=\"correctComponent\">";
 			htmlFile <<  forLoopComponents[i]->getComponent() << "<br />";
@@ -183,44 +181,49 @@ void createHTML::makeHTMLfile()
 		{
 			htmlFile << "<div class=\"wrongComponent\">";
 			htmlFile <<  forLoopComponents[i]->getComponent() << "<br />";
+			for (string s : forLoopComponents[i]->getCodeSmells()) {
+				htmlFile << s;
+			}
 			htmlFile << "</div>";
 		}
 	}
 
 	for (int i = 0; i < ifComponents.size(); i++)
 	{
-		/*componentIsCorrect = ifComponents[i]->getCorrectComponent();
-
-		if (componentIsCorrect)
+		if (ifComponents[i]->getCorrectComponent())
 		{
 			htmlFile << "\t\t\t<div class=\"correctComponent\">\n";
-			htmlFile << "\t\t\t\t" << ifComponents[i]->getComponent() << "\n";
+			htmlFile << "\t\t\t\t" << ifComponents[i]->getComponent() << "<br />";
 			htmlFile << "\t\t\t</div>\n";
 		}
 		else
 		{
 			htmlFile << "\t\t\t<div class=\"wrongComponent\">\n";
-			htmlFile << "\t\t\t\t" << ifComponents[i]->getComponent() << "\n";
+			htmlFile << "\t\t\t\t" << ifComponents[i]->getComponent() << "<br />";
+			for (string s : ifComponents[i]->getCodeSmells()) {
+				htmlFile << s;
+			}
 			htmlFile << "\t\t\t</div>\n";
-		}*/
+		}
 	}
 
 	for (int i = 0; i < switchComponents.size(); i++)
 	{
-		/*componentIsCorrect = switchComponents[i]->getCorrectComponent();
-
-		if (componentIsCorrect)
+		if (switchComponents[i]->getCorrectComponent())
 		{
 			htmlFile << "\t\t\t<div class=\"correctComponent\">\n";
-			htmlFile << "\t\t\t\t" << switchComponents[i]->getComponent() << "\n";
+			htmlFile << "\t\t\t\t" << switchComponents[i]->getComponent() << "<br />";
 			htmlFile << "\t\t\t</div>\n";
 		}
 		else
 		{
 			htmlFile << "\t\t\t<div class=\"wrongComponent\">\n";
-			htmlFile << "\t\t\t\t" << switchComponents[i]->getComponent() << "\n";
+			htmlFile << "\t\t\t\t" << switchComponents[i]->getComponent() << "<br />";
+			for (string s : switchComponents[i]->getCodeSmells()) {
+				htmlFile << s;
+			}
 			htmlFile << "\t\t\t</div>\n";
-		}*/
+		}
 	}
 
 	htmlFile << "</div></div></body></html>";//close components then entire page

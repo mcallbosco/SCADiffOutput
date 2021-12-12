@@ -10,46 +10,72 @@ class If : public Component
 {
 private:
 	int elses;
-	vector<string> conditions;	//0 will always be first if
-	vector<string> conditionsL;
-	vector<string> conditionsR;
+	string conditions;	//0 will always be first if
+	string conditionsL;
+	string conditionsR;
 	vector<bool> conditionsLunqualifiedId;
 	vector<bool> conditionsRunqualifiedId;
-	Component componentClass;
 	vector<int> startLines;
 	//vector<int> endLines;
 
 public:
 	If();
-	void setVariables(Node* rt);
-	Node* find(string data, Node* start);
+	If(Node* compRtPtr, Node* trRtPtr);
+	void setVariables();
 	string getComponent();
+	void checkComponent();
 };
 
 If::If() : Component()
 {
-	componentClass.setStatementType(1);
+	setStatementType(1);
 }
 
-void If::setVariables(Node* rt)
+If::If(Node* compRtPtr, Node* trRtPtr) : Component(compRtPtr, trRtPtr) {
+	setStatementType(1);
+	elses = 0;
+}
+
+void If::setVariables()
 {
-	componentClass.setStartOfStatement(rt);
-	Node* statementStart = componentClass.getStartOfStatement();
+	Node* statementStart = getComponentRootNode();
+	int numOfComponentChildren = getComponentRootNode()->getChildCount();
 	Node* walker;
 	Node* walker2;
 
 	//find first line number
-	walker = find("if", statementStart);
+	walker = getComponentRootNode()->getChild(0);
 	startLines.push_back(walker->getLineNum());
 
 	//find the condition
-	walker = find("condition", statementStart);
+	walker = nullptr;
+	for (int i = 0; i < numOfComponentChildren; i++) {
+		if (getComponentRootNode()->getChild(i)->getData() == "condition") {
+			walker = getComponentRootNode()->getChild(i);
+			break;
+		}
+	}
+
 	if (walker == nullptr)
-		conditions.push_back("No condition was found");
+		conditions = "No condition was found";
 	else
 	{
 		while (walker->getChildCount() == 1)
 			walker = walker->getChild(0);
+		
+		// single condition, boolean value being tested
+		if (walker->getChildCount() == 0) {
+			if (walker->getParent()->getData() == "unqualifiedId") {
+				conditionsLunqualifiedId.push_back(true);
+				conditionsRunqualifiedId.push_back(false);
+			}
+			else {
+				conditionsLunqualifiedId.push_back(false);
+				conditionsRunqualifiedId.push_back(false);
+			}
+			conditionsL = walker->getData();
+			conditions = "boolean";
+		}
 		if (walker->getChildCount() == 3)
 		{
 			//get left side of condtion
@@ -62,10 +88,10 @@ void If::setVariables(Node* rt)
 				conditionsLunqualifiedId.push_back(true);
 			else
 				conditionsLunqualifiedId.push_back(false);
-			conditionsL.push_back(walker2->getData());
+			conditionsL = walker2->getData();
 
 			//get comparison operator
-			conditions.push_back(walker->getChild(1)->getData());
+			conditions = walker->getChild(1)->getData();
 
 			//get right side of condition
 			walker2 = walker->getChild(2);
@@ -77,7 +103,7 @@ void If::setVariables(Node* rt)
 				conditionsRunqualifiedId.push_back(true);
 			else
 				conditionsRunqualifiedId.push_back(false);
-			conditionsR.push_back(walker2->getData());
+			conditionsR = walker2->getData();
 		}
 		else if (walker->getChildCount() == 4)
 		{
@@ -91,11 +117,11 @@ void If::setVariables(Node* rt)
 				conditionsLunqualifiedId.push_back(true);
 			else
 				conditionsLunqualifiedId.push_back(false);
-			conditionsL.push_back(walker2->getData());
+			conditionsL = walker2->getData();
 
 			//get comparison operator
-			conditions.push_back(walker->getChild(1)->getData());
-			conditions[0] += walker->getChild(2)->getData();
+			conditions = walker->getChild(1)->getData();
+			conditions += walker->getChild(2)->getData();
 
 			//get right side of condition
 			walker2 = walker->getChild(2);
@@ -107,7 +133,7 @@ void If::setVariables(Node* rt)
 				conditionsRunqualifiedId.push_back(true);
 			else
 				conditionsRunqualifiedId.push_back(false);
-			conditionsR.push_back(walker2->getData());
+			conditionsR = walker2->getData();
 		}
 	}
 
@@ -115,113 +141,54 @@ void If::setVariables(Node* rt)
 	{
 		elses++;
 
-		walker = find("else", statementStart);
-		startLines.push_back(walker->getLineNum());
-
-
-		statementStart = statementStart->getChild(6);
-		if (statementStart->getChild(0)->getData() == "selectionStatement")	//means there's another if
-		{
-			statementStart = statementStart->getChild(0);
-
-			//find the condition
-			walker = find("condition", statementStart);
-			if (walker == nullptr)
-				conditions.push_back("No condition was found");
-			else
-			{
-				while (walker->getChildCount() == 1)
-					walker = walker->getChild(0);
-				if (walker->getChildCount() == 3)
-				{
-					//get left side of condtion
-					walker2 = walker->getChild(0);
-
-					while (walker2->getChildCount() == 1)
-						walker2 = walker2->getChild(0);
-
-					if (walker2->getParent()->getData() == "unqualifiedId")
-						conditionsLunqualifiedId.push_back(true);
-					else
-						conditionsLunqualifiedId.push_back(false);
-					conditionsL.push_back(walker2->getData());
-
-					//get comparison operator
-					conditions.push_back(walker->getChild(1)->getData());
-
-					//get right side of condition
-					walker2 = walker->getChild(2);
-
-					while (walker2->getChildCount() == 1)
-						walker2 = walker2->getChild(0);
-
-					if (walker2->getParent()->getData() == "unqualifiedId")
-						conditionsRunqualifiedId.push_back(true);
-					else
-						conditionsRunqualifiedId.push_back(false);
-					conditionsR.push_back(walker2->getData());
-				}
-				else if (walker->getChildCount() == 4)
-				{
-					//get left side of condtion
-					walker2 = walker->getChild(0);
-
-					while (walker2->getChildCount() == 1)
-						walker2 = walker2->getChild(0);
-
-					if (walker2->getParent()->getData() == "unqualifiedId")
-						conditionsLunqualifiedId.push_back(true);
-					else
-						conditionsLunqualifiedId.push_back(false);
-					conditionsL.push_back(walker2->getData());
-
-					//get comparison operator
-					conditions.push_back(walker->getChild(1)->getData());
-					conditions[elses] += walker->getChild(2)->getData();
-
-					//get right side of condition
-					walker2 = walker->getChild(2);
-
-					while (walker2->getChildCount() == 1)
-						walker2 = walker2->getChild(0);
-
-					if (walker2->getParent()->getData() == "unqualifiedId")
-						conditionsRunqualifiedId.push_back(true);
-					else
-						conditionsRunqualifiedId.push_back(false);
-					conditionsR.push_back(walker2->getData());
-				}
+		// find else
+		walker = nullptr;
+		for (int i = 0; i < numOfComponentChildren; i++) {
+			if (getComponentRootNode()->getChild(i)->getData() == "else") {
+				walker = getComponentRootNode()->getChild(i);
+				break;
 			}
+		}
+		if (walker != nullptr) {
+			startLines.push_back(walker->getLineNum());
 
+			statementStart = statementStart->getChild(6);
+			if (statementStart->getChild(0)->getData() == "selectionStatement")	//means there's another if
+			{
+				statementStart = statementStart->getChild(0);
+			}
+		}
+		else {
+			break;
 		}
 	}
 }
 
 
-Node* If::find(string data, Node* start)
-{
-	Node* nodeIter = start;
-	string iteratorInt;
+string If::getComponent() {
+	string componentString = "<strong><u>If Statement</u></strong><br/>";
 
-	if (nodeIter->getData() == data)
-	{
-		iteratorInt = nodeIter->getData();
-		return nodeIter;
+	if (startLines.size() > 1) {
+		componentString += "Begins on line " + to_string(startLines[0]) + "<br/>";
+		componentString += "Else begins on line " + to_string(startLines[1]) + "<br/>";
 	}
-
-	if (nodeIter->getChildCount() == 0)
-		return nullptr;
-
-	int totalChildren = nodeIter->getChildCount();
-
-	for (int i = 0; i < totalChildren; i++) {
-		find(data, nodeIter->getChild(i));
+	else {
+		componentString += "<br/>If statement begins on line " + to_string(startLines[0]) + "<br/>";
 	}
-	return nullptr;
+	componentString += "Number of elses: " + to_string(elses) + "<br/>";
+
+	componentString += "Condition for If Statement: " + conditionsL + " " + conditions + " " + conditionsR + "<br/>";
+
+	return componentString;
 }
 
-string If::getComponent() {
-	return "";
+void If::checkComponent() {
+	for (int i = 0; i < conditionsLunqualifiedId.size(); i++) {
+		if (conditionsLunqualifiedId[i] == false && conditionsRunqualifiedId[i] == false) {
+			setCorrectComponent(false);
+			setCodeSmell("If statement uses literals. Execution will always follow the same path.<br/>");
+		}
+	}
 }
 
 #endif

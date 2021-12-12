@@ -376,11 +376,13 @@ Node* SCA::readANTLROutputTree(string& treeTxtFilePath) {
 	AST_Parser* ast_parser = new AST_Parser(treeTxtFilePath, cppFilePath);
 	Node* rootPtr = nullptr;
 	if (ast_parser->testFileExists(treeTxtFilePath)) {
+		////////////// Create tree in memory from ANTLR output produced ////////////////
 		ast_parser->parseTree();
 		rootPtr = ast_parser->getTreeRoot();
 		ast_parser->condenseTree(rootPtr);
 		ast_parser->getNodeLineNums();
 
+		//////////// Retrieve all of the root nodes for every component of interest /////////////
 		ast = ast_parser->getTree();
 		ast->filltokenNodeVector("iterationStatement", ast->getRoot());
 		iterationNodes = ast->getTokenNodes();
@@ -388,6 +390,67 @@ Node* SCA::readANTLROutputTree(string& treeTxtFilePath) {
 		ast->filltokenNodeVector("selectionStatement", ast->getRoot());
 		selectionNodes = ast->getTokenNodes();
 		ast->clearTokenNodes();
+
+		///////////// Extract all components info from the tree ///////////////
+		Node* temp;
+		string testToken = "";
+
+		// iterate though each node that contains an iterationStatement
+		for (int i = 0; i < iterationNodes.size(); i++) {
+			temp = iterationNodes[i];
+			while (temp->getChildCount() != 0) {
+				temp = temp->getChild(0);
+			}
+			testToken = temp->getData();
+			
+			if (testToken == "for") {
+				ForLoop* aForLoop = new ForLoop(iterationNodes[i], ast->getRoot());
+				aForLoop->setVariables();
+				aForLoop->checkComponent();
+				forLoopComponents.push_back(aForLoop);
+				continue;
+			}
+			else if (testToken == "while") {
+				While_Loop* aWhileLoop = new While_Loop(iterationNodes[i], ast->getRoot(), "while");
+				aWhileLoop->extractAllInfo();
+				aWhileLoop->checkComponent();
+				whileLoopComponents.push_back(aWhileLoop);
+				continue;
+			}
+			else if (testToken == "do") {
+				While_Loop* aDoWhileLoop = new While_Loop(iterationNodes[i], ast->getRoot(), "do");
+				aDoWhileLoop->extractAllInfo();
+				aDoWhileLoop->checkComponent();
+				whileLoopComponents.push_back(aDoWhileLoop);
+				continue;
+			}
+		}
+
+		// iterate through each node that contains a selectionStatement
+		for (int i = 0; i < selectionNodes.size(); i++) {
+			temp = selectionNodes[i];
+			while (temp->getChildCount() != 0) {
+				temp = temp->getChild(0);
+			}
+
+			testToken = temp->getData();
+			if (testToken == "if") {
+				If* anIf = new If(selectionNodes[i], ast->getRoot());
+				anIf->setVariables();
+				anIf->checkComponent();
+				ifComponents.push_back(anIf);
+				continue;
+			}
+			else if (testToken == "switch") {
+				Switch* aSwitch = new Switch(selectionNodes[i], ast->getRoot());
+				aSwitch->setVariables();
+				aSwitch->checkComponent();
+				switchComponents.push_back(aSwitch);
+				continue;
+			}
+		}
+
+
 	}
 	else {
 		cout << "File " << treeTxtFilePath << " does not exist..." << endl;
@@ -410,14 +473,6 @@ string SCA::matchTemplateWithTree() {
 	templateMatcher->setTemplateTable(tempTableLoader->getTemplateTable());
 	templateMatcher->setRulesArraySize();
 	templateMatcher->checkTreeForErrors(ast->getRoot());
-
-	// Use tree to gather Components
-	templateMatcher->retreiveComponents(ast, iterationNodes, selectionNodes);
-
-	whileLoopComponents = templateMatcher->getWhileLoopComponents();
-	forLoopComponents = templateMatcher->getForLoopComponents();
-	ifComponents = templateMatcher->getIfComponents();
-	switchComponents = templateMatcher->getSwitchComponents();
 
 	return templateMatcher->outputSuggestions();
 }

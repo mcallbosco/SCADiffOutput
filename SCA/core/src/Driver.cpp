@@ -64,7 +64,7 @@ void explore(char *dir_name) {
 				
 				cppFilePath = sca->loadSourceCode(cppFilePath);
 				//cout << "Loaded Source Code\n";
-				//cout << cppFilePath << endl;
+				cout << cppFilePath << endl;
 
 				if (cppFilePath == "failed") {
 					goto SkipFile;

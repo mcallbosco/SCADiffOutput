@@ -11,128 +11,217 @@ class Switch : public Component
 private:
 	int numOfCases;
 	int numOfBreaks;
-	Component componentClass;
 	string condition;
 	bool conditionIsUnqualifiedId;
+	bool conditionIsLiteral;
 	int startLine;
 	vector<string> cases;
 	vector<int> caseLines;
 	bool hasDefault;
 	string iteratorInt;
+	int defaultLine;
 
 
 public:
 	Switch();
+	Switch(Node* compRtPtr, Node* trRtPtr);
 
-	void setVariables(Node* rt);
+	void setVariables();
 
-	Node* findNode(string data, Node* start);
+	void _extractCase(Node* rt);
 
 	string getComponent();
+	void checkComponent();
 };
 
 Switch::Switch() : Component()
 {
-	componentClass.setStatementType(1);
+	setStatementType(1);
 	condition = "";
 	conditionIsUnqualifiedId = false;
 	numOfCases = 0;
 	hasDefault = false;
 }
 
-void Switch::setVariables(Node* rt)
+Switch::Switch(Node* compRtPtr, Node* trRtPtr) : Component(compRtPtr, trRtPtr) {
+	setStatementType(1);
+	numOfCases = 0;
+	numOfBreaks = 0;
+	startLine = 0;
+	defaultLine = 0;
+	conditionIsUnqualifiedId = false;
+	hasDefault = false;
+	conditionIsLiteral = false;
+	iteratorInt = "";
+	condition = "";
+}
+
+void Switch::setVariables()
 {
-	componentClass.setStartOfStatement(rt);
-	Node* statementStart = componentClass.getStartOfStatement();
-	Node* walker;
-	Node* walker2;
-	Node* walker3;
+	Node* statementStart = getComponentRootNode();
+	int numOfComponentChildren = getComponentRootNode()->getChildCount();
+	Node* walker = getComponentRootNode();
+	Node* walker2, *walker3, *walker4;
 
 	//find first line number
-	walker = findNode("switch", statementStart);
+	walker = walker->getChild(0);
 	startLine = walker->getLineNum();
 
 	//find condition
-	walker = findNode("condition", statementStart);
+	walker = nullptr;
+	for (int i = 0; i < numOfComponentChildren; i++) {
+		if (getComponentRootNode()->getChild(i)->getData() == "condition") {
+			walker = getComponentRootNode()->getChild(i);
+			break;
+		}
+	}
+
 	if (walker == nullptr)
 		condition = "No condition was found";
 	else
 	{
-		while (walker->getData() != "unqualifiedId")
-		{
-			if (walker->getChildCount() != 0)
-				walker = walker->getChild(0);
-			else
-				conditionIsUnqualifiedId = false;
-		}
-		if (walker->getData() == "unqualifiedId")
-		{
-			conditionIsUnqualifiedId = true;
+		while (walker->getChildCount() != 0) {
 			walker = walker->getChild(0);
+		}
+
+		if (walker->getParent()->getData() == "unqualifiedId") {
+			conditionIsUnqualifiedId = true;
+			condition = walker->getData();
+		}
+		else if (walker->getParent()->getData() == "literal") {
+			conditionIsLiteral = true;
+			condition = walker->getData();
+		}
+		else {
 			condition = walker->getData();
 		}
 	}
 
 	//find cases
-	walker = findNode("statement", statementStart);
-	walker = walker->getChild(0);
-	walker = walker->getChild(0);
-	
-	for (int i = 0; i < walker->getChildCount(); i++)
-	{
-		walker2 = walker->getChild(i);
-		if (walker2->getChild(0)->getData() == "labeledStatement")
-		{
-			walker2 = walker2->getChild(0);
-			walker3 = walker2->getChild(0);
-			numOfCases++;
-			caseLines.push_back(walker3->getLineNum());
-			if (walker3->getData() == "case")
+	walker = nullptr;
+	for (int i = 0; i < numOfComponentChildren; i++) {
+		if (getComponentRootNode()->getChild(i)->getData() == "statement") {
+			walker = getComponentRootNode()->getChild(i);
+			break;
+		}
+	}
+
+	if (walker == nullptr) {
+		cases.push_back("Could not find case statements");
+	}
+	else {
+
+		if (findNode("statementSeq", walker)) {
+			walker = getFoundNode();
+
+			for (int i = 0; i < walker->getChildCount(); i++)
 			{
-				walker3 = findNode("constantExpression", walker2);
-				if (walker3 != nullptr)
+				walker2 = walker->getChild(i);
+
+				if (walker2->getChild(0)->getData() == "labeledStatement")
 				{
-					while (walker3->getData() != "literal")
-						walker3 = walker3->getChild(0);
-					cases.push_back(walker3->getData());
+					walker2 = walker2->getChild(0);
+					walker3 = walker2->getChild(0);
+					walker4 = walker2->getChild(1);
+					
+					if (walker3->getData() == "case")
+					{
+						numOfCases++;
+						caseLines.push_back(walker3->getLineNum());
+						_extractCase(walker4);
+					}
+					else if (walker3->getData() == "default")
+					{
+						hasDefault = true;
+						defaultLine = walker3->getLineNum();
+					}
+				}
+				else if (walker2->getChild(0)->getData() == "jumpStatement")
+				{
+					numOfBreaks++;
 				}
 			}
-			else if (walker3->getData() == "default")
-			{
-				hasDefault = true;
-			}
 		}
-		else if (walker2->getChild(0)->getData() == "jumpStatement")
-		{
-			numOfBreaks++;
+		else {
+			cases.push_back("Unable to find case");
 		}
+		
+		
 	}
 }
 
-
-Node* Switch::findNode(string data, Node* start)
-{
-	Node* nodeIter = start;
-
-	if (nodeIter->getData() == data)
-	{
-		iteratorInt = nodeIter->getData();
-		return nodeIter;
+void Switch::_extractCase(Node* rt) {
+	Node* iterNode = rt;
+	if (iterNode->getChildCount() == 0) {
+		cases.push_back(iterNode->getData());
+		return;
 	}
-
-	if (nodeIter->getChildCount() == 0)
-		return nullptr;
-
-	int totalChildren = nodeIter->getChildCount();
-
-	for (int i = 0; i < totalChildren; i++) {
-		findNode(data, nodeIter->getChild(i));
+	int numOfChildren = iterNode->getChildCount();
+	for (int i = 0; i < numOfChildren; i++) {
+		_extractCase(iterNode->getChild(i));
 	}
-	return nullptr;
 }
 
 string Switch::getComponent() {
-	return "";
+	string componentString = "";
+
+	componentString = "<strong><u>Switch Structure</u></strong><br/>";
+	componentString += "Begins on line " + to_string(startLine) + "<br/>";
+	componentString += "Condition being tested: " + condition + "<br/>";
+	componentString += "Number of cases: " + to_string(numOfCases) + "<br/>";
+	componentString += "Number of breaks: " + to_string(numOfBreaks) + "<br/>";
+	componentString += "Contains default case: ";
+	if (hasDefault)
+		componentString += "Yes, on line " + to_string(defaultLine) + "<br/>";
+	else 
+		componentString += "No<br/>";
+	
+	componentString += "List of Cases:<br/>";
+	for (int i = 0; i < caseLines.size(); i++) {
+		componentString += "case (" + cases[i] + ") on line " + to_string(caseLines[i]) + "<br/>";
+	}
+
+	return componentString;
+
+}
+
+void Switch::checkComponent() {
+	// make sure same # of breaks as there are cases
+	// default doesn't count as a case so if there is a default there should be (cases + 1) breaks
+	// if no default add string to code smells and also make sure breaks == cases
+	if (hasDefault) {
+		// + 1 to account for the default case
+		if ((numOfCases + 1) != numOfCases) {
+			setCorrectComponent(false);
+			setCodeSmell("Make sure all cases contain a break statement, including the default case.<br/>");
+		}
+	}
+	else {
+		setCorrectComponent(false);
+		setCodeSmell("Be sure to include a default case.<br/>");
+	}
+
+	// if number of cases is 1, suggest using an if/else statment
+	if (numOfCases == 1) {
+		setCorrectComponent(false);
+		setCodeSmell("You may want to use an if-else statement instead of a switch structure.<br/>");
+	}
+
+	// check to make sure condtion is testing a variable and not a literal
+	if (conditionIsLiteral) {
+		setCorrectComponent(false);
+		setCodeSmell("Make sure your switch structure is testing a variable.<br/>");
+	}
+
+	if (condition == "No condition was found") {
+		setCorrectComponent(false);
+		setCodeSmell("Could not find a condition for Switch structure.<br/>");
+	}
+
+	if (cases.size() > 0 && cases[0] == "Could not find case statements") {
+		setCorrectComponent(false);
+		setCodeSmell("Make sure your Switch structure has cases.<br/>");
+	}
 }
 
 #endif

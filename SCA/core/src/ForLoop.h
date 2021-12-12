@@ -17,43 +17,72 @@ private:
 	bool conditionLunqualifiedId;
 	string conditionR;
 	bool conditionRunqualifiedId;
-	Component componentClass;
-	string expression;
-	string plusplusOrminusminus;
+	vector<string> expression;
+	bool hasExpression;
 
 public:
 	ForLoop();
+	ForLoop(Node* stOfStatement, Node* rtOfTree);
 
-	void setVariables(Node* rt);
+	void setVariables();
+
+	void _extractExpression(Node* rt);
 	string getComponent();
+	void checkComponent();
+
+	// simple checks to validate that loop will run and loop will terminate
+	void _validateLoop(double initVal, double condVal, double stepVal, string stepIncOrDec);
 };
 
 ForLoop::ForLoop() : Component()
 {
-	componentClass.setStatementType(0);
+	setStatementType(0);
 	condition = "";
 	conditionLunqualifiedId = false;
 	conditionRunqualifiedId = false;
 	IntAssignmentUnqualifiedId = false;
 }
 
-void ForLoop::setVariables(Node* rt)
+ForLoop::ForLoop(Node* stOfStatement, Node* rtOfTree) : Component(stOfStatement, rtOfTree) {
+	setStatementType(0);
+	condition = "";
+	iteratorInt = "";
+	iteratorIntAssignment = "";
+	conditionL = "";
+	conditionR = "";
+	conditionLunqualifiedId = false;
+	conditionRunqualifiedId = false;
+	IntAssignmentUnqualifiedId = false;
+	hasExpression = false;
+}
+
+void ForLoop::setVariables()
 {
-	componentClass.setStartOfStatement(rt);
-	Node* statementStart = componentClass.getStartOfStatement();
 	Node* walker;
 	Node* walker2;
 
+	// get component root node and number of children for use later in function
+	walker = getComponentRootNode();
+	int numOfComponentChildren = getComponentRootNode()->getChildCount();
+
 	//find first line number
-	walker = findNode("for", statementStart);
-	addAnStartLine(walker->getLineNum());
+	addAnStartLine(walker->getChild(0)->getLineNum());
 
 	//set last line number
-	addAnEndLine(statementStart);
+	addAnEndLine(walker);
 
 	//Find out what the iterator is called
-	walker = findNode("forInitStatement", statementStart);
-	walker2 = findNode("unqualifiedId", walker);
+	if (findNode("forInitStatement", getComponentRootNode())) {
+		walker = getFoundNode();
+		if (findNode("unqualifiedId", walker))
+			walker2 = getFoundNode();
+		else
+			walker2 = nullptr;
+	}
+	else {
+		walker = nullptr;
+		walker2 = nullptr;
+	}
 
 	if (walker2 == nullptr)//unqualifiedId not found
 		iteratorInt = "Not an unqualifiedId";
@@ -62,26 +91,43 @@ void ForLoop::setVariables(Node* rt)
 		iteratorInt = walker2->getChild(0)->getData();
 
 		//find what value is assigned to the iterator
-		walker2 = walker->getChild(1);
-		walker = findNode("literal", walker2);
+		if (findNode("literal", walker))
+			walker2 = getFoundNode();
+		else
+			walker2 = nullptr;
 
-		if (walker != nullptr)
-			iteratorIntAssignment = walker->getChild(0)->getData();
+		if (walker2 != nullptr)
+			iteratorIntAssignment = walker2->getChild(0)->getData();
 		else//check if assignment is unqualified id
 		{
-			walker = findNode("unqualifiedId", walker2);
-			if (walker != nullptr)
-			{
-				iteratorIntAssignment = walker->getChild(0)->getData();
-				IntAssignmentUnqualifiedId = true;
+			if (findNode("initDeclarator", walker))
+				walker = getFoundNode();
+			else
+				walker = nullptr;
+
+			if (walker != nullptr) {
+				walker2 = walker->getChild(1);
+				if (findNode("unqualifiedId", walker2)) {
+					walker2 = getFoundNode();
+					iteratorIntAssignment = walker2->getChild(0)->getData();
+				}
+				else {
+					walker2 = nullptr;
+					iteratorIntAssignment = "No assignment made";
+				}
 			}
-			else//no assigment for iterator
-				iteratorIntAssignment = "No assignment made";
 		}
 	}
 
 	//find the condition
-	walker = findNode("condition", statementStart);
+	walker = nullptr;
+	for (int i = 0; i < numOfComponentChildren; i++) {
+		if (getComponentRootNode()->getChild(i)->getData() == "condition") {
+			walker = getComponentRootNode()->getChild(i);
+			break;
+		}
+	}
+
 	if (walker == nullptr)
 		condition = "No condition was found";
 	else
@@ -143,17 +189,33 @@ void ForLoop::setVariables(Node* rt)
 	}
 	
 	//find the expression
-	walker = findNode("expression", statementStart);
-	while (walker->getChildCount() == 1)
-		walker = walker->getChild(0);
+	walker = nullptr;
+	for (int i = 0; i < numOfComponentChildren; i++) {
+		if (getComponentRootNode()->getChild(i)->getData() == "expression") {
+			walker = getComponentRootNode()->getChild(i);
+			break;
+		}
+	}
 
-	plusplusOrminusminus = walker->getChild(1)->getData();
+	if (walker == nullptr) 
+		expression.push_back("No expression");
+	else {
+		_extractExpression(walker);	
+		hasExpression = true;
+	}
+}
 
-	walker = walker->getChild(0);
-	while (walker->getChildCount() == 1)
-		walker = walker->getChild(0);
+void ForLoop::_extractExpression(Node* rt) {
+	Node* nodeIter = rt;
+	if (nodeIter->getChildCount() == 0) {
+		expression.push_back(nodeIter->getData());
+		return;
+	}
+	int totalChildren = nodeIter->getChildCount();
 
-	expression = walker->getData();
+	for (int i = 0; i < totalChildren; i++) {
+		_extractExpression(nodeIter->getChild(i));
+	}
 }
 
 
@@ -165,18 +227,116 @@ string ForLoop::getComponent()
 	vector<int> startLineVec = getStartLine();
 	vector<int> endLineVec = getEndLine();
 
-	htmlString = "<br/>Begins on line " + to_string(startLineVec[0]) + "<br/>";
+	htmlString = "<strong><u>For Loop</u></strong><br/>";
+	htmlString += "Begins on line " + to_string(startLineVec[0]) + "<br/>";
 
 	htmlString += "Iterator: " + iteratorInt + "<br/>";
 	htmlString += "Assignment to that iterator: " + iteratorIntAssignment + "<br/>";
 
 	htmlString += "Condition statement: " + conditionL + " " + condition + " " + conditionR + "<br/>";
 
-	htmlString += "Update statement: " + expression + plusplusOrminusminus + "<br/>";
+	htmlString += "Update statement: ";
+	for (string s : expression) 
+		htmlString += s + " ";
+	htmlString += "<br/>";
 
 	htmlString += "Ends on line " + to_string(endLineVec[0]) + "<br/>";
 
 	return htmlString;
 }
+
+void ForLoop::checkComponent() {
+	// make sure a variable is used to initialize for loop iteration
+	if (iteratorInt == "Not an unqualifiedId") {
+		setCorrectComponent(false);
+		setCodeSmell("Use a variable to initialize For Loop.<br/>");
+	}
+
+	if (condition == "No condition was found") {
+		setCorrectComponent(false);
+		setCodeSmell("For Loop must contain a condition.<br/>");
+	}
+
+	// Only check init variable, condition and expression if they have been extracted
+	if (getCorrectComponent() && hasExpression) {
+		double initValDbl = 0.0;
+		double condValDbl = 0.0;
+		double stepValDbl = 0.0;
+		string stepIncreaseOrDecrease = "";
+
+		// Extract loop conditions into integer data types to perform testing on loop to check
+		// if loop will run 0 times or if it's an infinite loop
+		if (isNumeric(iteratorIntAssignment)) {
+			initValDbl = stod(iteratorIntAssignment);
+			if (isNumeric(conditionR)) 
+				condValDbl = stod(conditionR);
+			else if (isNumeric(conditionL))
+				condValDbl = stod(conditionL);
+			else
+				goto postExtraction;
+			
+			for (int i = 0; i < expression.size(); i++) {
+				if (isNumeric(expression[i])) 
+					stepValDbl = stod(expression[i]);
+				else if (expression[i] == "+" || expression[i] == "+=" || expression[i] == "++")
+					stepIncreaseOrDecrease = "inc";
+				else if (expression[i] == "-" || expression[i] == "-=" || expression[i] == "--")
+					stepIncreaseOrDecrease = "dec";
+
+			}
+			_validateLoop(initValDbl, condValDbl, stepValDbl, stepIncreaseOrDecrease);
+		}
+		else {
+			goto postExtraction;
+		}
+	}
+
+	postExtraction:
+	return;
+}
+
+void ForLoop::_validateLoop(double initVal, double condVal, double stepVal, string stepIncOrDec) {
+	if (condition == "<") {
+		if (initVal >= condVal) {
+			setCorrectComponent(false);
+			setCodeSmell("Check For Loop, it may run zero times.<br/>");
+		}
+		if (initVal < condVal && stepIncOrDec == "dec") {
+			setCorrectComponent(false);
+			setCodeSmell("Check For Loop, it may never terminate.<br/>");
+		}
+	}
+	else if (condition == ">") {
+		if (initVal <= condVal) {
+			setCorrectComponent(false);
+			setCodeSmell("Check For Loop, it may run zero times.<br/>");
+		}
+		if (initVal > condVal && stepIncOrDec == "inc") {
+			setCorrectComponent(false);
+			setCodeSmell("Check For Loop, it may never terminate.<br/>");
+		}
+	}
+	else if (condition == "<=") {
+		if (initVal > condVal) {
+			setCorrectComponent(false);
+			setCodeSmell("Check For Loop, it may run zero times.<br/>");
+		}
+		if (initVal <= condVal && stepIncOrDec == "dec") {
+			setCorrectComponent(false);
+			setCodeSmell("Check For Loop, it may never terminate.<br/>");
+		}
+	}
+	else if (condition == ">=") {
+		if (initVal < condVal) {
+			setCorrectComponent(false);
+			setCodeSmell("Check For Loop, it may run zero times.<br/>");
+		}
+		if (initVal >= condVal && stepIncOrDec == "inc") {
+			setCorrectComponent(false);
+			setCodeSmell("Check For Loop, it may never terminate.<br/>");
+		}
+	}
+}
+
 
 #endif // !FOR_LOOP

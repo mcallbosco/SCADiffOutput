@@ -1,6 +1,7 @@
 .columnContainer{
     float: left;
     width: 50%;
+    margin-bottom: 2rem;
 }
 
 .sourcecode{
@@ -24,11 +25,12 @@
 .correctComponent{
   position: relative;
   border-radius: 25px;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   border: 2px solid #66e766;
   padding: 20px;
-  width: 25%;
-  height: 80px;
+  max-width: 45%;
+  height: auto;
   margin: 5px;
   font-family: "Lucida Console";
   font-size: 16px;
@@ -37,11 +39,12 @@
 .wrongComponent{
   position: relative;
   border-radius: 25px;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   border: 2px solid #eb4040;
   padding: 20px;
-  width: 25%;
-  height: 80px;
+  max-width: 45%;
+  height: auto;
   margin: 5px;
   font-family: "Lucida Console";
   font-size: 16px;
@@ -63,8 +66,16 @@
   text-align: center;
 }
 .entirePage {
-  max-width: 1000px;
+  width: 1400px;
   margin: auto;
+}
+
+.componentContainer {
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 1rem;
+  background-color: rgb(230,230,230);
+  margin-right: 1.5rem;
 }
 
 .ruleContainer

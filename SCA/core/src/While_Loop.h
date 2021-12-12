@@ -46,6 +46,8 @@ public:
     void printLoopInfo();
     string getComponent();
 
+    void checkComponent();
+
 };
 
 While_Loop::While_Loop() {
@@ -60,6 +62,7 @@ While_Loop::While_Loop(Node* compRtNode, Node* treeRtNode, string lType) : Compo
     conditionRtNode = nullptr;
     stmtRtNode = nullptr;
     begLineNum = 0;
+    setStatementType(0);
 }
 
 void While_Loop::extractBegLineNum() {
@@ -292,7 +295,10 @@ string While_Loop::getComponent() {
     int prevLineNum = 0;
     string htmlString = "";
 
-    htmlString = "<br/><strong>Loop Type:</strong> " + loopType + "<br/>";
+    if (loopType == "do")
+        htmlString = "<strong><u>Do While Loop</u></strong><br/>";
+    else
+        htmlString = "<strong><u>While Loop</u></strong><br/>";
 
     htmlString += "<strong>Begins on Line " + to_string(begLineNum) + "</strong><br/>";
 
@@ -345,6 +351,39 @@ string While_Loop::getComponent() {
     htmlString += "\n";
 
     return htmlString;
+}
+
+void While_Loop::checkComponent() {
+    // check if variable used in test condition is updated in body
+    if (increment.size() == 0) {
+        setCorrectComponent(false);
+        setCodeSmell("Make sure you update your test variable in the body of the loop.<br/>");
+    }
+
+    // if boolean value is used as test expression, make sure it's not a literal and if it is
+    // make sure there is a break somewhere to terminate loop execution
+    if (testExpression.size() == 1) {
+        if (testExpression[0]->getParent()->getData() == "literal") {
+            if (!findNode("break", getComponentRootNode())) {
+                setCorrectComponent(false);
+                setCodeSmell("Make sure there is a break statement inside loop body to terminate execution.<br/>");
+            }
+        }
+    }
+    
+    // check to make sure test expression doesn't compare literals
+    if (testExpression.size() == 3) {
+        if (testExpression[0]->getParent()->getData() == "literal" && testExpression[2]->getParent()->getData() == "literal") {
+            if (!findNode("break", getComponentRootNode())) {
+                setCorrectComponent(false);
+                setCodeSmell("Be sure to use a variable in test expression, loop may never terminate.<br/>");
+            }
+            else {
+                setCorrectComponent(false);
+                setCodeSmell("Test expression compares two literals, is this necessary?<br/>");
+            }
+        }
+    }
 }
 
 #endif // !WHILE_COMPONENT_

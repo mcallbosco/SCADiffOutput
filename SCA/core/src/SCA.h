@@ -17,6 +17,10 @@
 #include "Tree.h"
 #include "TemplateTable.h"
 #include "Template_Matcher.h"
+#include "While_Loop.h"
+#include "ForLoop.h"
+#include "Switch.h"
+#include "If.h"
 
 using namespace std;
 

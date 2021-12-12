@@ -3,6 +3,7 @@
 
 #include "SCA.h"
 #include "Tree.h"
+#include <regex>
 
 using namespace std;
 
@@ -12,15 +13,19 @@ private:
 	Node* treeRootNode;
 	Node* componentRootNode;
 
+	// used for recursively searching tree for a specific node
+	Node* foundNode;
+
 	int statementTypeint;
 	string statementType;
-	Node* startOfStatement;
 	string componentType;
 	vector<int> startLine;
 	int startLineCount;
 	vector<int> endLine;
 	int endLineCount;
 	bool correctComponent;
+	vector<string> codeSmells;
+
 public:
 	// Default Constructor
 	Component();
@@ -68,29 +73,54 @@ public:
 	bool getCorrectComponent();
 
 	//searches from start node to find data, returns first node with the same data in it.
-	Node* findNode(string data, Node* start);
+	bool findNode(string data, Node* start);
 
 	//getComponent => will be overridden in our component classes, returns a string in html format
 	string getComponent();
 
+	// check Component, implemented in derived classes to check componenet's correctness.
+	void checkComponent();
+
+	// set a code smell
+	void setCodeSmell(string aSmell);
+
+	// get code smells
+	vector<string> getCodeSmells();
+
+	// checks if a string is an integer
+	bool isInteger(const string& str);
+
+	// check if a string is numeric including double and decimal
+	bool isNumeric(string str);
+
 	// accessor Methods
 	Node* getTreeRootNode();
 	Node* getComponentRootNode();
+	Node* getFoundNode();
 };
 
 Component::Component() {
 	componentRootNode = nullptr;
 	treeRootNode = nullptr;
+	foundNode = nullptr;
 }
 
 Component::Component(Node* compRtPtr) {
 	componentRootNode = compRtPtr;
 	treeRootNode = nullptr;
+	foundNode = nullptr;
+	correctComponent = true;
+	startLineCount = 0;
+	endLineCount = 0;
 }
 
 Component::Component(Node* compRtPtr, Node* treeRtPtr) {
 	componentRootNode = compRtPtr;
 	treeRootNode = treeRtPtr;
+	foundNode = nullptr;
+	correctComponent = true;
+	startLineCount = 0;
+	endLineCount = 0;
 }
 
 Node* Component::getTreeRootNode() {
@@ -116,17 +146,6 @@ string Component::getStatementType() {
 	return statementType;
 }
 
-void Component::setStartOfStatement(Node* rt)
-{
-	startOfStatement = rt;
-
-	componentType = startOfStatement->getChild(0)->getData();
-}
-
-Node* Component::getStartOfStatement(){
-	return startOfStatement;
-}
-
 void Component::addAnEndLine(Node* start)
 {
 	Node* nodeIter = start;
@@ -134,7 +153,7 @@ void Component::addAnEndLine(Node* start)
 	while (nodeIter->getChildCount() != 0)
 		nodeIter = nodeIter->getChild(nodeIter->getChildCount() - 1);
 
-	endLine[endLineCount] = nodeIter->getLineNum();
+	endLine.push_back(nodeIter->getLineNum());
 	endLineCount++;
 }
 
@@ -147,7 +166,7 @@ int Component::getEndLineCount() {
 }
 
 void Component::addAnStartLine(int start) {
-	startLine[startLineCount] = start;
+	startLine.push_back(start);
 	startLineCount++;
 }
 
@@ -167,35 +186,60 @@ bool Component::getCorrectComponent() {
 	return correctComponent;
 }
 
-Node* Component::findNode(string data, Node* start)
+Node* Component::getFoundNode() {
+	return foundNode;
+}
+
+bool Component::findNode(string data, Node* start)
 {
 	Node* nodeIter = start;
 
-	if (nodeIter->getData() == data){
-		return nodeIter;
+	if (nodeIter->getData() == data) {
+		foundNode = nodeIter;
+		return true;
 	}
-	
-	if (nodeIter->getChildCount() == 0)
-		//no further child nodes
-		return nullptr;
-	else{
-		//more child nodes
-		int totalChildren = nodeIter->getChildCount();
-	
-		for (int i = 0; i < totalChildren; i++) {
-			findNode(data, nodeIter->getChild(i));
-		}
+	for (int i = 0; i < nodeIter->getChildCount(); i++) {
+		if (findNode(data, nodeIter->getChild(i)))
+			return true;
 	}
-	
-	return nullptr;
+	return false;
 }
 
 string Component::getComponent() {
 	// override this function
 	// will return a string formatted for html
-	// use <br /> for line breaks instead of endl or \n
+	// use <br /> for line breaks instead of 'endl' or '\n'
 	// Base function returns an empty string
 	return "";
+}
+
+void Component::checkComponent() {
+	// implemenation left to dervied classes.
+}
+
+void Component::setCodeSmell(string aSmell) {
+	codeSmells.push_back(aSmell);
+}
+
+vector<string> Component::getCodeSmells() {
+	return codeSmells;
+}
+
+bool Component::isInteger(const string& str) {
+	for (char const &c : str) {
+		if (isdigit(c) == 0)
+			return false;
+	}
+	return true;
+}
+
+bool Component::isNumeric(string str) {
+	regex e ("[+-]?[0-9]+\\.?[0-9]*");
+
+	if (regex_match(str, e))
+		return true;
+	
+	return false;
 }
 
 #endif // !COMPONENT

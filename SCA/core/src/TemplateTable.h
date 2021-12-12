@@ -18,10 +18,10 @@ private:
 
 public:
 	//constructor
-	TemplateTable TemplateTable();
+	TemplateTable();
 
 	//Loads template table into unordered_map from file
-	loadTemplateTable(string templateTableFile);
+	bool loadTemplateTable(string templateTableFile);
 
 	//returns the templateTable
 	unordered_map <int, Rule> getTemplateTable();

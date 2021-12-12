@@ -13,19 +13,12 @@ using namespace std;
 class Template_Matcher {
 private:
 	unordered_map <int, Rule> template_table;
-	string iterationStmt = "iterationStatement";
-	string selectionStmt = "selectionStatement";
 	int rulesViolatedEntries;
 	int rulesToCheckEntries;
 	int* rulesToCheck;
 	int* rulesViolated;
 	int* rulesViolatedLines;
 	string suggestions;
-	string componentString;
-	vector<While_Loop*> whileLoopComponents;
-	vector<ForLoop*> forLoopComponents;
-	vector<If*> ifComponents;
-	vector<Switch*> switchComponents;
 
 public:
 	//constructor sets entries to 0 and suggestions to "".
@@ -55,17 +48,8 @@ public:
 	//returns template table size, the number of rules.
 	int getTemplateTableSize();
 
-	//get components
-	vector<While_Loop*> getWhileLoopComponents();
-	vector<ForLoop*> getForLoopComponents();
-	vector<If*> getIfComponents();
-	vector<Switch*> getSwitchComponents();
-
-	// Calls the fill node vector functions then iterates through each vector handing node to corresponding component class to build component
-	void retreiveComponents(Tree* tree, vector<Node*> iterNodes, vector<Node*> selectNodes);
-
 	//Checks for errors in all components.
-	void checkAllComponents();
+	void checkAllComponents(vector<ForLoop*> forLoopComponents, vector<While_Loop*> whileLoopComponents, vector<If*> ifComponents, vector<Switch*> switchComponents);
 };
 
 Template_Matcher::Template_Matcher() 
@@ -73,7 +57,6 @@ Template_Matcher::Template_Matcher()
 	rulesToCheckEntries = 0;
 	rulesViolatedEntries = 0;
 	suggestions = "";
-	componentString = "";
 }
 
 void Template_Matcher::searchFirstToken(string token)
@@ -170,22 +153,6 @@ int Template_Matcher::getTemplateTableSize()
 	return template_table.size();
 }
 
-vector<While_Loop*> Template_Matcher::getWhileLoopComponents() {
-	return whileLoopComponents;
-}
-
-vector<ForLoop*> Template_Matcher::getForLoopComponents() {
-	return forLoopComponents;
-}
-
-vector<If*> Template_Matcher::getIfComponents() {
-	return ifComponents;
-}
-
-vector<Switch*> Template_Matcher::getSwitchComponents() {
-	return switchComponents;
-}
-
 string Template_Matcher::outputSuggestions()
 {
 	if (rulesViolatedEntries != 0)
@@ -200,89 +167,8 @@ string Template_Matcher::outputSuggestions()
 	return suggestions;
 }
 
-void Template_Matcher::retreiveComponents(Tree* tree, vector<Node*> iterNodes, vector<Node*> selectNodes) {
 
-	Node* temp;
-	string testToken = "";
-
-	// iterate though each node that contains an iterationStatement
-	for (int i = 0; i < iterNodes.size(); i++) {
-		temp = iterNodes[i];
-		while (temp->getChildCount() != 0) {
-			temp = temp->getChild(0);
-		}
-		testToken = temp->getData();
-		
-		if (testToken == "for") {
-			ForLoop* aForLoop = new ForLoop();
-			aForLoop->setVariables(iterNodes[i]);
-			forLoopComponents.push_back(aForLoop);
-			break;
-		}
-		else if (testToken == "while") {
-			While_Loop* aWhileLoop = new While_Loop(iterNodes[i], tree->getRoot(), "while");
-			aWhileLoop->extractAllInfo();
-			whileLoopComponents.push_back(aWhileLoop);
-			break;
-		}
-		else if (testToken == "do") {
-			While_Loop* aDoWhileLoop = new While_Loop(iterNodes[i], tree->getRoot(), "do");
-			aDoWhileLoop->extractAllInfo();
-			whileLoopComponents.push_back(aDoWhileLoop);
-			break;
-		}
-	}
-
-	// iterate through each node that contains a selectionStatement
-	for (int i = 0; i < selectNodes.size(); i++) {
-		temp = selectNodes[i];
-		while (temp->getChildCount() != 0) {
-			temp = temp->getChild(0);
-		}
-
-		testToken = temp->getData();
-		if (testToken == "if") {
-			Switch* aSwitch = new Switch();
-			aSwitch->setVariables(selectNodes[i]);
-			switchComponents.push_back(aSwitch);
-			break;
-		}
-		else if (testToken == "switch") {
-			If* aIf = new If();
-			aIf->setVariables(selectNodes[i]);
-			ifComponents.push_back(aIf);
-			break;
-		}
-	}
-
-	//-------------------------------------------------------------------------------------------------------| 
-	//currently commented out, don't think it's neccessary because of how we print components in createHTML, |
-	// but wanted to make sure with Matt first before I delete this.                                         |
-	// I think this messes up suggestions string as of right now.                                            |
-	// ------------------------------------------------------------------------------------------------------|
-	// 
-	//for (int i = 0; i < forLoopComponents.size(); i++) {
-	//	componentString += forLoopComponents[i]->getComponent();
-	//}
-
-
-	//for (int i = 0; i < whileLoopComponents.size(); i++) {
-	//	componentString += whileLoopComponents[i]->getComponent();
-	//}
-
-	//for (int i = 0; i < ifComponents.size(); i++) {
-	//	componentString += ifComponents[i]->getComponent();
-	//}
-
-	//for (int i = 0; i < switchComponents.size(); i++) {
-	//	componentString += switchComponents[i]->getComponent();
-	//}
-
-	//// add component string to end of suggestions string to be used by createHTML function
-	//suggestions = suggestions + componentString;
-}
-
-void Template_Matcher::checkAllComponents()
+void Template_Matcher::checkAllComponents(vector<ForLoop*> forLoopComponents, vector<While_Loop*> whileLoopComponents, vector<If*> ifComponents, vector<Switch*> switchComponents)
 {
 	for (int i = 0; i < whileLoopComponents.size(); i++)
 	{

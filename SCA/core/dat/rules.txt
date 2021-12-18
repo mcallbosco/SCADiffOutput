@@ -62,3 +62,6 @@ ver: 1.1
 60,10,if (unqualifiedId == literal) {} else,There is no body for the if statement, use if (x != y) instead of just the else statement.
 61,10,if (unqualifiedId == unqualifiedId) {} else,There is no body for the if statement, use if (x != y) instead of just the else statement.
 62,10,if (literal == unqualifiedId) {} else,There is no body for the if statement, use if (x != y) instead of just the else statement.
+63,4,if (literal),Using a literal as the test condition. Execution will always follow the same path.
+64,4,while (literal),Using a literal as the test condition. Execution may never run or never terminate.
+65,4,switch (literal),Using a lteral as the test condition. Execution will always follow the same path.

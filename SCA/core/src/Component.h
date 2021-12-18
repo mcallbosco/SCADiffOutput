@@ -63,6 +63,9 @@ public:
 	//returns startLine.
 	vector<int> getStartLine();
 
+	//return first instance of start line
+	int getFirstStartLine();
+
 	//returns amount of startLines.
 	int getStartLineCount();
 
@@ -240,6 +243,13 @@ bool Component::isNumeric(string str) {
 		return true;
 	
 	return false;
+}
+
+int Component::getFirstStartLine() {
+	if (startLine.size() > 0)
+		return startLine[0];
+	else
+		return 0;
 }
 
 #endif // !COMPONENT

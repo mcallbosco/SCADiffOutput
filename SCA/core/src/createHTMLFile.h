@@ -104,6 +104,25 @@ void createHTML::makeHTMLfile()
 
 	while (getline(cppFile, tempString))//load the cpp file into CPP string
 	{
+
+		// remove all less than and greater than symbols (<,>) from the tempString
+		// replace with &lt; and &gt; so they can be written to the html file.
+		size_t ltFound = tempString.find("<");
+		size_t gtFound = tempString.find(">");
+
+		while (ltFound != string::npos || gtFound != string::npos) {
+			if (ltFound != string::npos) 
+				tempString = tempString.substr(0, ltFound) + "&lt;" + tempString.substr(ltFound + 1, tempString.size() - ltFound);
+			
+			gtFound = tempString.find(">");
+
+			if (gtFound != string::npos)
+				tempString = tempString.substr(0, gtFound) + "&gt;" + tempString.substr(gtFound + 1, tempString.size() - gtFound);
+
+			ltFound = tempString.find("<"); 
+		}
+
+
 		if (lineNum < 10) {
 			CPPstring += to_string(lineNum) + "&emsp;" + tempString + "<br/>";
 		}
@@ -128,8 +147,39 @@ void createHTML::makeHTMLfile()
 	//clear tempString
 	tempString = "";
   
-	htmlFile << "\t\t\t<div class = \"ruleContainer\"\n";
+	htmlFile << "\t\t\t<div class=\"ruleContainer\">";
 
+	// Check if there are suggestions produced by component classes
+	bool hasWhileLoopSuggestions = false;
+	bool hasForLoopSuggestions = false;
+	bool hasIfSuggestions = false;
+	bool hasSwitchSuggestions = false;
+	bool hasSuggestions = false;
+
+	for (While_Loop* wl : whileLoopComponents) {
+		if (!wl->getCorrectComponent()) {
+			hasWhileLoopSuggestions = true;
+			break;
+		}
+	}
+	for (ForLoop* fl : forLoopComponents) {
+		if (!fl->getCorrectComponent()) {
+			hasForLoopSuggestions = true;
+			break;
+		}
+	}
+	for (If* iff : ifComponents) {
+		if (!iff->getCorrectComponent()) {
+			hasIfSuggestions = true;
+			break;
+		}
+	}
+	for (Switch* sw : switchComponents) {
+		if (!sw->getCorrectComponent()) {
+			hasSwitchSuggestions = true;
+			break;
+		}
+	}
 
 	stringstream suggestions(Suggestions);
 	//load suggestions in right column
@@ -140,10 +190,53 @@ void createHTML::makeHTMLfile()
 
 			htmlFile << "<p class=\"rule\">" << tempString << "</p>";
 		}
+		hasSuggestions = true;
 	}
-	else
+	if (hasWhileLoopSuggestions) {
+		for (While_Loop* wl : whileLoopComponents) {
+			if (!wl->getCorrectComponent()) {
+				for (string s : wl->getCodeSmells()) {
+					htmlFile << "<p class=\"rule\"><strong>" << wl->getLoopType() << " loop on line " << to_string(wl->getBegLineNum());
+					htmlFile << ":</strong> " << s << "</p>";
+				}
+			}
+		}
+	}
+	if (hasForLoopSuggestions) {
+		for (ForLoop* fl : forLoopComponents) {
+			if (!fl->getCorrectComponent()) {
+				for (string s : fl->getCodeSmells()) {
+					htmlFile << "<p class=\"rule\"><strong>For Loop on line " << to_string(fl->getFirstStartLine());
+					htmlFile << ":</strong> " << s << "</p>";
+				}
+			}
+		}
+	}
+	if (hasIfSuggestions) {
+		for (If* iff : ifComponents) {
+			if (!iff->getCorrectComponent()) {
+				for (string s : iff->getCodeSmells()) {
+					htmlFile << "<p class=\"rule\"><strong>If Statement on line " << to_string(iff->getFirstStartLine());
+					htmlFile << ":</strong> " << s << "</p>";
+				}
+			}
+		}
+	}
+	if (hasSwitchSuggestions) {
+		for (Switch* sw : switchComponents) {
+			if (!sw->getCorrectComponent()) {
+				for (string s : sw->getCodeSmells()) {
+					htmlFile << "<p class=\"rule\"><strong>If Statement on line " << to_string(sw->getFirstStartLine());
+					htmlFile << ":</strong> " << s << "</p>";
+				}
+			}
+		}
+	}
+	if (!hasSuggestions && !hasWhileLoopSuggestions && !hasForLoopSuggestions && !hasIfSuggestions && !hasSwitchSuggestions) {
 		htmlFile << "<p class=\"rule\">" << "No Suggestions!" << "</p>";
+	}
 
+	cout << Suggestions << endl;
 	htmlFile << "</div>";//close ruleContainer
 	htmlFile << "</div>";//close left column
 
@@ -162,9 +255,9 @@ void createHTML::makeHTMLfile()
 		{
 			htmlFile << "<div class=\"wrongComponent\">";
 			htmlFile <<  whileLoopComponents[i]->getComponent() << "<br />";
-			for (string s : whileLoopComponents[i]->getCodeSmells()) {
-				htmlFile << s;
-			}
+			//for (string s : whileLoopComponents[i]->getCodeSmells()) {
+			//	htmlFile << s;
+			//}
 			htmlFile << "</div>";
 		}
 	}
@@ -181,9 +274,9 @@ void createHTML::makeHTMLfile()
 		{
 			htmlFile << "<div class=\"wrongComponent\">";
 			htmlFile <<  forLoopComponents[i]->getComponent() << "<br />";
-			for (string s : forLoopComponents[i]->getCodeSmells()) {
-				htmlFile << s;
-			}
+			//for (string s : forLoopComponents[i]->getCodeSmells()) {
+			//	htmlFile << s;
+			//}
 			htmlFile << "</div>";
 		}
 	}
@@ -200,9 +293,9 @@ void createHTML::makeHTMLfile()
 		{
 			htmlFile << "\t\t\t<div class=\"wrongComponent\">\n";
 			htmlFile << "\t\t\t\t" << ifComponents[i]->getComponent() << "<br />";
-			for (string s : ifComponents[i]->getCodeSmells()) {
-				htmlFile << s;
-			}
+			//for (string s : ifComponents[i]->getCodeSmells()) {
+			//	htmlFile << s;
+			//}
 			htmlFile << "\t\t\t</div>\n";
 		}
 	}
@@ -219,9 +312,9 @@ void createHTML::makeHTMLfile()
 		{
 			htmlFile << "\t\t\t<div class=\"wrongComponent\">\n";
 			htmlFile << "\t\t\t\t" << switchComponents[i]->getComponent() << "<br />";
-			for (string s : switchComponents[i]->getCodeSmells()) {
-				htmlFile << s;
-			}
+			//for (string s : switchComponents[i]->getCodeSmells()) {
+			//    htmlFile << s;
+			//}
 			htmlFile << "\t\t\t</div>\n";
 		}
 	}

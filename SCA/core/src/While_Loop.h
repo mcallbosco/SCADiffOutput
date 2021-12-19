@@ -48,6 +48,9 @@ public:
 
     void checkComponent();
 
+    int getBegLineNum();
+    string getLoopType();
+
 };
 
 While_Loop::While_Loop() {
@@ -290,6 +293,14 @@ void While_Loop::printLoopInfo() {
 
 }
 
+int While_Loop::getBegLineNum() {
+    return begLineNum;
+}
+
+string While_Loop::getLoopType() {
+    return loopType;
+}
+
 string While_Loop::getComponent() {
     int currLineNum = 0;
     int prevLineNum = 0;
@@ -310,12 +321,12 @@ string While_Loop::getComponent() {
         htmlString += setupVariable[i]->getData() + " ";
     }
 
-    htmlString += "<br/><strong>Test Variable(s):</strong> ";
-    for (int i = 0; i < testVariable.size(); i++) {
-        htmlString += testVariable[i] + " ";
+    htmlString += "<br/><strong>Stop Condition:</strong> ";
+    for (int i = 0; i < testExpression.size(); i++) {
+        htmlString += testExpression[i]->getData() + " ";
     }
 
-    htmlString += "<br/><strong>Increment Statement(s):</strong> ";
+    htmlString += "<br/><strong>Step Statement(s):</strong> ";
     for (int i = 0; i < increment.size(); i++) {
         prevLineNum = currLineNum;
         currLineNum = increment[i]->getLineNum();
@@ -326,29 +337,6 @@ string While_Loop::getComponent() {
             htmlString += increment[i]->getData() + " ";
         }
     }
-
-    htmlString += "<br/><br/>" + loopType + " (";
-    for (int i = 0; i < testExpression.size(); i++) {
-        htmlString += testExpression[i]->getData() + " ";
-    }
-
-    htmlString += ")";
-
-    // reset current and previous line numbers
-    currLineNum = 0;
-    prevLineNum = 0;
-    for (int i = 0; i < body.size(); i++) {
-        prevLineNum = currLineNum;
-        currLineNum = body[i]->getLineNum();
-        if (prevLineNum != currLineNum) {
-            htmlString += "<br/>" + body[i]->getData() + " ";
-        }
-        else {
-            htmlString += body[i]->getData() + " ";
-        }
-    }
-    htmlString += "<br/><br/>";
-    htmlString += "\n";
 
     return htmlString;
 }

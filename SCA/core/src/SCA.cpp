@@ -467,10 +467,9 @@ bool SCA::readANTLROutputErrors(string& errorTxtFilePath) {
 string SCA::matchTemplateWithTree() {
 	Template_Matcher* templateMatcher = new Template_Matcher();
 
-	TemplateTable* tempTableLoader = new TemplateTable();
-	tempTableLoader->loadTemplateTable(templateTableFile);
-
-	templateMatcher->setTemplateTable(tempTableLoader->getTemplateTable());
+	if (!templateMatcher->readRulesIntoMemory(templateTableFile))
+		return "Failed to load rule book into memory";
+	
 	templateMatcher->setRulesArraySize();
 	templateMatcher->checkTreeForErrors(ast->getRoot());
 

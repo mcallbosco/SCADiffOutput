@@ -233,9 +233,9 @@ string ForLoop::getComponent()
 	htmlString += "Iterator: " + iteratorInt + "<br/>";
 	htmlString += "Assignment to that iterator: " + iteratorIntAssignment + "<br/>";
 
-	htmlString += "Condition statement: " + conditionL + " " + condition + " " + conditionR + "<br/>";
+	htmlString += "Stop Condition: " + conditionL + " " + condition + " " + conditionR + "<br/>";
 
-	htmlString += "Update statement: ";
+	htmlString += "Step statement: ";
 	for (string s : expression) 
 		htmlString += s + " ";
 	htmlString += "<br/>";

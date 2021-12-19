@@ -17,9 +17,17 @@
 
 .components{
   font-size: 32px;
-  position: relative;
-  width: 95%;
-  align-self: baseline;
+  display: inline-flex;
+  width: 1400px;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin-top: 1rem;
+}
+
+.components > p {
+  width: 1400px;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .correctComponent{

@@ -17,7 +17,7 @@ string sourceFileDir = "/SCA/SCA/user/source-code";
 string htmlFileDir = "/SCA/SCA/user/output";
 char *homeDir;
 
-void explore(char *dir_name);
+void explore(char *dir_name, string inputPath, string outputPath);
 
 int main(int argc, char *argv[]) {
 	// get user home directory

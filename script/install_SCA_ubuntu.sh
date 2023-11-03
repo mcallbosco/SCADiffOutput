@@ -21,7 +21,7 @@ mkdir SCA
 mkdir ANTLR
 
 # clone our SCA repo into newly created directory SCA
-git clone https://github.com/alihaider1264/SCA.git ~/SCA
+git clone https://github.com/mcallbosco/SCA.git ~/SCA
 
 # remove script directory from git clone
 # pipe yes to remove command if it asks about removing files

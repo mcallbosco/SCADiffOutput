@@ -476,7 +476,7 @@ string SCA::matchTemplateWithTree() {
 	return templateMatcher->outputSuggestions();
 }
 
-string SCA::createHTMLFile(string& matchedSugg) {
+string SCA::createHTMLFile(string& matchedSugg, string outputFile = "") {
 	createHTML* create_html = new createHTML();
 	create_html->setCPPfile(cppFilePath);
 	create_html->setSuggestions(matchedSugg);
@@ -493,6 +493,7 @@ string SCA::createHTMLFile(string& matchedSugg) {
 	pos = filename.find(".");
 	filename = filename.substr(0, pos);
 	string htmlLocation = htmlDir + "/" + filename + ".html";
+	if (outputFile != "") htmlLocation = outputFile;
 	create_html->setHTMLlocation(htmlLocation);
 	create_html->makeHTMLfile();
 	return htmlLocation;

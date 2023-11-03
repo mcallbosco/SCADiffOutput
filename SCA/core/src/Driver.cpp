@@ -19,17 +19,21 @@ char *homeDir;
 
 void explore(char *dir_name);
 
-int main() {
+int main(int argc, char *argv[]) {
 	// get user home directory
 	struct passwd *pw = getpwuid(getuid());
 	homeDir = pw->pw_dir;
 
 	// update absolute paths for templateTableFile and sourceFileDir
 	sourceFileDir = string(homeDir) + sourceFileDir;
+
+	string sourceFile = argv[1];
+	string outputPath = argv[2];
+
 	templateTableFile = string(homeDir) + templateTableFile;
 	htmlFileDir = string(homeDir) + htmlFileDir;
 	
-	explore((char*)sourceFileDir.c_str());
+	explore((char*)sourceFileDir.c_str(), sourceFile, outputPath);
 	
 	// open /output in file explorer when SCA is complete
 	system("xdg-open ~/SCA/SCA/user/output");
@@ -37,13 +41,19 @@ int main() {
 	return 0;
 }
 
-void explore(char *dir_name) {
+void explore(char *dir_name, string inputPath = "", string outputPath = "") {
 	DIR *dir;
 	struct dirent *entry;
 	struct stat info;
+	bool singleFile = false;
 
 	// open directory
 	dir = opendir(dir_name);
+	//modify to only read a speficied file, not all files in directory
+	if (inputPath != ""){
+		singleFile = true;
+		dir = opendir(inputPath.c_str());
+	}
 	if (!dir) {
 		cout << "Unable to open directory => " << dir_name << endl;
 		return;
@@ -82,7 +92,7 @@ void explore(char *dir_name) {
 				matchedSuggestions = sca->matchTemplateWithTree();
 				//cout << "Matched suggestions with tree\n";
 
-				htmlFilePath = sca->createHTMLFile(matchedSuggestions);
+				htmlFilePath = sca->createHTMLFile(matchedSuggestions, outputPath);
 				//cout << "Created html file\n";
 				cout << "Successfully analyzed file: " << cppFilePath << endl << endl;
 			}

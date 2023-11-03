@@ -50,7 +50,7 @@ public:
 	Node* readANTLROutputTree(string& treeTxtFilePath);
 	bool readANTLROutputErrors(string& errorTxtFilePath);
 	string matchTemplateWithTree();
-	string createHTMLFile(string& matchedSuggestions);
+	string createHTMLFile(string& matchedSuggestions, string htmlFilePath);
 };
 
 #include "SCA.cpp"

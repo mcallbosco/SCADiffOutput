@@ -63,7 +63,7 @@ virtual std::string matchTemplateWithTree() = 0;
     @post  An HTML file is created and stored in the same folder.
     @param None.
     @return  Path to newly created HTML file */
-virtual string createHTMLFile(string& matchedSuggestions) = 0;
+virtual string createHTMLFile(string& matchedSuggestions, string htmlFilePath) = 0;
 };
 
 #endif

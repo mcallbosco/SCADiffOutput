@@ -60,8 +60,8 @@ fi
 export CLASSPATH=".:$workingDir/antlr-4.9.2-complete.jar:$CLASSPATH"
 
 # Download CPP14 Lexer and Parser from GitHub
-wget https://raw.githubusercontent.com/antlr/grammars-v4/master/cpp/CPP14Lexer.g4
-wget https://raw.githubusercontent.com/antlr/grammars-v4/master/cpp/CPP14Parser.g4
+wget https://raw.githubusercontent.com/antlr/grammars-v4/6e10f7e59d7e556efc47fa0909b814cb4f596f3a/cpp/CPP14Lexer.g4
+wget https://raw.githubusercontent.com/antlr/grammars-v4/6e10f7e59d7e556efc47fa0909b814cb4f596f3a/cpp/CPP14Parser.g4
 
 # run .jar file on grammar files to produce .java classes
 java -jar $workingDir/antlr-4.9.2-complete.jar CPP14Lexer.g4

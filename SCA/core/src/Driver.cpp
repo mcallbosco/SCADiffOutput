@@ -26,14 +26,15 @@ int main(int argc, char *argv[]) {
 
 	// update absolute paths for templateTableFile and sourceFileDir
 	sourceFileDir = string(homeDir) + sourceFileDir;
-
+	string sourceFile;
+	string outputPath;
 	if (argc >= 3){
-	string sourceFile = argv[1];
-	string outputPath = argv[2];
+	sourceFile = argv[1];
+	outputPath = argv[2];
 	}
 	else{
-		string sourceFile = "";
-		string outputPath = "";
+		sourceFile = "";
+		outputPath = "";
 	}
 
 	templateTableFile = string(homeDir) + templateTableFile;

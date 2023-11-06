@@ -29,12 +29,12 @@ int main(int argc, char *argv[]) {
 	string sourceFile;
 	string outputPath;
 	if (argc >= 3){
-	string sourceFile = argv[1];
-	string outputPath = argv[2];
+	sourceFile = argv[1];
+	outputPath = argv[2];
 	}
 	else{
-		string sourceFile = "";
-		string outputPath = "";
+		sourceFile = "";
+		outputPath = "";
 	}
 
 	templateTableFile = string(homeDir) + templateTableFile;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-void explore(char *dir_name, string inputPath = "", string outputPath = "") {
+void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 	DIR *dir;
 	struct dirent *entry;
 	struct stat info;
@@ -58,9 +58,10 @@ void explore(char *dir_name, string inputPath = "", string outputPath = "") {
 	// open directory
 	dir = opendir(dir_name);
 	//modify to only read a speficied file, not all files in directory
-	if (inputPath != ""){
+	if (inputFile != ""){
 		singleFile = true;
-		dir = opendir(inputPath.c_str());
+		//make dir only contain the file specified in the input
+		dir = opendir(inputFile.c_str());
 	}
 	if (!dir) {
 		cout << "Unable to open directory => " << dir_name << endl;

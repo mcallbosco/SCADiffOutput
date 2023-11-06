@@ -27,13 +27,113 @@ int main(int argc, char *argv[]) {
 	// update absolute paths for templateTableFile and sourceFileDir
 	sourceFileDir = string(homeDir) + sourceFileDir;
 
+	if (argc >= 3) {
+		string sourceFile = argv[1];
+		string outputPath = argv[2];
+
+		templateTableFile = string(homeDir) + templateTableFile;
+		htmlFileDir = string(homeDir) + htmlFileDir;
+
+		explore((char*)sourceFileDir.c_str(), sourceFile, outputPath);
+
+		// open /output in file explorer when SCA is complete
+		system("xdg-open ~/SCA/SCA/user/output");
+	} else {
+		cout << "Usage: " << argv[0] << " <source_file> <output_path>" << endl;
+	}
+
+	return 0;
+}
+
+void explore(char *dir_name, string inputPath = "", string outputPath = "") {
+	DIR *dir;
+	struct dirent *entry;
+	struct stat info;
+	bool singleFile = false;
+
+	// open directory
+	dir = opendir(dir_name);
+	//modify to only read a speficied file, not all files in directory
+	if (inputPath != ""){
+		singleFile = true;
+		dir = opendir(inputPath.c_str());
+	}
+	if (!dir) {
+		cout << "Unable to open directory => " << dir_name << endl;
+		return;
+	}
+	else {
+		while((entry = readdir(dir)) != NULL) {
+			string cppFilePath = sourceFileDir + "/" + string(entry->d_name);
+
+			if (cppFilePath.substr(cppFilePath.length() - 3, 3) == "cpp") {
+				SCA* sca = new SCA(cppFilePath, templateTableFile, htmlFileDir);
+				Node* rt;
+
+				sca->existsFile(cppFilePath);
+				//cout << "File exists\n";
+
+				sca->loadTemplateTable(templateTableFile);
+				//cout << "Loaded template table\n";
+
+				cppFilePath = sca->loadSourceCode(cppFilePath);
+				//cout << "Loaded Source Code\n";
+				cout << cppFilePath << endl;
+
+				if (cppFilePath == "failed") {
+					goto SkipFile;
+				}
+				sca->serveCodeToANTLR(treeTxtFilePath, errorTxtFilePath);
+				//cout << "Served code to ANTLR\n";
+
+				// get root
+				rt = sca->readANTLROutputTree(treeTxtFilePath);
+				//cout << "Read tree text file into memory\n";
+
+				sca->readANTLROutputErrors(errorTxtFilePath);
+				//cout << "Read output error file\n";
+
+				matchedSuggestions = sca->matchTemplateWithTree();
+				//cout << "Matched suggestions with tree\n";
+
+				htmlFilePath = sca->createHTMLFile(matchedSuggestions, outputPath);
+				//cout << "Created html file\n";
+				cout << "Successfully analyzed file: " << cppFilePath << endl << endl;
+			}
+			else {
+				cout << "File: " + cppFilePath + " not recognized.\n";
+				cout << "Make sure file is named with proper extenstion (.cpp)\n\n";
+			}
+			if (false) {
+				SkipFile:
+				cout << "Loading source code failed... skipping file: " << cppFilePath << endl << endl;
+			}
+		}
+	}
+	closedir(dir);
+}
+
+int main(int argc, char *argv[]) {
+	// get user home directory
+	struct passwd *pw = getpwuid(getuid());
+	homeDir = pw->pw_dir;
+
+	// update absolute paths for templateTableFile and sourceFileDir
+	sourceFileDir = string(homeDir) + sourceFileDir;
+
+	if (argc >= 3){
 	string sourceFile = argv[1];
 	string outputPath = argv[2];
+	}
+	else{
+		string sourceFile = "";
+		string outputPath = "";
+	}
 
 	templateTableFile = string(homeDir) + templateTableFile;
 	htmlFileDir = string(homeDir) + htmlFileDir;
 	
-	explore((char*)sourceFileDir.c_str(), sourceFile, outputPath);
+	explore((char*)sourceFileDir.c_str(), intputPath = sourceFile, outputPath = outputPath);
 	
 	// open /output in file explorer when SCA is complete
 	system("xdg-open ~/SCA/SCA/user/output");

@@ -64,7 +64,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 		dir = opendir(dir_name);
 	}
 	
-	if (!dir && inputFile != "") {
+	if (!dir & inputFile != "") {
 		cout << "Unable to open directory => " << dir_name << endl;
 		return;
 	}

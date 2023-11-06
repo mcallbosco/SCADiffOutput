@@ -56,20 +56,21 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 	bool singleFile = false;
 
 	// open directory
-	dir = opendir(dir_name);
-	//modify to only read a speficied file, not all files in directory
-	if (inputFile != ""){
+	if (inputFile != "") {
 		singleFile = true;
-		//make dir only contain the file specified in the input
-		dir = opendir(inputFile.c_str());
 	}
-	if (!dir) {
+	dir = true;
+	
+	if (!dir && inputFile != "") {
 		cout << "Unable to open directory => " << dir_name << endl;
 		return;
 	}
 	else {
-		while((entry = readdir(dir)) != NULL) {
+		while((entry = readdir(dir)) != NULL || singleFile == true) {
 			string cppFilePath = sourceFileDir + "/" + string(entry->d_name);
+			if (singleFile == true){
+				cppFilePath = inputFile;
+			}
 			
 			if (cppFilePath.substr(cppFilePath.length() - 3, 3) == "cpp") {
 				SCA* sca = new SCA(cppFilePath, templateTableFile, htmlFileDir);

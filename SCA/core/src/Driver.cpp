@@ -50,6 +50,7 @@ int main(int argc, char *argv[]) {
 }
 
 void explore(char *dir_name, string inputFile = "", string outputPath = "") {
+
 	DIR *dir;
 	struct dirent *entry;
 	struct stat info;
@@ -64,8 +65,9 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 		dir = opendir(dir_name);
 	}
 	
-	if (!dir & inputFile != "") {
+	if (!dir && inputFile != "") {
 		cout << "Unable to open directory => " << dir_name << endl;
+		cout << inputFile << endl;
 		return;
 	}
 	else {

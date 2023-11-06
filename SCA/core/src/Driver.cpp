@@ -81,7 +81,7 @@ void explore(char *dir_name, string inputPath = "", string outputPath = "") {
 			cout << "Unable to open file => " << inputPath << endl;
 			return;
 		}
-	}
+	
 		while((entry = readdir(dir)) != NULL) {
 			string cppFilePath = sourceFileDir + "/" + string(entry->d_name);
 			

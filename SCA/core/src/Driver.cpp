@@ -55,18 +55,33 @@ void explore(char *dir_name, string inputPath = "", string outputPath = "") {
 	struct stat info;
 	bool singleFile = false;
 
+
 	// open directory
 	dir = opendir(dir_name);
 	//modify to only read a speficied file, not all files in directory
-	if (inputPath != ""){
-		singleFile = true;
+	
+	// check if inputPath is a file
+	if (inputPath != "") {
+		struct stat s;
+		if (stat(inputPath.c_str(), &s) == 0 && (s.st_mode & S_IFMT) == S_IFREG) {
+			singleFile = true;
+		}
+	}
+
+	// open directory
+	if (!singleFile) {
+		dir = opendir(dir_name);
+		if (!dir) {
+			cout << "Unable to open directory => " << dir_name << endl;
+			return;
+		}
+	} else {
 		dir = opendir(inputPath.c_str());
+		if (!dir) {
+			cout << "Unable to open file => " << inputPath << endl;
+			return;
+		}
 	}
-	if (!dir) {
-		cout << "Unable to open directory => " << dir_name << endl;
-		return;
-	}
-	else {
 		while((entry = readdir(dir)) != NULL) {
 			string cppFilePath = sourceFileDir + "/" + string(entry->d_name);
 			

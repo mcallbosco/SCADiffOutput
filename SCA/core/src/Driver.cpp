@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 	templateTableFile = string(homeDir) + templateTableFile;
 	htmlFileDir = string(homeDir) + htmlFileDir;
 	
-	explore((char*)sourceFileDir.c_str(), intputPath = sourceFile, outputPath = outputPath);
+	explore((char*)sourceFileDir.c_str(), sourceFile, outputPath);
 	
 	
 	// open /output in file explorer when SCA is complete

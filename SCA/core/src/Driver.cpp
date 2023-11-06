@@ -58,8 +58,11 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 	// open directory
 	if (inputFile != "") {
 		singleFile = true;
+		dir = NULL;
 	}
-	dir = true;
+	else {
+		dir = opendir(dir_name);
+	}
 	
 	if (!dir && inputFile != "") {
 		cout << "Unable to open directory => " << dir_name << endl;
@@ -115,6 +118,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 				cout << "Loading source code failed... skipping file: " << cppFilePath << endl << endl;
 			}
 		}
+		singleFile = false;
 	}
 	closedir(dir);
 }

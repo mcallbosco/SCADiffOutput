@@ -72,10 +72,13 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 	}
 	else {
 		while((entry = readdir(dir)) != NULL || singleFile == true) {
-			string cppFilePath = sourceFileDir + "/" + string(entry->d_name);
+			string cppFilePath = "";
 			if (singleFile == true){
 				cppFilePath = inputFile;
 				cout << inputFile << endl;
+			}
+			else {
+				cppFilePath = sourceFileDir + "/" + string(entry->d_name);
 			}
 			
 			if (cppFilePath.substr(cppFilePath.length() - 3, 3) == "cpp") {

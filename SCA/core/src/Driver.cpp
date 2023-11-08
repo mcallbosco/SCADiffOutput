@@ -61,6 +61,9 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 	if (inputFile != "") {
 		singleFile = true;
 		dir = NULL;
+		if (outputPath != "") {
+			htmlFileDir = outputPath;
+		}
 	}
 	else {
 		dir = opendir(dir_name);

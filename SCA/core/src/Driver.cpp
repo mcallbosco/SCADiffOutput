@@ -55,6 +55,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 	struct dirent *entry;
 	struct stat info;
 	bool singleFile = false;
+	bool multiFile = false;
 
 	// open directory
 	if (inputFile != "") {
@@ -63,6 +64,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 	}
 	else {
 		dir = opendir(dir_name);
+		multiFile = true;
 	}
 	
 	if (!dir && inputFile == "") {
@@ -71,7 +73,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 		return;
 	}
 	else {
-		while(singleFile == true || (entry = readdir(dir)) != NULL) {
+		while(singleFile == true || (multiFile && (entry = readdir(dir)) != NULL)) {
 			string cppFilePath = "";
 			if (singleFile == true){
 				cppFilePath = inputFile;
@@ -123,8 +125,8 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 				SkipFile:
 				cout << "Loading source code failed... skipping file: " << cppFilePath << endl << endl;
 			}
+			singleFile = false;
 		}
-		singleFile = false;
 	}
 	closedir(dir);
 }

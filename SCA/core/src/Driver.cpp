@@ -119,6 +119,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 				htmlFilePath = sca->createHTMLFile(matchedSuggestions, outputPath);
 				//cout << "Created html file\n";
 				cout << "Successfully analyzed file: " << cppFilePath << endl << endl;
+				cout << "HTML file created at: " << htmlFilePath << endl << endl;
 			}
 			else {
 				cout << "File: " + cppFilePath + " not recognized.\n";

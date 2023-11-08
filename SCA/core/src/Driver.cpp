@@ -29,12 +29,12 @@ int main(int argc, char *argv[]) {
 	string sourceFile;
 	string outputPath;
 	if (argc >= 3){
-	sourceFile = argv[1];
-	outputPath = argv[2];
+		sourceFile = argv[1];
+		outputPath = argv[2];
 	}
 	else{
-		sourceFile = NULL;
-		outputPath = NULL;
+		sourceFile = "";
+		outputPath = "";
 	}
 
 	templateTableFile = string(homeDir) + templateTableFile;
@@ -57,7 +57,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 	bool singleFile = false;
 
 	// open directory
-	if (inputFile != NULL) {
+	if (inputFile != "") {
 		singleFile = true;
 		dir = NULL;
 	}
@@ -65,7 +65,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 		dir = opendir(dir_name);
 	}
 	
-	if (!dir && inputFile == NULL) {
+	if (!dir && inputFile == "") {
 		cout << "Unable to open directory => " << dir_name << endl;
 		cout << inputFile << endl;
 		return;

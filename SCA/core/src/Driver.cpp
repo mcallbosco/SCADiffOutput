@@ -71,6 +71,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 		return;
 	}
 	else {
+		cout << "test" << endl;
 		while((entry = readdir(dir)) != NULL || singleFile == true) {
 			string cppFilePath = sourceFileDir + "/" + string(entry->d_name);
 			if (singleFile == true){

@@ -71,7 +71,7 @@ void explore(char *dir_name, string inputFile = "", string outputPath = "") {
 		return;
 	}
 	else {
-		while((entry = readdir(dir)) != NULL || singleFile == true) {
+		while(singleFile == true || (entry = readdir(dir)) != NULL) {
 			string cppFilePath = "";
 			if (singleFile == true){
 				cppFilePath = inputFile;

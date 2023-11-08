@@ -493,7 +493,7 @@ string SCA::createHTMLFile(string& matchedSugg, string outputFile = "") {
 	pos = filename.find(".");
 	filename = filename.substr(0, pos);
 	string htmlLocation = htmlDir + "/" + filename + ".html";
-	if (outputFile != "") htmlLocation = outputFile;
+	if (outputFile != "") htmlLocation = outputFile + "/" + filename + ".html";
 	create_html->setHTMLlocation(htmlLocation);
 	create_html->makeHTMLfile();
 	return htmlLocation;

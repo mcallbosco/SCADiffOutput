@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
 	explore((char*)sourceFileDir.c_str(), sourceFile, outputPath);
 	
 	
-	// open /output in file explorer when SCA is complete
-	system("xdg-open ~/SCA/SCA/user/output");
+	// dont open /output in file explorer when SCA is complete
+	//system("xdg-open ~/SCA/SCA/user/output");
 
 	return 0;
 }

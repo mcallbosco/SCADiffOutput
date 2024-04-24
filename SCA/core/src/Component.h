@@ -174,6 +174,7 @@ void Component::addAnStartLine(int start) {
 }
 
 vector<int> Component::getStartLine() {
+	std::cout << "Start line: " << std::endl;
 	return startLine;
 }
 

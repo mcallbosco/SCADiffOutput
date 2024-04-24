@@ -67,7 +67,6 @@ void ForLoop::setVariables()
 
 	//find first line number
 	addAnStartLine(walker->getChild(0)->getLineNum());
-
 	//set last line number
 	addAnEndLine(walker);
 

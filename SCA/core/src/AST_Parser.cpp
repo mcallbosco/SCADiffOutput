@@ -284,147 +284,15 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 	}
 	// if not found go get next line and search again
 	// HOW TO HANDLE ERRORS??? <missing ' '> && OTHER LEAF NODES THAT AREN'T IN SOURCE CODE???
-	else {
-		_handleMatchError(rt, token);		
-	}
-}
-
-void AST_Parser::_handleMatchError(Node* rt, const string& token) {
-	int isHashTag = line.find("#");
-	int isSingleLineComment = line.find("//");
-	int isMultiLineComment = line.find("/*");
 	
-	// if there's a <missing ' '> token or <EOF> 'end of file' token
-	if ((token.size() >= 5 && token.substr(0, 5) == "<miss") || token == "<EOF>" || token == "<EOF>\n") {
-		rt->setLineNum(1);
-	}
-	// else if the line contains a preprocessor directive
-	else if (isHashTag != -1) {
-		// checks if '#' is in a single line comment
-		if (isSingleLineComment != -1 && (isSingleLineComment < isHashTag)) {
-			goto handle_single_line_comment;
-		}
-		else if (isMultiLineComment != -1 && (isMultiLineComment < isHashTag)) {
-			goto handle_multi_line_comment;
-		}
+	if (cppFile.peek() != EOF) {
 		getline(cppFile, line);
 		lineNumber++;
 		_searchLineForToken(rt);
 	}
-	// else if the line is a comment
-	else if (isSingleLineComment != -1) {
-		handle_single_line_comment:
-		// check to make sure the comment is not preceded by code (ex: int i = 2; //some comment)
-		for (int i = 0; i < line.size(); i++) {
-			if (line[i] == '\t' || line[i] == space) {}
-			else if (line.size() - 1 >= i + 1 && line[i] == '/' && line[i + 1] == '/') {
-				getline(cppFile, line);
-				lineNumber++;
-				_searchLineForToken(rt);
-				break;
-			}
-			// comment is not first token in line, handle other tokens before comment
-			else goto jumpToOtherMismatch;
-		}
-	}
-	else if (isMultiLineComment != -1) {
-		handle_multi_line_comment:
-		// make sure comment is not preceded by code (ex: int i = 2; /* comment */
-		for (int i = 0; i < line.size(); i++) {
-			if (line[i] == '\t' || line[i] == space) {}
-			else if (line.size() - 1 >= i + 1 && line[i] == '/' && line[i + 1] == '*') {
-				while (true) {
-					if (line.find("*/") != string::npos) {
-						int foundPos = line.find("*/");
-						line = line.substr(foundPos + 2, line.size() - 1);
-						_searchLineForToken(rt);
-						break;
-					}
-					else {
-						getline(cppFile, line);
-						lineNumber++;
-					}
-				}
-			}
-			// comment is not first token in line, handle other tokens before comment
-			else goto jumpToOtherMismatch;
-		}
-	}
-	// else there is some other mismatch
 	else {
-	jumpToOtherMismatch:
-		// obtain current file position before getting new line
-		int filePosition = cppFile.tellg();
-		// store current line in temp in case it needs to be revisited
-		string temp = line;
-		if (getline(cppFile, line)) {
-			// if line is blank increase lineNumber and search again
-			if (line.empty()) {
-				lineNumber++;
-				_searchLineForToken(rt);
-
-			}
-			// else line is not blank, but may be filled with '\t' or '\n' or spaces
-			else {
-				// check to make sure line is not blank
-				bool isLineBlank = true;
-				for (int i = 0; i < line.size(); i++) {
-					if (line[i] == ' ' || line[i] == '\t' || line[i] == '\n') {}
-					else {
-						isLineBlank = false;
-						break;
-					}
-				}
-				if (isLineBlank) {
-					lineNumber++;
-					_searchLineForToken(rt);
-					goto end_of_handle_error;
-				}
-				else {
-					int found = line.find(token);
-					int commentFound = line.find("//");
-					int multiLineCommentFound = line.find("/*");
-					if (multiLineCommentFound != -1) {
-						lineNumber++;
-						goto handle_multi_line_comment;
-					}
-					else if (found == -1 && commentFound == -1) {
-						rt->setLineNum(2);
-						cppFile.seekg(filePosition);
-						line = temp;
-					}
-					else if (found == -1 && commentFound != -1) {
-						lineNumber++;
-						_searchLineForToken(rt);
-						goto end_of_handle_error;
-
-					}
-					else if (found != -1 && commentFound == -1) {
-						lineNumber++;
-						rt->setLineNum(3);
-						line = line.substr(found + token.size(), line.size() - 1);
-					}
-					else {
-						if (found < commentFound) {
-							lineNumber++;
-							rt->setLineNum(4);
-							line = line.substr(found + token.size(), line.size() - 1);
-						}
-						else {
-							lineNumber++;
-							_searchLineForToken(rt);
-							goto end_of_handle_error;
-						}
-					}
-				}
-			}
-		}
-		else {
-			rt->setLineNum(5);
-		}
-
+		cout << "End of file reached... token not found." << endl;
 	}
-end_of_handle_error: ;	
 }
 
 // traverse tree in order and search each leaf for its associated line number

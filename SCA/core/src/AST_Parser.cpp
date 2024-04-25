@@ -268,7 +268,7 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 	int commentFound = line.find("//");
 	int found = line.find(token);
 
-	if (found =! -1){
+	if (found == -1){
 		std::cout << "Token: " << token << "not found in " << line << std::endl;
 	}
 

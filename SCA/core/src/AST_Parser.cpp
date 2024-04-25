@@ -288,6 +288,16 @@ void AST_Parser::_searchLineForToken(Node* rt) {
     // Iterate over the lines of the file
 	int counter = 0;
     while (getline(cppFile, currLine)) {
+		//strip any comments
+		size_t commentPos = currLine.find("//");
+		if (commentPos != string::npos) {
+			currLine = currLine.substr(0, commentPos);
+		}
+		//strip any #
+		size_t hashPos = currLine.find("#");
+		if (hashPos != string::npos) {
+			currLine = currLine.substr(0, hashPos);
+		}
         lineNumber++;
         // Search for the token in the current line
         size_t pos = currLine.find(token);

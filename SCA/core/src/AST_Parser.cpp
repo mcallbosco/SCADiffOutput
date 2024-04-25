@@ -360,7 +360,7 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 				_searchLineForToken(rt);
 
 			}
-
+		}
 		else {
 			rt->setLineNum(lineNumber);
 		}

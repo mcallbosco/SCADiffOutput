@@ -275,7 +275,7 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 			line = line.substr(found + token.size(), line.size() - 1);
 		}
 
-		rt->setLineNum(lineNumber);
+		rt->setLineNum(0);
 		return;
 	}
 	// if not found go get next line and search again
@@ -292,7 +292,7 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 	
 	// if there's a <missing ' '> token or <EOF> 'end of file' token
 	if ((token.size() >= 5 && token.substr(0, 5) == "<miss") || token == "<EOF>" || token == "<EOF>\n") {
-		rt->setLineNum(lineNumber);
+		rt->setLineNum(1);
 	}
 	// else if the line contains a preprocessor directive
 	else if (isHashTag != -1) {
@@ -385,7 +385,7 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 						goto handle_multi_line_comment;
 					}
 					else if (found == -1 && commentFound == -1) {
-						rt->setLineNum(lineNumber);
+						rt->setLineNum(2);
 						cppFile.seekg(filePosition);
 						line = temp;
 					}
@@ -397,13 +397,13 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 					}
 					else if (found != -1 && commentFound == -1) {
 						lineNumber++;
-						rt->setLineNum(lineNumber);
+						rt->setLineNum(3);
 						line = line.substr(found + token.size(), line.size() - 1);
 					}
 					else {
 						if (found < commentFound) {
 							lineNumber++;
-							rt->setLineNum(lineNumber);
+							rt->setLineNum(4);
 							line = line.substr(found + token.size(), line.size() - 1);
 						}
 						else {
@@ -416,7 +416,7 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 			}
 		}
 		else {
-			rt->setLineNum(lineNumber);
+			rt->setLineNum(5);
 		}
 
 	}

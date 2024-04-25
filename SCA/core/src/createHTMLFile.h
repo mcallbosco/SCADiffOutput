@@ -216,8 +216,7 @@ void createHTML::makeHTMLfile()
 		for (If* iff : ifComponents) {
 			if (!iff->getCorrectComponent()) {
 				for (string s : iff->getCodeSmells()) {
-					htmlFile << "<p class=\"rule\"><strong>If Statement: ";
-					htmlFile << ":</strong> " << s << "</p>";
+					htmlFile << "<p class=\"rule\">" << s << "</p>";
 				}
 			}
 		}

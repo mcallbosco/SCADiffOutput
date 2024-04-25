@@ -376,7 +376,7 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 					_searchLineForToken(rt);
 					goto end_of_handle_error;
 				}
-				else {
+				
 					int found = line.find(token);
 					int commentFound = line.find("//");
 					int multiLineCommentFound = line.find("/*");
@@ -414,9 +414,8 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 					}
 				}
 			}
-		}
 		else {
-			rt->setLineNum(5);
+			rt->setLineNum(lineNumber);
 		}
 
 	}

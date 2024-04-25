@@ -2,6 +2,8 @@
 
 #define MAX 10
 
+//if test if
+
 struct coupleType{
 	int value;
 	int ind;

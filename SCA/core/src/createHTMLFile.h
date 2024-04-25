@@ -226,7 +226,7 @@ void createHTML::makeHTMLfile()
 		for (Switch* sw : switchComponents) {
 			if (!sw->getCorrectComponent()) {
 				for (string s : sw->getCodeSmells()) {
-					htmlFile << "<p class=\"rule\"><strong>If Statement on line " << to_string(sw->getFirstStartLine());
+					htmlFile << "<p class=\"rule\"><strong>Switch Statement on line " << to_string(sw->getFirstStartLine());
 					htmlFile << ":</strong> " << s << "</p>";
 				}
 			}

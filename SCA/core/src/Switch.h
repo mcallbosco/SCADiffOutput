@@ -193,12 +193,12 @@ void Switch::checkComponent() {
 		// + 1 to account for the default case
 		if ((numOfCases + 1) != numOfCases) {
 			setCorrectComponent(false);
-			setCodeSmell("Make sure all cases contain a break statement, including the default case.<br/>");
+			setCodeSmell("If statement on line " + to_string(startLine)+ ": " + "Make sure all cases contain a break statement, including the default case.<br/>");
 		}
 	}
 	else {
 		setCorrectComponent(false);
-		setCodeSmell("Be sure to include a default case.<br/>");
+		setCodeSmell("If statement on line " + to_string(startLine)+ ": " + "Be sure to include a default case.<br/>");
 	}
 
 	// if number of cases is 1, suggest using an if/else statment

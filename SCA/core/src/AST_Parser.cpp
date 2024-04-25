@@ -287,7 +287,7 @@ void AST_Parser::_searchLineForToken(Node* rt) {
     // Iterate over the lines of the file
 	int counter = 0;
     while (getline(cppFile, currLine)) {
-		if (counter <= tokenCount) {
+		if (counter < tokenCount) {
 			counter++;
 			lineNumber++;
 			continue;

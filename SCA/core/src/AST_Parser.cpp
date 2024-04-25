@@ -290,6 +290,7 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 		if (counter <= tokenCount) {
 			counter++;
 			lineNumber++;
+			continue;
 		}
         lineNumber++;
         // Search for the token in the current line

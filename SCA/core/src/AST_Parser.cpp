@@ -264,6 +264,9 @@ void AST_Parser::_searchLineForToken(Node* rt) {
     // Get the token data from the leaf node
     string token = rt->getData();
 
+    // Reset the line number counter
+    lineNumber = 0;
+
     // Rewind the file position to the beginning
     cppFile.clear();
     cppFile.seekg(0, ios::beg);
@@ -284,7 +287,6 @@ void AST_Parser::_searchLineForToken(Node* rt) {
         }
     }
 }
-
 // traverse tree in order and search each leaf for its associated line number
 void AST_Parser::_traverseInOrder(Node* rt) {
 	Node* nodeIter = rt;

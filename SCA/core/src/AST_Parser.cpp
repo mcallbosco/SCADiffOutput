@@ -274,8 +274,8 @@ void AST_Parser::_searchLineForToken(Node* rt) {
     // Variable to store the current line
     string currLine;
 
-    // Flag to indicate if the token has been found
-    bool tokenFound = false;
+    // Vector to store all occurrences of the token and their line numbers
+    vector<pair<int, string>> tokenOccurrences;
 
     // Iterate over the lines of the file
     while (getline(cppFile, currLine)) {
@@ -283,27 +283,22 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 
         size_t pos = 0;
         while ((pos = currLine.find(token, pos)) != string::npos) {
-            // Token found
-            tokenFound = true;
-
-            // Check if this is the same token as the current node
-            if (rt->getLineNum() == 0 || rt->getLineNum() == lineNumber) {
-                // Set the line number in the leaf node
-                rt->setLineNum(lineNumber);
-                pos += token.length();
-            } else {
-                // Token found, but not for the current node
-                pos += token.length();
-            }
+            // Token found, store its line number and the line content
+            tokenOccurrences.emplace_back(lineNumber, currLine);
+            pos += token.length();
         }
+    }
 
-        // If the token was found for the current node, no need to search further
-        if (tokenFound && rt->getLineNum() != 0)
+    // Find the occurrence of the token that matches the current node
+    for (const auto& occurrence : tokenOccurrences) {
+        if (occurrence.second.find(token) != string::npos) {
+            rt->setLineNum(occurrence.first);
             break;
+        }
     }
 
     // If the token was not found, set the line number to -1
-    if (!tokenFound)
+    if (rt->getLineNum() == 0)
         rt->setLineNum(-1);
 }
 

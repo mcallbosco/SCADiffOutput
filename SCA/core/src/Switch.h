@@ -193,34 +193,34 @@ void Switch::checkComponent() {
 		// + 1 to account for the default case
 		if ((numOfCases + 1) != numOfCases) {
 			setCorrectComponent(false);
-			setCodeSmell("If statement on line " + to_string(startLine)+ ": " + "Make sure all cases contain a break statement, including the default case.<br/>");
+			setCodeSmell("Switch statement on line " + to_string(startLine)+ ": " + "Make sure all cases contain a break statement, including the default case.<br/>");
 		}
 	}
 	else {
 		setCorrectComponent(false);
-		setCodeSmell("If statement on line " + to_string(startLine)+ ": " + "Be sure to include a default case.<br/>");
+		setCodeSmell("Switch statement on line " + to_string(startLine)+ ": " + "Be sure to include a default case.<br/>");
 	}
 
 	// if number of cases is 1, suggest using an if/else statment
 	if (numOfCases == 1) {
 		setCorrectComponent(false);
-		setCodeSmell("You may want to use an if-else statement instead of a switch structure.<br/>");
+		setCodeSmell("Switch statement on line " + to_string(startLine)+ ": " + "You may want to use an if-else statement instead of a switch structure.<br/>");
 	}
 
 	// check to make sure condtion is testing a variable and not a literal
 	if (conditionIsLiteral) {
 		setCorrectComponent(false);
-		setCodeSmell("Make sure your switch structure is testing a variable.<br/>");
+		setCodeSmell("Switch statement on line " + to_string(startLine)+ ": " + "Make sure your switch structure is testing a variable.<br/>");
 	}
 
 	if (condition == "No condition was found") {
 		setCorrectComponent(false);
-		setCodeSmell("Could not find a condition for Switch structure.<br/>");
+		setCodeSmell("Switch statement on line " + to_string(startLine)+ ": " + "Could not find a condition for Switch structure.<br/>");
 	}
 
 	if (cases.size() > 0 && cases[0] == "Could not find case statements") {
 		setCorrectComponent(false);
-		setCodeSmell("Make sure your Switch structure has cases.<br/>");
+		setCodeSmell("Switch statement on line " + to_string(startLine)+ ": " + "Make sure your Switch structure has cases.<br/>");
 	}
 }
 

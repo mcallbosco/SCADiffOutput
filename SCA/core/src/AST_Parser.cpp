@@ -268,6 +268,10 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 	int commentFound = line.find("//");
 	int found = line.find(token);
 
+	if (found =! -1){
+		std::cout << "Token: " << token << "not found in " << line << std::endl;
+	}
+
 	// if found, add line number info to node
 	if (found != -1 && commentFound == -1) {
 		if (found < line.size()) {
@@ -360,9 +364,63 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 				_searchLineForToken(rt);
 
 			}
+			// else line is not blank, but may be filled with '\t' or '\n' or spaces
+			else {
+				// check to make sure line is not blank
+				bool isLineBlank = true;
+				for (int i = 0; i < line.size(); i++) {
+					if (line[i] == ' ' || line[i] == '\t' || line[i] == '\n') {}
+					else {
+						isLineBlank = false;
+						break;
+					}
+				}
+				if (isLineBlank) {
+					lineNumber++;
+					_searchLineForToken(rt);
+					goto end_of_handle_error;
+				}
+				else {
+					int found = line.find(token);
+					int commentFound = line.find("//");
+					int multiLineCommentFound = line.find("/*");
+					if (multiLineCommentFound != -1) {
+						lineNumber++;
+						goto handle_multi_line_comment;
+					}
+					else if (found == -1 && commentFound == -1) {
+						rt->setLineNum(2);
+						cppFile.seekg(filePosition);
+						line = temp;
+					}
+					else if (found == -1 && commentFound != -1) {
+						lineNumber++;
+						_searchLineForToken(rt);
+						goto end_of_handle_error;
+
+					}
+					else if (found != -1 && commentFound == -1) {
+						lineNumber++;
+						rt->setLineNum(3);
+						line = line.substr(found + token.size(), line.size() - 1);
+					}
+					else {
+						if (found < commentFound) {
+							lineNumber++;
+							rt->setLineNum(4);
+							line = line.substr(found + token.size(), line.size() - 1);
+						}
+						else {
+							lineNumber++;
+							_searchLineForToken(rt);
+							goto end_of_handle_error;
+						}
+					}
+				}
+			}
 		}
 		else {
-			rt->setLineNum(lineNumber);
+			rt->setLineNum(5);
 		}
 
 	}

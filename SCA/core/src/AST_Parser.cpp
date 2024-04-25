@@ -274,19 +274,39 @@ void AST_Parser::_searchLineForToken(Node* rt) {
     // Variable to store the current line
     string currLine;
 
+    // Flag to indicate if the token has been found
+    bool tokenFound = false;
+
     // Iterate over the lines of the file
     while (getline(cppFile, currLine)) {
         lineNumber++;
 
-        // Search for the token in the current line
-        size_t pos = currLine.find(token);
-        if (pos != string::npos) {
-            // Token found, set the line number in the leaf node
-            rt->setLineNum(lineNumber);
-            break;
+        size_t pos = 0;
+        while ((pos = currLine.find(token, pos)) != string::npos) {
+            // Token found
+            tokenFound = true;
+
+            // Check if this is the same token as the current node
+            if (rt->getLineNum() == 0 || rt->getLineNum() == lineNumber) {
+                // Set the line number in the leaf node
+                rt->setLineNum(lineNumber);
+                pos += token.length();
+            } else {
+                // Token found, but not for the current node
+                pos += token.length();
+            }
         }
+
+        // If the token was found for the current node, no need to search further
+        if (tokenFound && rt->getLineNum() != 0)
+            break;
     }
+
+    // If the token was not found, set the line number to -1
+    if (!tokenFound)
+        rt->setLineNum(-1);
 }
+
 // traverse tree in order and search each leaf for its associated line number
 void AST_Parser::_traverseInOrder(Node* rt) {
 	Node* nodeIter = rt;

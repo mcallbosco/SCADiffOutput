@@ -183,10 +183,12 @@ string If::getComponent() {
 }
 
 void If::checkComponent() {
+	string stupidStarterTextSinceThisWasntMadeRight = "<strong>If statement on line " + to_string(startLines[0])+ ": </strong>" ;
+
 	for (int i = 0; i < conditionsLunqualifiedId.size(); i++) {
 		if (conditionsLunqualifiedId[i] == false && conditionsRunqualifiedId[i] == false) {
 			setCorrectComponent(false);
-			setCodeSmell("If statement on line " + to_string(startLines[0])+ ": "" uses literals. Execution will always follow the same path.<br/>");
+			setCodeSmell(stupidStarterTextSinceThisWasntMadeRight + "uses literals. Execution will always follow the same path.<br/>");
 		}
 	}
 }

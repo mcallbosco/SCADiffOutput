@@ -226,7 +226,7 @@ void createHTML::makeHTMLfile()
 		for (Switch* sw : switchComponents) {
 			if (!sw->getCorrectComponent()) {
 				for (string s : sw->getCodeSmells()) {
-					htmlFile << "<p>" << s << "</p>";
+					htmlFile << "<p class=\"rule\">" << s << "</p>";
 				}
 			}
 		}

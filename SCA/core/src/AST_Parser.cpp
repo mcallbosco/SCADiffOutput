@@ -283,6 +283,7 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 	//Variable to store the times the current token has been found
 	int tokenCount = 0;
 	tokenCount = readTokensDict[token];
+	std::cout << tokenCount << std::endl;
 
     // Iterate over the lines of the file
     while (getline(cppFile, currLine)) {
@@ -292,6 +293,7 @@ void AST_Parser::_searchLineForToken(Node* rt) {
         if (pos != string::npos) {
             // Token found, set the line number in the leaf node
             rt->setLineNum(lineNumber);
+			readTokensDict[token] = tokenCount + 1;
             break;
         }
     }

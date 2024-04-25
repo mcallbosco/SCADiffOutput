@@ -192,6 +192,7 @@ void createHTML::makeHTMLfile()
 		}
 		hasSuggestions = true;
 	}
+	//TODO, REWORK THIS
 	if (hasWhileLoopSuggestions) {
 		for (While_Loop* wl : whileLoopComponents) {
 			if (!wl->getCorrectComponent()) {
@@ -206,7 +207,7 @@ void createHTML::makeHTMLfile()
 		for (ForLoop* fl : forLoopComponents) {
 			if (!fl->getCorrectComponent()) {
 				for (string s : fl->getCodeSmells()) {
-					htmlFile << "<p class=\"rule\"><strong>For Loop on line " << to_string(fl->getFirstStartLine());
+					htmlFile << "<p class=\"rule\"><strong>For Loop on line ";
 					htmlFile << ":</strong> " << s << "</p>";
 				}
 			}
@@ -216,7 +217,7 @@ void createHTML::makeHTMLfile()
 		for (If* iff : ifComponents) {
 			if (!iff->getCorrectComponent()) {
 				for (string s : iff->getCodeSmells()) {
-					htmlFile << "<p class=\"rule\"><strong>If Statement on line " << to_string(iff->getFirstStartLine());
+					htmlFile << "<p class=\"rule\"><strong>If Statement on line ";
 					htmlFile << ":</strong> " << s << "</p>";
 				}
 			}

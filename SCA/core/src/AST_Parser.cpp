@@ -279,7 +279,7 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 			line = line.substr(found + token.size(), line.size() - 1);
 		}
 
-		rt->setLineNum(0);
+		rt->setLineNum(lineNumber);
 		return;
 	}
 	// if not found go get next line and search again

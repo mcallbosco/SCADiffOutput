@@ -32,8 +32,8 @@ int find_largest(int arr[MAX], int &l) {
 			ind = i;
 		}
 	}
-	l = largest;		//returned passively byRef variables
-	return ind;			//returned by the fn
+	l = largest;
+	return ind;
 }
 
 
@@ -48,5 +48,5 @@ coupleType find_largest(int arr[MAX]) {
 			largest.ind = i;
 		}
 	}
-	return largest;			//returned by the fn
+	return largest;
 }

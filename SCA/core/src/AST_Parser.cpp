@@ -268,10 +268,6 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 	int commentFound = line.find("//");
 	int found = line.find(token);
 
-	if (found == -1){
-		std::cout << "Token: " << token << "not found in " << line << std::endl;
-	}
-
 	// if found, add line number info to node
 	if (found != -1 && commentFound == -1) {
 		if (found < line.size()) {
@@ -284,9 +280,9 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 	}
 	// if not found go get next line and search again
 	// HOW TO HANDLE ERRORS??? <missing ' '> && OTHER LEAF NODES THAT AREN'T IN SOURCE CODE???
-	getline(cppFile, line);
-	lineNumber++;
-	_searchLineForToken(rt);
+	else {
+		_handleMatchError(rt, token);		
+	}
 }
 
 void AST_Parser::_handleMatchError(Node* rt, const string& token) {
@@ -296,7 +292,7 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 	
 	// if there's a <missing ' '> token or <EOF> 'end of file' token
 	if ((token.size() >= 5 && token.substr(0, 5) == "<miss") || token == "<EOF>" || token == "<EOF>\n") {
-		rt->setLineNum(1);
+		rt->setLineNum(lineNumber);
 	}
 	// else if the line contains a preprocessor directive
 	else if (isHashTag != -1) {
@@ -389,7 +385,7 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 						goto handle_multi_line_comment;
 					}
 					else if (found == -1 && commentFound == -1) {
-						rt->setLineNum(2);
+						rt->setLineNum(lineNumber);
 						cppFile.seekg(filePosition);
 						line = temp;
 					}
@@ -401,13 +397,13 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 					}
 					else if (found != -1 && commentFound == -1) {
 						lineNumber++;
-						rt->setLineNum(3);
+						rt->setLineNum(lineNumber);
 						line = line.substr(found + token.size(), line.size() - 1);
 					}
 					else {
 						if (found < commentFound) {
 							lineNumber++;
-							rt->setLineNum(4);
+							rt->setLineNum(lineNumber);
 							line = line.substr(found + token.size(), line.size() - 1);
 						}
 						else {
@@ -420,7 +416,7 @@ void AST_Parser::_handleMatchError(Node* rt, const string& token) {
 			}
 		}
 		else {
-			rt->setLineNum(5);
+			rt->setLineNum(lineNumber);
 		}
 
 	}

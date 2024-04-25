@@ -239,10 +239,8 @@ string ForLoop::getComponent()
 		htmlString += s + " ";
 	htmlString += "<br/>";
 
-	if (endLineVec[0] == 0)
-		htmlString += "Ends on line " + to_string(startLineVec[0]) + "<br/>";
-	else
-		htmlString += "Ends on line " + to_string(endLineVec[0]) + "<br/>";
+	//TO:DO: Fix this to get the correct end line
+		//htmlString += "Ends on line " + to_string(endLineVec[0]) + "<br/>";
 
 	return htmlString;
 }

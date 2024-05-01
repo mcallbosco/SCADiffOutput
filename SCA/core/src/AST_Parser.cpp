@@ -310,8 +310,6 @@ vector<string> AST_Parser::_searchLineForToken(Node* rt, vector<string> cppFileL
 
 	//Variable to store the times the current token has been found
 	int tokenCount = 0;
-	tokenCount = readTokensDict[token];
-	std::cout << tokenCount << std::endl;
 
     // Iterate over the lines of the file
 	int counter = 0;
@@ -343,11 +341,9 @@ vector<string> AST_Parser::_traverseInOrder(Node* rt, vector<string> cppFileCont
 		cppFileContent = _searchLineForToken(nodeIter, cppFileContent);
 		return cppFileContent;
 	}
-
 	int totalChildren = nodeIter->getChildCount();
-
 	for (int i = 0; i < totalChildren; i++) {
-		cppFileContent = (nodeIter->getChild(i), cppFileContent);
+		cppFileContent = _traverseInOrder(nodeIter->getChild(i), cppFileContent);
 	}
 	return cppFileContent;
 }

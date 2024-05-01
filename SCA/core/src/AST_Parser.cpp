@@ -287,7 +287,19 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 
     // Iterate over the lines of the file
 	int counter = 0;
+	bool inMultiLineComment = false;
     while (getline(cppFile, currLine)) {
+		//make sure we are not in a comment
+		if (inMultiLineComment) {
+			size_t multiLineCommentEnd = currLine.find("*/");
+			if (multiLineCommentEnd != string::npos) {
+				currLine = currLine.substr(multiLineCommentEnd + 2);
+				inMultiLineComment = false;
+			}
+			else {
+				continue;
+			}
+		}
 		//strip any comments
 		size_t commentPos = currLine.find("//");
 		if (commentPos != string::npos) {
@@ -298,7 +310,23 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 		if (hashPos != string::npos) {
 			currLine = currLine.substr(0, hashPos);
 		}
+		size_t multiLineCommentStart = currLine.find("/*");
+		if (multiLineCommentStart != string::npos) {
+			size_t multiLineCommentEnd = currLine.find("*/");
+			if (multiLineCommentEnd != string::npos) {
+				currLine = currLine.substr(0, multiLineCommentStart) + currLine.substr(multiLineCommentEnd + 2);
+			}
+			else {
+				currLine = currLine.substr(0, multiLineCommentStart);
+				inMultiLineComment = true;
+			}
+			inMultiLineComment = true;
+
+		}
+		
+		
         lineNumber++;
+		
         // Search for the token in the current line
         size_t pos = currLine.find(token);
         if (pos != string::npos) {
@@ -311,6 +339,7 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 			readTokensDict[token] = tokenCount + 1;
             break;
         }
+		
     }
 }
 

@@ -259,7 +259,8 @@ void AST_Parser::condenseTree(Node* rt) {
 
 
 void AST_Parser::getNodeLineNums() {
-		cppFile.clear();
+	cppFile.open(cppFilePath);
+	cppFile.clear();
     cppFile.seekg(0, ios::beg);
 	vector<string> cppFileContent;
 	while (getline(cppFile, line)) {
@@ -309,7 +310,7 @@ vector<string> AST_Parser::_searchLineForToken(Node* rt, vector<string> cppFileL
     // Iterate over the lines of the file
 	int counter = 0;
 	int lengthOfCppFile = cppFileList.size();
-	std::cout << "Length of cpp file: " << lengthOfCppFile << std::endl;
+
 	for (int i = 0; i < lengthOfCppFile; i++) {
 		std::cout << "Counter: " << counter << std::endl;
 		currLine = cppFileList[i];

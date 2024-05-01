@@ -268,16 +268,11 @@ void AST_Parser::getNodeLineNums() {
 
 
 
-void AST_Parser::_searchLineForToken(Node* rt) {
+	vector<string> AST_Parser::_searchLineForToken(Node* rt, vector<string> cppFileList) {
     // Get the token data from the leaf node
     string token = rt->getData();
 
-    // Reset the line number counter
     lineNumber = 0;
-
-    // Rewind the file position to the beginning
-    cppFile.clear();
-    cppFile.seekg(0, ios::beg);
 
     // Variable to store the current line
     string currLine;
@@ -289,77 +284,61 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 
     // Iterate over the lines of the file
 	int counter = 0;
-	bool inMultiLineComment = false;
-    while (getline(cppFile, currLine)) {
-		//make sure we are not in a comment
-		if (inMultiLineComment) {
-			size_t multiLineCommentEnd = currLine.find("*/");
-			if (multiLineCommentEnd != string::npos) {
-				currLine = currLine.substr(multiLineCommentEnd + 2);
-				inMultiLineComment = false;
-			}
-			else {
-				lineNumber++;
-				continue;
+	int lengthOfCppFile = cppFileList.size();
+	for (int i = 0; i < lengthOfCppFile; i++) {
+		currLine = cppFileList[i];
+		lineNumber++;
+		// Check if the line contains the token
+		size_t found = currLine.find(token);
+		if (found != string::npos) {
+			// Remove the token from the line
+			cppFileList[i].erase(found, token.length());
+			// Insert the line number into the leaf node
+			rt->setLineNum(lineNumber);
+			return cppFileList;
+		}
+	}
 
-			}
-		}
-		//strip any comments
-		size_t commentPos = currLine.find("//");
-		if (commentPos != string::npos) {
-			currLine = currLine.substr(0, commentPos);
-		}
-		//strip any #
-		size_t hashPos = currLine.find("#");
-		if (hashPos != string::npos) {
-			currLine = currLine.substr(0, hashPos);
-		}
-		size_t multiLineCommentStart = currLine.find("/*");
-		if (multiLineCommentStart != string::npos) {
-			size_t multiLineCommentEnd = currLine.find("*/");
-			if (multiLineCommentEnd != string::npos) {
-				currLine = currLine.substr(0, multiLineCommentStart) + currLine.substr(multiLineCommentEnd + 2);
-			}
-			else {
-				currLine = currLine.substr(0, multiLineCommentStart);
-				inMultiLineComment = true;
-			}
-			inMultiLineComment = true;
 
-		}
-		
-		
-        lineNumber++;
-		
-        // Search for the token in the current line
-        size_t pos = currLine.find(token);
-        if (pos != string::npos) {
-			if (counter < tokenCount) {
-				counter++;
-				continue;
-			}
-            // Token found, set the line number in the leaf node
-            rt->setLineNum(lineNumber);
-			readTokensDict[token] = tokenCount + 1;
-            break;
-        }
-		
-    }
+	return cppFileList;
 }
 
 // traverse tree in order and search each leaf for its associated line number
 void AST_Parser::_traverseInOrder(Node* rt) {
 	cppFile.clear();
     cppFile.seekg(0, ios::beg);
-	std::list <string> cppFileContent;
+	vector<string> cppFileContent;
 	while (getline(cppFile, line)) {
 		cppFileContent.push_back(line);
 	}
 
-
+	//scan through to look for comments and remove them
+	//iterate through the list of strings
+	int length = cppFileContent.size();
+	bool isMultiLineComment = false;
+	for (int i = 0; i < length; i++) {
+		//check if the string has a comment
+		size_t commentPos = cppFileContent[i].find("//");
+		if (commentPos != string::npos) {
+			cppFileContent[i] = cppFileContent[i].substr(0, commentPos);
+		}
+		//check if the string has a #
+		size_t hashPos = cppFileContent[i].find("#");
+		if (hashPos != string::npos) {
+			cppFileContent[i] = cppFileContent[i].substr(0, hashPos);
+		}
+		//check if the string has a /*
+		size_t multiLineCommentStart = cppFileContent[i].find("/*");
+		if (multiLineCommentStart != string::npos) {
+			size_t multiLineCommentEnd = cppFileContent[i].find("*/");
+			if (multiLineCommentEnd != string::npos) {
+				cppFileContent[i] = cppFileContent[i].substr(0, multiLineCommentStart) + cppFileContent[i].substr(multiLineCommentEnd + 2);
+			}
+		}
+	}
 	Node* nodeIter = rt;
 	if (nodeIter->getChildCount() == 0) {
-		_searchLineForToken(nodeIter);
+		cppFileContent = _searchLineForToken(nodeIter, cppFileContent);
 		return;
 	}
 

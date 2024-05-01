@@ -57,7 +57,7 @@ public:
 	// get line numbers from cppFile & helper functions
 	void getNodeLineNums();
 	vector<string> _searchLineForToken(Node* rt, vector<string> cppFileList);
-	void _traverseInOrder(Node* rt);
+	vector<string> _traverseInOrder(Node* rt, vector<string> cppFileList);
 	void _handleMatchError(Node* rt, const string& token);
 
 	// print in order w/ line numbers

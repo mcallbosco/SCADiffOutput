@@ -259,53 +259,7 @@ void AST_Parser::condenseTree(Node* rt) {
 
 
 void AST_Parser::getNodeLineNums() {
-	cppFile.open(cppFilePath);
-	getline(cppFile, line);
-	lineNumber++;
-	_traverseInOrder(rawAST->getRoot());
-
-}
-
-
-
-	vector<string> AST_Parser::_searchLineForToken(Node* rt, vector<string> cppFileList) {
-    // Get the token data from the leaf node
-    string token = rt->getData();
-
-    lineNumber = 0;
-
-    // Variable to store the current line
-    string currLine;
-
-	//Variable to store the times the current token has been found
-	int tokenCount = 0;
-	tokenCount = readTokensDict[token];
-	std::cout << tokenCount << std::endl;
-
-    // Iterate over the lines of the file
-	int counter = 0;
-	int lengthOfCppFile = cppFileList.size();
-	for (int i = 0; i < lengthOfCppFile; i++) {
-		currLine = cppFileList[i];
-		lineNumber++;
-		// Check if the line contains the token
-		size_t found = currLine.find(token);
-		if (found != string::npos) {
-			// Remove the token from the line
-			cppFileList[i].erase(found, token.length());
-			// Insert the line number into the leaf node
-			rt->setLineNum(lineNumber);
-			return cppFileList;
-		}
-	}
-
-
-	return cppFileList;
-}
-
-// traverse tree in order and search each leaf for its associated line number
-void AST_Parser::_traverseInOrder(Node* rt) {
-	cppFile.clear();
+		cppFile.clear();
     cppFile.seekg(0, ios::beg);
 	vector<string> cppFileContent;
 	while (getline(cppFile, line)) {
@@ -336,16 +290,64 @@ void AST_Parser::_traverseInOrder(Node* rt) {
 			}
 		}
 	}
+	cppFile.open(cppFilePath);
+	getline(cppFile, line);
+	lineNumber++;
+	_traverseInOrder(rawAST->getRoot(), cppFileContent);
+
+}
+
+
+
+vector<string> AST_Parser::_searchLineForToken(Node* rt, vector<string> cppFileList) {
+    // Get the token data from the leaf node
+    string token = rt->getData();
+
+    lineNumber = 0;
+
+    // Variable to store the current line
+    string currLine;
+
+	//Variable to store the times the current token has been found
+	int tokenCount = 0;
+	tokenCount = readTokensDict[token];
+	std::cout << tokenCount << std::endl;
+
+    // Iterate over the lines of the file
+	int counter = 0;
+	int lengthOfCppFile = cppFileList.size();
+	for (int i = 0; i < lengthOfCppFile; i++) {
+		currLine = cppFileList[i];
+		lineNumber++;
+		// Check if the line contains the token
+		size_t found = currLine.find(token);
+		if (found != string::npos) {
+			// Remove the token from the line
+			cppFileList[i].erase(found, token.length());
+			// Insert the line number into the leaf node
+			rt->setLineNum(lineNumber);
+			// Increment the token count
+			return cppFileList;
+		}
+	}
+
+
+	return cppFileList;
+}
+
+// traverse tree in order and search each leaf for its associated line number
+vector<string> AST_Parser::_traverseInOrder(Node* rt, vector<string> cppFileContent) {
+	
 	Node* nodeIter = rt;
 	if (nodeIter->getChildCount() == 0) {
 		cppFileContent = _searchLineForToken(nodeIter, cppFileContent);
-		return;
+		return cppFileContent;
 	}
 
 	int totalChildren = nodeIter->getChildCount();
 
 	for (int i = 0; i < totalChildren; i++) {
-		_traverseInOrder(nodeIter->getChild(i));
+		cppFileContent = (nodeIter->getChild(i), cppFileContent);
 	}
 }
 

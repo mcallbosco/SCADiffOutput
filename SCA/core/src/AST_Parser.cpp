@@ -349,6 +349,7 @@ vector<string> AST_Parser::_traverseInOrder(Node* rt, vector<string> cppFileCont
 	for (int i = 0; i < totalChildren; i++) {
 		cppFileContent = (nodeIter->getChild(i), cppFileContent);
 	}
+	return cppFileContent;
 }
 
 void AST_Parser::inOrderPrintAllLeafData(Node* rt) {

@@ -10,6 +10,7 @@ which one is called will depend on inputs
 i.e., add(2,3) will call the first one
 add(2) will call the second one*/
 
+int ifi();
 int mul(int, int);
 float divide(int, int);
 

@@ -347,6 +347,14 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 
 // traverse tree in order and search each leaf for its associated line number
 void AST_Parser::_traverseInOrder(Node* rt) {
+	cppFile.clear();
+    cppFile.seekg(0, ios::beg);
+	std::list <string> cppFileContent;
+	while (getline(cppFile, line)) {
+		cppFileContent.push_back(line);
+	}
+
+
 	Node* nodeIter = rt;
 	if (nodeIter->getChildCount() == 0) {
 		_searchLineForToken(nodeIter);

@@ -309,6 +309,7 @@ vector<string> AST_Parser::_searchLineForToken(Node* rt, vector<string> cppFileL
     // Iterate over the lines of the file
 	int counter = 0;
 	int lengthOfCppFile = cppFileList.size();
+	std::cout << "Length of cpp file: " << lengthOfCppFile << std::endl;
 	for (int i = 0; i < lengthOfCppFile; i++) {
 		std::cout << "Counter: " << counter << std::endl;
 		currLine = cppFileList[i];

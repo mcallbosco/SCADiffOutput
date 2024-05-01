@@ -297,7 +297,9 @@ void AST_Parser::_searchLineForToken(Node* rt) {
 				inMultiLineComment = false;
 			}
 			else {
+				lineNumber++;
 				continue;
+
 			}
 		}
 		//strip any comments

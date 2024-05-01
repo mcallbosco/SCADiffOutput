@@ -302,19 +302,15 @@ void AST_Parser::getNodeLineNums() {
 vector<string> AST_Parser::_searchLineForToken(Node* rt, vector<string> cppFileList) {
     // Get the token data from the leaf node
     string token = rt->getData();
-
     lineNumber = 0;
-
     // Variable to store the current line
     string currLine;
-
-	//Variable to store the times the current token has been found
-	int tokenCount = 0;
 
     // Iterate over the lines of the file
 	int counter = 0;
 	int lengthOfCppFile = cppFileList.size();
 	for (int i = 0; i < lengthOfCppFile; i++) {
+		std::cout << "Counter: " << counter << std::endl;
 		currLine = cppFileList[i];
 		lineNumber++;
 		// Check if the line contains the token

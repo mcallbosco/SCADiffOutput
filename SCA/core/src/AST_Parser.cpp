@@ -272,6 +272,17 @@ void AST_Parser::getNodeLineNums() {
 	int length = cppFileContent.size();
 	bool isMultiLineComment = false;
 	for (int i = 0; i < length; i++) {
+		if (isMultiLineComment) {
+			size_t multiLineCommentEnd = cppFileContent[i].find("*/");
+			if (multiLineCommentEnd != string::npos) {
+				cppFileContent[i] = cppFileContent[i].substr(multiLineCommentEnd + 2);
+				isMultiLineComment = false;
+			}
+			else {
+				cppFileContent[i] = "";
+				continue;
+			}
+		}
 		//check if the string has a comment
 		size_t commentPos = cppFileContent[i].find("//");
 		if (commentPos != string::npos) {
@@ -289,7 +300,12 @@ void AST_Parser::getNodeLineNums() {
 			if (multiLineCommentEnd != string::npos) {
 				cppFileContent[i] = cppFileContent[i].substr(0, multiLineCommentStart) + cppFileContent[i].substr(multiLineCommentEnd + 2);
 			}
+			else {
+				cppFileContent[i] = cppFileContent[i].substr(0, multiLineCommentStart);
+				isMultiLineComment = true;
+			}
 		}
+		
 	}
 	cppFile.open(cppFilePath);
 	getline(cppFile, line);

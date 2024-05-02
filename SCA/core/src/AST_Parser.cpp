@@ -328,7 +328,6 @@ vector<string> AST_Parser::_searchLineForToken(Node* rt, vector<string> cppFileL
 	int lengthOfCppFile = cppFileList.size();
 
 	for (int i = 0; i < lengthOfCppFile; i++) {
-		std::cout << "Counter: " << counter << std::endl;
 		currLine = cppFileList[i];
 		lineNumber++;
 		// Check if the line contains the token

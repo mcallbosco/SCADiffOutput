@@ -240,7 +240,7 @@ string ForLoop::getComponent()
 	htmlString += "<br/>";
 
 	//TO:DO: Fix this to get the correct end line
-		//htmlString += "Ends on line " + to_string(endLineVec[0]) + "<br/>";
+		htmlString += "Ends on line " + to_string(endLineVec[0]) + "<br/>";
 
 	return htmlString;
 }

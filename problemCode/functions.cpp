@@ -9,7 +9,6 @@ two definitions with same name but different inputs
 which one is called will depend on inputs
 i.e., add(2,3) will call the first one
 add(2) will call the second one*/
-
 int ifi();
 int mul(int, int);
 float divide(int, int);
@@ -39,7 +38,11 @@ int mul(int a, int b) {
 }
 
 float divide(int a, int b) {
-	if (b != 0)
+	/*function add() is overloaded
+	 t wo definitions with same name but* different inputs
+	 which one is called will depend on inputs
+	 i.e., add(2,3) will call the first one
+	 add(2) will call the second one*/ if (b != 0)
 		return a / float(b);
 	
 	return 0;

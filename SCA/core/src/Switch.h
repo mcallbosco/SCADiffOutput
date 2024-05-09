@@ -167,7 +167,8 @@ string Switch::getComponent() {
 
 	componentString = "<strong><u>Switch Structure</u></strong><br/>";
 	componentString += "Begins on line " + to_string(startLine) + "<br/>";
-	componentString += "Condition being tested: " + condition + "<br/>";
+	//TO:DO Fix condition L/R refrencing an array eliment or class
+	//componentString += "Condition being tested: " + condition + "<br/>";
 	componentString += "Number of cases: " + to_string(numOfCases) + "<br/>";
 	componentString += "Number of breaks: " + to_string(numOfBreaks) + "<br/>";
 	componentString += "Contains default case: ";

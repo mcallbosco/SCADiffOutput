@@ -232,7 +232,8 @@ string ForLoop::getComponent()
 	htmlString += "Iterator: " + iteratorInt + "<br/>";
 	htmlString += "Assignment to that iterator: " + iteratorIntAssignment + "<br/>";
 
-	htmlString += "Stop Condition: " + conditionL + " " + condition + " " + conditionR + "<br/>";
+	//TO:DO Fix condition L/R refrencing an array eliment or class
+	//htmlString += "Stop Condition: " + conditionL + " " + condition + " " + conditionR + "<br/>";
 
 	htmlString += "Step statement: ";
 	for (string s : expression) 

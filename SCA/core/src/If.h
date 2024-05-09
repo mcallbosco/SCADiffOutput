@@ -177,7 +177,8 @@ string If::getComponent() {
 	}
 	componentString += "Number of elses: " + to_string(elses) + "<br/>";
 
-	componentString += "Condition for If Statement: " + conditionsL + " " + conditions + " " + conditionsR + "<br/>";
+	//TO:DO Fix condition L/R refrencing an array eliment or class
+	//componentString += "Condition for If Statement: " + conditionsL + " " + conditions + " " + conditionsR + "<br/>";
 
 	return componentString;
 }
